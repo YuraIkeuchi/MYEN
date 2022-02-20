@@ -7,6 +7,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	gscene->Run();
 
 	delete gscene;
-
 	return 0;
 }
