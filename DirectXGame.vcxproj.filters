@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="シェーダーファイル">
+      <UniqueIdentifier>{7e5584a5-2895-4181-9eaf-f65622106b57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\camera">
+      <UniqueIdentifier>{aa585cca-aff0-46b5-a8e9-6d11b98bf651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d">
+      <UniqueIdentifier>{5d491f2e-7e67-4b7a-931f-2b1400ac8371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d">
+      <UniqueIdentifier>{37fd77c1-a9cc-4d14-ae48-a3d3566d595e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\audio">
+      <UniqueIdentifier>{674259b1-4d7d-4f94-aa91-465b73c1c301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\collision">
+      <UniqueIdentifier>{2f193a21-6fed-4f32-a3e4-2ce9404c1b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\enginebase">
+      <UniqueIdentifier>{08cc8de9-e278-4be6-9186-d3bb73eab2cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Imgui">
+      <UniqueIdentifier>{78b1a6b2-299c-4df8-ad8c-c21cd3e5c5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\input">
+      <UniqueIdentifier>{61fe5d0a-48e2-492f-af30-ba760eef5aff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\light">
+      <UniqueIdentifier>{94239481-c59f-4280-8ac6-c94fae178d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{3b0ead00-f701-4b83-8671-360bdfbcb6f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Basic.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\Shaders\Sprite.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="imgui\imgui.vcxproj">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </None>
+    <None Include="imgui\imgui.vcxproj.filters">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </None>
+    <None Include="FBX.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="OBJShaderHeader.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shaders\BasicPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpriteVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BasicVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="FBXVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="FBXPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="OBJPixelShader.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="OBJVertexShader.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="3d\Material.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Mesh.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Model.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Object3d.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\Camera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\DebugCamera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\DebugText.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\Sprite.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\Audio.cpp">
+      <Filter>ソース ファイル\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\Collision.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionPrimitive.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="enginebase\AbstractSceneFactory.cpp">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClCompile>
+    <ClCompile Include="enginebase\DirectXCommon.cpp">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClCompile>
+    <ClCompile Include="enginebase\SceneFactory.cpp">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClCompile>
+    <ClCompile Include="enginebase\WinApp.cpp">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx12.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Input.cpp">
+      <Filter>ソース ファイル\input</Filter>
+    </ClCompile>
+    <ClCompile Include="light\LightGroup.cpp">
+      <Filter>ソース ファイル\light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\PointLight.cpp">
+      <Filter>ソース ファイル\light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\SpotLight.cpp">
+      <Filter>ソース ファイル\light</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\BaseScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\Framework.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\IkeGame.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneManager.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\TitleScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3d\Material.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Mesh.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Model.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3d.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\Camera.h">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\DebugCamera.h">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\DebugText.h">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Sprite.h">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\Audio.h">
+      <Filter>ソース ファイル\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\Collision.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionPrimitive.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="enginebase\AbstractSceneFactory.h">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClInclude>
+    <ClInclude Include="enginebase\DirectXCommon.h">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClInclude>
+    <ClInclude Include="enginebase\SceneFactory.h">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClInclude>
+    <ClInclude Include="enginebase\WinApp.h">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx12.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>ソース ファイル\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="input\Input.h">
+      <Filter>ソース ファイル\input</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\LightGroup.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\PointLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\SpotLight.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\BaseScene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\Framework.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GamePlayScene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\IkeGame.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneManager.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TitleScene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
