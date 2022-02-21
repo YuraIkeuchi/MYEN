@@ -9,9 +9,9 @@ class SceneManager
 public:
 	static SceneManager* GetInstance();
 	//更新
-	void Update();
+	void Update(DirectXCommon* dxCommon);
 	/// 描画
-	void Draw();
+	void Draw(DirectXCommon* dxCommon);
 
 public:
 	//次シーン予約

@@ -4,8 +4,8 @@
 #include "DebugText.h"
 #include "SceneManager.h"
 #include "TitleScene.h"
-//#include "FbxLoader.h"
-void GamePlayScene::Initiallize()
+#include "FbxLoader.h"
+void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
@@ -41,7 +41,7 @@ void GamePlayScene::Initiallize()
 	objFighter->SetModel(modelFighter);
 
 	objFighter->SetPosition(FighterPosition);
-	objPlayer->SetPosition( PlayerPosition );
+	objPlayer->SetPosition(PlayerPosition);
 	objGround->SetPosition({ 0, -10, 0 });
 
 	// カメラ注視点をセット
@@ -54,48 +54,49 @@ void GamePlayScene::Initiallize()
 	pointLightPos[0] = 0.5f;
 	pointLightPos[1] = 1.0f;
 	pointLightPos[2] = 0.0f;*/
-	//// モデル名を指定してファイル読み込み
-	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	// モデル名を指定してファイル読み込み
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-	//// デバイスをセット
-	//FBXObject3d::SetDevice(dxCommon->GetDev());
-	//// カメラをセット
-	//FBXObject3d::SetCamera(camera);
-	//// グラフィックスパイプライン生成
-	//FBXObject3d::CreateGraphicsPipeline();
+	// デバイスをセット
+	FBXObject3d::SetDevice(dxCommon->GetDev());
+	// カメラをセット
+	FBXObject3d::SetCamera(camera);
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
 
-	//object1 = new FBXObject3d;
-	//object1->Initialize();
-	//object1->SetModel(model1);
+	object1 = new FBXObject3d;
+	object1->Initialize();
+	object1->SetModel(model1);
 }
 
-void GamePlayScene::Update()
+void GamePlayScene::Update(DirectXCommon* dxCommon)
 {
 	Input* input = Input::GetInstance();
 	DebugText* debugText = DebugText::GetInstance();
 	lightGroup->Update();
-	
+
 
 	// オブジェクト移動
-	if (input->PushKey(DIK_UP) || (input->TiltStick(input->Up))) {
-		cameraPos.y += 0.1f;
+	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
+	{
+		if (input->PushKey(DIK_UP)) {
+			cameraPos.y += 0.1f;
+		}
+		if (input->PushKey(DIK_DOWN)) {
+			cameraPos.y -= 0.1f;
+		}
+		if (input->PushKey(DIK_LEFT)) {
+			cameraPos.x -= 0.1f;
+		}
+		if (input->PushKey(DIK_RIGHT)) {
+			cameraPos.x += 0.1f;
+		}
+		objPlayer->SetPosition(PlayerPosition);
+		objFighter->SetPosition(FighterPosition);
 	}
-	if (input->PushKey(DIK_DOWN) || (input->TiltStick(input->Down))) {
-		cameraPos.y -= 0.1f;
-	}
-	if (input->PushKey(DIK_LEFT) || (input->TiltStick(input->Left))) {
-		cameraPos.x -= 0.1f;
-	}
-	if (input->PushKey(DIK_RIGHT) || (input->TiltStick(input->Right))) {
-		cameraPos.x += 0.1f;
-	}
-	objPlayer->SetPosition(PlayerPosition);
-	objFighter->SetPosition(FighterPosition);
-	
 
-	if (input->TriggerButton(input->Button_A) || input->TriggerKey(DIK_RETURN)) {
+	if (input->PushKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene("TITLE");
-		Audio::GetInstance()->StopWave(0);
 	}
 
 	bool hit = collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.5, FighterPosition.x, FighterPosition.y, FighterPosition.z, 0.5);
@@ -104,10 +105,10 @@ void GamePlayScene::Update()
 		debugText->Print("Hit", 5.0, 5.0, 5.0f);
 	}
 
-	//if (input->PushKey(DIK_0)) {
-	//	object1->PlayAnimation();
-	//}
-	//object1->Update();
+	if (input->PushKey(DIK_0)) {
+		object1->PlayAnimation();
+	}
+	object1->Update();
 	//{
 	//	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	//	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
@@ -121,7 +122,7 @@ void GamePlayScene::Update()
 	objGround->Update();
 }
 
-void GamePlayScene::Draw()
+void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 	ImGui::Begin("Light");
 	//ImGui::SetWindowPos(ImVec2(0, 0));
@@ -154,7 +155,7 @@ void GamePlayScene::Draw()
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
-	//object1->Draw();
+	object1->Draw(dxCommon->GetCmdList());
 	objSkydome->Draw();
 	objGround->Draw();
 	objFighter->Draw();

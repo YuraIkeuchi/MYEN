@@ -6,7 +6,7 @@
 #include "BaseScene.h"
 #include "DebugCamera.h"
 #include "LightGroup.h"
-//#include "FBXObject3d.h"
+#include "FBXObject3d.h"
 #include "DirectXCommon.h"
 #include "DirectXMath.h"
 //ゲームプレイシーン
@@ -16,17 +16,17 @@ private://メンバ変数
 
 public:
 	//初期化
-	void Initiallize() override;
+	void Initiallize(DirectXCommon* dxCommon) override;
 	//更新
-	void Update() override;
+	void Update(DirectXCommon* dxCommon) override;
 	//描画
-	void Draw() override;
+	void Draw(DirectXCommon* dxCommon) override;
 	//開放
 	void Finalize() override;
 	///ゲームシーン用
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
-	DirectXCommon* dxCommon = nullptr;
+
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	Model* modelFighter = nullptr;
@@ -35,8 +35,8 @@ public:
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
 	Object3d* objPlayer = nullptr;
-	//FBXModel* model1 = nullptr;
-	//FBXObject3d* object1 = nullptr;
+	FBXModel* model1 = nullptr;
+	FBXObject3d* object1 = nullptr;
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };

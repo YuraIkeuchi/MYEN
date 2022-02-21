@@ -26,13 +26,13 @@ public: // メンバ関数
 	~IkeGame();
 
 	//初期化
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxCommon) override;
 
 	//毎フレーム処理
-	void Update() override;
+	void Update(DirectXCommon* dxCommon) override;
 
 	//描画
-	void Draw() override;
+	void Draw(DirectXCommon* dxCommon) override;
 
 	//終了
 	void Finalize() override;

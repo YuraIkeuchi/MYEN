@@ -19,25 +19,25 @@ IkeGame::~IkeGame()
 	//safe_delete(modelPlayer);
 }
 
-void IkeGame::Initialize()
+void IkeGame::Initialize(DirectXCommon* dxCommon)
 {
 	//基底クラスの初期化
-	Framework::Initialize();
+	Framework::Initialize(dxCommon);
 	//マネージャーセット
 	sceneFactory_ = new SceneFactory();
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
 	SceneManager::GetInstance()->ChangeScene("TITLE");
 }
 
-void IkeGame::Update()
+void IkeGame::Update(DirectXCommon* dxCommon)
 {
 	//基底クラスの更新処理
-	Framework::Update();
+	Framework::Update(dxCommon);
 }
 
-void IkeGame::Draw()
+void IkeGame::Draw(DirectXCommon* dxCommon)
 {
-	Framework::Draw();
+	Framework::Draw(dxCommon);
 }
 
 void IkeGame::Finalize()

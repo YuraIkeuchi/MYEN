@@ -22,20 +22,20 @@ public:
 	//Às
 	void Run();
 	//‰Šú‰»
-	virtual void Initialize();
+	virtual void Initialize(DirectXCommon* dxCommon);
 
 	//‰Šú‰»
 	virtual void Finalize();
 
 	//–ˆƒtƒŒ[ƒ€ˆ—
-	virtual void Update();
+	virtual void Update(DirectXCommon* dxCommon);
 
 	////•`‰æ
-	virtual void Draw()  = 0;
+	virtual void Draw(DirectXCommon* dxCommon) = 0;
 
 	bool GetEndRequst() { return endRequst; }
 protected:
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxcommon = nullptr;
 	Input* input = nullptr;
 	Audio* audio = nullptr;
 	DebugText* debugText = nullptr;
