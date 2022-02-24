@@ -43,14 +43,11 @@ public: // 静的メンバ関数
 	/// テクスチャ読み込み
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
 
-	
 	/// 描画前処理
 	static void PreDraw();
 
-	
 	/// 描画後処理
 	static void PostDraw();
-
 	
 	/// スプライト生成
 	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);

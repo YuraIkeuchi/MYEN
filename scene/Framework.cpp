@@ -47,6 +47,7 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 	debugText->Initialize(debugTextTexNumber);
 
 	Object3d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
+	Texture::StaticInitialize(dxcommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	// FBXŠÖ˜AÃ“I‰Šú‰»
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 

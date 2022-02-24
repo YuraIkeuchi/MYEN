@@ -9,11 +9,11 @@
 #include "FBXObject3d.h"
 #include "DirectXCommon.h"
 #include "DirectXMath.h"
+#include "Texture.h"
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
 {
 private://メンバ変数
-
 public:
 	//初期化
 	void Initiallize(DirectXCommon* dxCommon) override;
@@ -37,6 +37,7 @@ public:
 	Object3d* objPlayer = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
+	Texture* titleTexture = nullptr;
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };

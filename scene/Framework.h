@@ -13,7 +13,7 @@
 #include "AbstractSceneFactory.h"
 #include "Camera.h"
 #include "LightGroup.h"
-
+#include "Texture.h"
 //フレームワーク
 class Framework
 {

@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "TitleScene.h"
 #include "FbxLoader.h"
+#include"Texture.h"
 void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
@@ -35,6 +36,10 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	modelGround = Model::LoadFromOBJ("ground");
 	modelPlayer = Model::LoadFromOBJ("Player");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
+	titleTexture = new Texture();
+	titleTexture = Texture::Create();
+	titleTexture->SetPosition({ 0,-10,0 });
+	titleTexture->SetScale({ 20,20,20 });
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objPlayer->SetModel(modelPlayer);
@@ -74,7 +79,6 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	Input* input = Input::GetInstance();
 	DebugText* debugText = DebugText::GetInstance();
 	lightGroup->Update();
-
 
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
@@ -120,6 +124,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objFighter->Update();
 	objSkydome->Update();
 	objGround->Update();
+	titleTexture->Update();
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -150,6 +155,9 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 	// 深度バッファクリア
 	//dxCommon->ClearDepthBuffer();
+	Texture::PreDraw(dxCommon->GetCmdList());
+	titleTexture->Draw();
+	Texture::PostDraw();
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画

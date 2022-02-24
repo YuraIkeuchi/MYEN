@@ -60,10 +60,10 @@
     <None Include="imgui\imgui.vcxproj.filters">
       <Filter>ソース ファイル\Imgui</Filter>
     </None>
-    <None Include="OBJShaderHeader.hlsli">
+    <None Include="Resources\Shaders\FBX.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
-    <None Include="Resources\Shaders\FBX.hlsli">
+    <None Include="Resources\Shaders\OBJShaderHeaderhlsli.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -80,16 +80,16 @@
     <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
-    <FxCompile Include="OBJPixelShader.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="OBJVertexShader.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\OBJPixelShader.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\OBJVertexShader.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
@@ -198,6 +198,9 @@
     </ClCompile>
     <ClCompile Include="3d\FBXObject3d.cpp">
       <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\Texture.cpp">
+      <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="3d\FBXObject3d.h">
       <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Texture.h">
+      <Filter>ソース ファイル\2d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
