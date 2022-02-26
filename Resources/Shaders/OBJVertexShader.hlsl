@@ -1,10 +1,12 @@
 #include "OBJShaderHeaderhlsli.hlsli"
 
-VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
+Output main(float4 pos:POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
-    VSOutput output; // ピクセルシェーダーに渡す値
-    output.svpos = mul(mat, pos); // 座標に行列を乗算
-    output.normal = normal;
-    output.uv = uv;
-    return output;
+	Output output;
+	//output.svpos = pos;
+	output.normal = normal;
+	//座標に行列を乗算して出力
+	output.svpos = mul(mat, pos);
+	output.uv = uv;
+	return output;
 }

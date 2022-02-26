@@ -34,12 +34,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objGround = Object3d::Create();
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
-	modelPlayer = Model::LoadFromOBJ("Player");
+	modelPlayer = Model::LoadFromOBJ("senntouki3");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
-	titleTexture = new Texture();
-	titleTexture = Texture::Create();
-	titleTexture->SetPosition({ 0,-10,0 });
-	titleTexture->SetScale({ 20,20,20 });
+	//普通のテクスチャ(スプライトじゃないよ)
+	Texture::LoadTexture(0, L"Resources/Title.png");
+	titleTexture = Texture::Create(0, { 0,0,0 }, { 12,12,12 }, { 1,1,1,1 });
+	titleTexture->TextureCreate();
+	titleTexture->SetPosition(texpo);
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objPlayer->SetModel(modelPlayer);
@@ -50,7 +51,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objGround->SetPosition({ 0, -10, 0 });
 
 	// カメラ注視点をセット
-	camera->SetTarget({ 0, 1, 0 });
+	camera->SetTarget(texpo);
 	camera->SetEye(cameraPos);
 	/*lightGroup->SetDirLightActive(0, false);
 	lightGroup->SetDirLightActive(1, false);
@@ -124,7 +125,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objFighter->Update();
 	objSkydome->Update();
 	objGround->Update();
-	titleTexture->Update();
+	titleTexture->SetPosition(texpo);
+	titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -164,10 +166,10 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	object1->Draw(dxCommon->GetCmdList());
-	objSkydome->Draw();
-	objGround->Draw();
-	objFighter->Draw();
-	objPlayer->Draw();
+	//objSkydome->Draw();
+	//objGround->Draw();
+	//objFighter->Draw();
+	//objPlayer->Draw();
 	Object3d::PostDraw();
 #pragma endregion
 
@@ -183,6 +185,7 @@ void GamePlayScene::Finalize()
 	//オブジェクト開放
 	delete objPlayer;
 	delete objFighter;
+	delete titleTexture;
 	//モデル開放
 	delete modelFighter;
 	delete modelPlayer;

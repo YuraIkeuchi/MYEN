@@ -44,15 +44,16 @@ public: // 静的メンバ関数
 	/// 静的初期化
 	static bool StaticInitialize(ID3D12Device* device, int window_width, int window_height);
 
+	/// テクスチャ読み込み
+	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
+
 	/// 描画前処理
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
 	/// 描画後処理
 	static void PostDraw();
-
-	/// 3Dオブジェクト生成
-	static Texture* Create();
-
+	//テクスチャ生成
+	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
 	/// 視点座標の取得
 	static const XMFLOAT3& GetEye() { return eye; }
 
@@ -68,7 +69,11 @@ public: // 静的メンバ関数
 	/// ベクトルによる移動
 	static void CameraMoveVector(XMFLOAT3 move);
 
+	/// スプライト生成
+	static Texture* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
+
 private: // 静的メンバ変数
+	static const int srvCount = 213;
 	// デバイス
 	static ID3D12Device* device;
 	// デスクリプタサイズ
@@ -86,7 +91,7 @@ private: // 静的メンバ変数
 	// インデックスバッファ
 	static ComPtr<ID3D12Resource> indexBuff;
 	// テクスチャバッファ
-	static ComPtr<ID3D12Resource> texbuff;
+	static ComPtr<ID3D12Resource> texbuff[srvCount];
 	// シェーダリソースビューのハンドル(CPU)
 	static CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
 	// シェーダリソースビューのハンドル(CPU)
@@ -109,6 +114,8 @@ private: // 静的メンバ変数
 	static VertexPosNormalUv vertices[vertexCount];
 	// 頂点インデックス配列
 	static unsigned short indices[indexCount];
+	private:
+		UINT texNumber = 0;
 
 private:// 静的メンバ関数
 	/// デスクリプタヒープの初期化
@@ -120,9 +127,6 @@ private:// 静的メンバ関数
 	/// グラフィックパイプライン生成
 	static bool InitializeGraphicsPipeline();
 
-	/// テクスチャ読み込み
-	static bool LoadTexture(const wchar_t* modelname);
-
 	/// モデル作成
 	static void CreateModel();
 
@@ -130,9 +134,12 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
+	void TextureCreate();
+	//コンストラクタ
+	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
 	bool Initialize();
 	/// 毎フレーム処理
-	void Update();
+	void Update(XMMATRIX matview, XMMATRIX matprojection);
 
 	/// 描画
 	void Draw();

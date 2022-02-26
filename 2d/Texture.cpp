@@ -20,7 +20,7 @@ ComPtr<ID3D12PipelineState> Texture::pipelinestate;
 ComPtr<ID3D12DescriptorHeap> Texture::descHeap;
 ComPtr<ID3D12Resource> Texture::vertBuff;
 ComPtr<ID3D12Resource> Texture::indexBuff;
-ComPtr<ID3D12Resource> Texture::texbuff;
+ComPtr<ID3D12Resource> Texture::texbuff[srvCount];
 CD3DX12_CPU_DESCRIPTOR_HANDLE Texture::cpuDescHandleSRV;
 CD3DX12_GPU_DESCRIPTOR_HANDLE Texture::gpuDescHandleSRV;
 XMMATRIX Texture::matView{};
@@ -33,6 +33,19 @@ D3D12_INDEX_BUFFER_VIEW Texture::ibView{};
 Texture::VertexPosNormalUv Texture::vertices[vertexCount];
 unsigned short Texture::indices[indexCount];
 XMFLOAT4 Texture::color = { 1,1,1,1 };
+
+Texture::Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color)
+{
+
+	this->position = position;
+	this->scale = size;
+	//this->anchorpoint = anchorpoint;//
+	this->matWorld = XMMatrixIdentity();
+	this->color = color;
+	this->texNumber = texNumber;
+	//this->texSize = size;
+}
+
 bool Texture::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
 {
 	// nullptrチェック
@@ -43,17 +56,8 @@ bool Texture::StaticInitialize(ID3D12Device* device, int window_width, int windo
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
 
-	// カメラ初期化
-	InitializeCamera(window_width, window_height);
-
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
-
-	// テクスチャ読み込み
-	LoadTexture(L"Resources/Title.png");
-
-	// モデル生成
-	CreateModel();
 
 	return true;
 }
@@ -80,22 +84,33 @@ void Texture::PostDraw()
 	Texture::cmdList = nullptr;
 }
 
-Texture* Texture::Create()
+Texture* Texture::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color)
 {
-	// 3Dオブジェクトのインスタンスを生成
-	Texture* object3d = new Texture();
-	if (object3d == nullptr) {
+	// 仮サイズ
+	//size = { 10.0f, 10.0f,3 };
+
+	if (texbuff[texNumber])
+	{
+		// テクスチャ情報取得
+		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
+		// スプライトのサイズをテクスチャのサイズに設定
+		size = { 10,10, 10 };
+	}
+
+	// Spriteのインスタンスを生成
+	Texture* texture = new Texture(texNumber, position, size, color);
+	if (texture == nullptr) {
 		return nullptr;
 	}
 
 	// 初期化
-	if (!object3d->Initialize()) {
-		delete object3d;
+	if (!texture->Initialize()) {
+		delete texture;
 		assert(0);
 		return nullptr;
 	}
 
-	return object3d;
+	return texture;
 }
 
 void Texture::SetEye(XMFLOAT3 eye)
@@ -327,20 +342,22 @@ bool Texture::InitializeGraphicsPipeline()
 	return true;
 }
 
-bool Texture::LoadTexture(const wchar_t* modelname)
+bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 {
+	// nullptrチェック
+	assert(device);
 
-	HRESULT result = S_FALSE;
-
+	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		modelname, WIC_FLAGS_NONE,
+		filename, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
-		return result;
+		assert(0);
+		return false;
 	}
 
 	const Image* img = scratchImg.GetImage(0, 0, 0); // 生データ抽出
@@ -361,13 +378,14 @@ bool Texture::LoadTexture(const wchar_t* modelname)
 		&texresDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, // テクスチャ用指定
 		nullptr,
-		IID_PPV_ARGS(&texbuff));
+		IID_PPV_ARGS(&texbuff[texnumber]));
 	if (FAILED(result)) {
-		return result;
+		assert(0);
+		return false;
 	}
 
 	// テクスチャバッファにデータ転送
-	result = texbuff->WriteToSubresource(
+	result = texbuff[texnumber]->WriteToSubresource(
 		0,
 		nullptr, // 全領域へコピー
 		img->pixels,    // 元データアドレス
@@ -375,30 +393,28 @@ bool Texture::LoadTexture(const wchar_t* modelname)
 		(UINT)img->slicePitch // 1枚サイズ
 	);
 	if (FAILED(result)) {
-		return result;
+		assert(0);
+		return false;
 	}
 
 	// シェーダリソースビュー作成
-	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
+	D3D12_RESOURCE_DESC resDesc = texbuff[texnumber]->GetDesc();
 
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	device->CreateShaderResourceView(texbuff.Get(), //ビューと関連付けるバッファ
+	device->CreateShaderResourceView(texbuff[texnumber].Get(), //ビューと関連付けるバッファ
 		&srvDesc, //テクスチャ設定情報
-		cpuDescHandleSRV
+		CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), texnumber, descriptorHandleIncrementSize)
 	);
 
 	return true;
 }
 
-void Texture::CreateModel()
+void Texture::TextureCreate()
 {
 	HRESULT result = S_FALSE;
 
@@ -500,7 +516,7 @@ bool Texture::Initialize()
 	return true;
 }
 
-void Texture::Update()
+void Texture::Update(XMMATRIX matview, XMMATRIX matprojection)
 {
 	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
@@ -523,7 +539,7 @@ void Texture::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->color = color;
-	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constMap->mat = matWorld * matview * matprojection;	// 行列の合成
 	constBuff->Unmap(0, nullptr);
 }
 
@@ -545,7 +561,9 @@ void Texture::Draw()
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 	// シェーダリソースビューをセット
-	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
+
+	//cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 }

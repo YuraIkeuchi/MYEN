@@ -41,6 +41,7 @@ public:
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
+	XMFLOAT3 texpo = { 0,0,0 };
 	//“–‚½‚è”»’è ‹…
 	Sphere sphere;
 	//“–‚½‚è”»’è •½–Ê
