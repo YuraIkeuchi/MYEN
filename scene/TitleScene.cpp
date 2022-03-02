@@ -17,7 +17,7 @@ void TitleScene::Initiallize(DirectXCommon* dxCommon) {
 
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	if (input->PushKey(DIK_RETURN)) {
+	if (input->PushKey(DIK_RETURN) || input->TriggerButton(input->Button_A)) {
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
 	DebugText::GetInstance()->Print("ENTER to GAMEPLAY!!", 200, 100, 1.0f);

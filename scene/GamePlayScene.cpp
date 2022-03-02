@@ -6,6 +6,12 @@
 #include "TitleScene.h"
 #include "FbxLoader.h"
 #include"Texture.h"
+float easeInSine(float x) {
+	return x * x * x;
+}
+float easeOutBack(float x) {
+	return x == 1 ? 1 : 1 - powf(2, -10 * x);
+}
 void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
@@ -36,11 +42,35 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	modelGround = Model::LoadFromOBJ("ground");
 	modelPlayer = Model::LoadFromOBJ("senntouki3");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
-	//普通のテクスチャ(スプライトじゃないよ)
+	//普通のテクスチャ(板ポリ)
 	Texture::LoadTexture(0, L"Resources/Title.png");
-	titleTexture = Texture::Create(0, { 0,0,0 }, { 12,12,12 }, { 1,1,1,1 });
+	titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
 	titleTexture->TextureCreate();
 	titleTexture->SetPosition(texpo);
+	titleTexture->SetScale({ 0.5,0.5,0.5 });
+
+	//普通のテクスチャ(板ポリ)
+	Texture::LoadTexture(2, L"Resources/Title.png");
+	fantasyTexture = Texture::Create(2, { 0,0,0 }, { 2,2,2 }, { 1,1,1,0.5 });
+	fantasyTexture->TextureCreate();
+	fantasyTexture->SetPosition(fantasypos);
+	fantasyTexture->SetScale({ 0.5,0.5,0.5 });
+	Texture::LoadTexture(1, L"Resources/ダウンロード.png");
+	for (int i = 0; i < Max; i++) {
+		EnemySpeed[i] = (float)(rand() % 360);
+		Enemyscale[i] = (float)(rand() % 15);
+		//プレイヤー
+		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
+		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
+		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
+		enepos[i].x = EnemyCircleX[i];
+		enepos[i].y = EnemyCircleZ[i];
+		
+		enemyTexture[i] = Texture::Create(1, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
+		enemyTexture[i]->TextureCreate();
+		enemyTexture[i]->SetPosition(enepos[i]);
+		enemyTexture[i]->SetScale({ 0.3,0.3,0.3 });
+	}
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objPlayer->SetModel(modelPlayer);
@@ -73,6 +103,19 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
+	//プレイヤー
+	Playerradius = PlayerSpeed * PI / 180.0f;
+	PlayerCircleX = cosf(Playerradius) * Playerscale;
+	PlayerCircleZ = sinf(Playerradius) * Playerscale;
+	texpo.x = PlayerCircleX;
+	texpo.y = PlayerCircleZ + 20;
+
+	//プレイヤー(幻想)
+	fantasyradius = fantasySpeed * PI / 180.0f;
+	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
+	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
+	fantasypos.x = fantasyCircleX;
+	fantasypos.y = fantasyCircleZ + 20;
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -82,26 +125,45 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	lightGroup->Update();
 
 	// オブジェクト移動
-	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	{
-		if (input->PushKey(DIK_UP)) {
-			cameraPos.y += 0.1f;
+	if (input->PushKey(DIK_UP) || input->TiltStick(input->Up)) {
+		PlayerSpeed += 2.1f;
+	}
+	if (input->PushKey(DIK_DOWN) || input->TiltStick(input->Down)) {
+		PlayerSpeed -= 2.1f;
+	}
+	/*if (PlayerSpeed >= 360 || PlayerSpeed <= -360) {
+		PlayerSpeed = 0;
+	}*/
+
+	//プレイヤー
+	Playerradius = PlayerSpeed * PI / 180.0f;
+	PlayerCircleX = cosf(Playerradius) * Playerscale;
+	PlayerCircleZ = sinf(Playerradius) * Playerscale;
+	texpo.x = PlayerCircleX;
+	texpo.y = PlayerCircleZ - 5;
+
+	if (input->TriggerKey(DIK_0)) {
+		if (fantasyFlag == false) {
+			fantasyFlag = true;
+			fantasySpeed = PlayerSpeed;
+		} else {
+
 		}
-		if (input->PushKey(DIK_DOWN)) {
-			cameraPos.y -= 0.1f;
-		}
-		if (input->PushKey(DIK_LEFT)) {
-			cameraPos.x -= 0.1f;
-		}
-		if (input->PushKey(DIK_RIGHT)) {
-			cameraPos.x += 0.1f;
-		}
-		objPlayer->SetPosition(PlayerPosition);
-		objFighter->SetPosition(FighterPosition);
 	}
 
-	if (input->PushKey(DIK_SPACE)) {
+	//プレイヤー(幻想)
+	fantasyradius = fantasySpeed * PI / 180.0f;
+	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
+	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
+	fantasypos.x = fantasyCircleX;
+	fantasypos.y = fantasyCircleZ - 5;
+
+	objPlayer->SetPosition(PlayerPosition);
+	objFighter->SetPosition(FighterPosition);
+
+	if (input->PushKey(DIK_SPACE) || input->TriggerButton(input->Button_A)) {
 		SceneManager::GetInstance()->ChangeScene("TITLE");
+		Audio::GetInstance()->StopWave(0);
 	}
 
 	bool hit = collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.5, FighterPosition.x, FighterPosition.y, FighterPosition.z, 0.5);
@@ -110,9 +172,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		debugText->Print("Hit", 5.0, 5.0, 5.0f);
 	}
 
-	if (input->PushKey(DIK_0)) {
-		object1->PlayAnimation();
-	}
+	//if (input->PushKey(DIK_0)) {
+	//	object1->PlayAnimation();
+	//}
+
 	object1->Update();
 	//{
 	//	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
@@ -127,23 +190,44 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objGround->Update();
 	titleTexture->SetPosition(texpo);
 	titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	fantasyTexture->SetPosition(fantasypos);
+	fantasyTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	for (int i = 0; i < Max; i++) {
+		enemyTexture[i]->SetPosition(enepos[i]);
+		enemyTexture[i]->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	}
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
-	ImGui::Begin("Light");
-	//ImGui::SetWindowPos(ImVec2(0, 0));
-	//ImGui::SetWindowSize(ImVec2(500, 200));
-	//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir0", lightDir0);
-	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir1", lightDir1);
-	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir2", lightDir2);
-	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-	ImGui::ColorEdit3("pointLightColor", pointLightColor, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("pointLightPos", pointLightPos);
-	ImGui::InputFloat3("pointLightAtten", pointLightAtten);
+	//ImGui::Begin("Light");
+	////ImGui::SetWindowPos(ImVec2(0, 0));
+	////ImGui::SetWindowSize(ImVec2(500, 200));
+	////ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	////ImGui::InputFloat3("lightDir0", lightDir0);
+	////ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	////ImGui::InputFloat3("lightDir1", lightDir1);
+	////ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	////ImGui::InputFloat3("lightDir2", lightDir2);
+	////ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	//ImGui::ColorEdit3("pointLightColor", pointLightColor, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("pointLightPos", pointLightPos);
+	//ImGui::InputFloat3("pointLightAtten", pointLightAtten);
+	//ImGui::End();
+
+	ImGui::Begin("test");
+	if (ImGui::TreeNode("Debug"))
+	{
+		if (ImGui::TreeNode("Player"))
+		{
+			ImGui::SliderFloat("PlayerSpeed", &PlayerSpeed, 50, -50);
+			ImGui::SliderFloat("FantasySpeed", &fantasySpeed, 50, -50);
+			//ImGui::Text("HP,%d", PlayerHP);
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
 	ImGui::End();
 
 
@@ -158,14 +242,20 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 深度バッファクリア
 	//dxCommon->ClearDepthBuffer();
 	Texture::PreDraw(dxCommon->GetCmdList());
+	if (fantasyFlag == true) {
+		fantasyTexture->Draw();
+	}
 	titleTexture->Draw();
+	for (int i = 0; i < Max; i++) {
+		enemyTexture[i]->Draw();
+	}
 	Texture::PostDraw();
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
-	object1->Draw(dxCommon->GetCmdList());
+	//object1->Draw(dxCommon->GetCmdList());
 	//objSkydome->Draw();
 	//objGround->Draw();
 	//objFighter->Draw();
@@ -185,7 +275,11 @@ void GamePlayScene::Finalize()
 	//オブジェクト開放
 	delete objPlayer;
 	delete objFighter;
+	delete fantasyTexture;
 	delete titleTexture;
+	for (int i = 0; i < Max; i++) {
+		delete enemyTexture[i];
+	}
 	//モデル開放
 	delete modelFighter;
 	delete modelPlayer;

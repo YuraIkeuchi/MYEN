@@ -146,13 +146,13 @@ void Texture::CameraMoveVector(XMFLOAT3 move)
 
 bool Texture::InitializeDescriptorHeap()
 {
-	HRESULT result = S_FALSE;
+HRESULT result = S_FALSE;
 
 	// デスクリプタヒープを生成	
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
+	descHeapDesc.NumDescriptors = srvCount; // シェーダーリソースビュー1つ
 	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
 	if (FAILED(result)) {
 		assert(0);
@@ -344,7 +344,7 @@ bool Texture::InitializeGraphicsPipeline()
 
 bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 {
-	// nullptrチェック
+		// nullptrチェック
 	assert(device);
 
 	HRESULT result;
@@ -396,6 +396,9 @@ bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 		assert(0);
 		return false;
 	}
+	// シェーダリソースビュー作成
+//	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
+	//gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
 
 	// シェーダリソースビュー作成
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
