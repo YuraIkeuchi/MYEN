@@ -58,8 +58,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Texture::LoadTexture(1, L"Resources/ダウンロード.png");
 	for (int i = 0; i < Max; i++) {
 		EnemySpeed[i] = (float)(rand() % 360);
-		Enemyscale[i] = (float)(rand() % 15);
-		//プレイヤー
+		Enemyscale[i] = (float)(rand() % 10);
 		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
 		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
 		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
@@ -70,6 +69,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 		enemyTexture[i]->TextureCreate();
 		enemyTexture[i]->SetPosition(enepos[i]);
 		enemyTexture[i]->SetScale({ 0.3,0.3,0.3 });
+		EnemyAlive[i] = 1;
+		EnemyTimer[i] = 100;
 	}
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
@@ -108,7 +109,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	PlayerCircleX = cosf(Playerradius) * Playerscale;
 	PlayerCircleZ = sinf(Playerradius) * Playerscale;
 	texpo.x = PlayerCircleX;
-	texpo.y = PlayerCircleZ + 20;
+	texpo.y = PlayerCircleZ - 5;
 
 	//プレイヤー(幻想)
 	fantasyradius = fantasySpeed * PI / 180.0f;
@@ -125,29 +126,100 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	lightGroup->Update();
 
 	// オブジェクト移動
-	if (input->PushKey(DIK_UP) || input->TiltStick(input->Up)) {
-		PlayerSpeed += 2.1f;
+	if (input->PushKey(DIK_UP) || input->TiltStick(input->Up) || input->PushKey(DIK_DOWN) || input->TiltStick(input->Down)) {
+		if (moveNumver == 0) {
+			if ((input->PushKey(DIK_UP)) || (input->TiltStick(input->Up))) {
+				if (AttackSpeed == 0.0f) {
+					PlayerSpeed += 2.0f;
+				}
+			}
+			if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Down))) {
+				if (AttackSpeed == 0.0f) {
+					PlayerSpeed -= 2.0f;
+				}
+			}
+			//プレイヤー
+			Playerradius = PlayerSpeed * PI / 180.0f;
+			PlayerCircleX = cosf(Playerradius) * Playerscale;
+			PlayerCircleZ = sinf(Playerradius) * Playerscale;
+			texpo.x = PlayerCircleX;
+			texpo.y = PlayerCircleZ - 5;
+		}
 	}
-	if (input->PushKey(DIK_DOWN) || input->TiltStick(input->Down)) {
-		PlayerSpeed -= 2.1f;
-	}
-	/*if (PlayerSpeed >= 360 || PlayerSpeed <= -360) {
-		PlayerSpeed = 0;
-	}*/
-
-	//プレイヤー
-	Playerradius = PlayerSpeed * PI / 180.0f;
-	PlayerCircleX = cosf(Playerradius) * Playerscale;
-	PlayerCircleZ = sinf(Playerradius) * Playerscale;
-	texpo.x = PlayerCircleX;
-	texpo.y = PlayerCircleZ - 5;
 
 	if (input->TriggerKey(DIK_0)) {
 		if (fantasyFlag == false) {
 			fantasyFlag = true;
 			fantasySpeed = PlayerSpeed;
 		} else {
+			if (moveNumver == 0) {
+				AttackSpeed = 0;
+				initScale = Playerscale;
+				initSpeed = PlayerSpeed;
+				inittexpo = texpo;
+				frame = 0;
+				moveNumver = 1;
+			
+				/*if (Playerscale <= 0.0f) {
+					moveNumver = 1;
+				} else {
+					moveNumver = 2;
+				}*/
+			}
+		}
+	}
 
+	//if (moveNumver == 1) {
+	//	PlayerSpeed++;
+	//	Playerscale = initScale + 40.0f * easeInSine(frame / frameMax);
+	//	if (frame != frameMax) {
+	//		frame = frame + 1;
+	//	} else {
+	//		moveNumver = 0;
+	//	}
+	//} else if (moveNumver == 2) {
+	//	PlayerSpeed++;
+	//	Playerscale = initScale - 40.0f * easeInSine(frame / frameMax);
+	//	if (frame != frameMax) {
+	//		frame = frame + 1;
+	//	} else {
+	//		moveNumver = 0;
+	//	}
+	//}
+
+	//if (moveNumver == 1) {
+	//	texpo.x = inittexpo.x - (texpo.x - fantasypos.x) * easeInSine(frame / frameMax);
+	//	texpo.y = inittexpo.y - (texpo.y - fantasypos.y) * easeInSine(frame / frameMax);
+	//	PlayerSpeed = fantasySpeed;
+	//	if (frame != frameMax) {
+	//			frame = frame + 1;
+	//		} else {
+	//			moveNumver = 0;
+	//		}
+	//}
+	if (moveNumver == 1) {
+		AttackSpeed = 3 * easeInSine(frame / frameMax);
+		if (frame != frameMax) {
+					frame = frame + 1;
+		}/* else {
+			moveNumver = 0;
+		}*/
+		angleX = (texpo.x - fantasypos.x);
+		angleZ = (texpo.y - fantasypos.y);
+		angleR = sqrt((texpo.x - fantasypos.x) * (texpo.x - fantasypos.x)
+			+ (texpo.y - fantasypos.y) * (texpo.y - fantasypos.y));
+		texpo.x -= (angleX / angleR) * AttackSpeed;
+		texpo.y -= (angleZ / angleR) * AttackSpeed;
+		PlayerSpeed = fantasySpeed;
+		if (collision->SphereCollision(texpo.x, texpo.y, texpo.z, 0.5, fantasypos.x, fantasypos.y, fantasypos.z, 0.5) == true) {
+			fantasyFlag = false;
+			moveNumver = 0;
+			AttackSpeed = 0.0f;
+			Playerradius = PlayerSpeed * PI / 180.0f;
+			PlayerCircleX = cosf(Playerradius) * Playerscale;
+			PlayerCircleZ = sinf(Playerradius) * Playerscale;
+			texpo.x = PlayerCircleX;
+			texpo.y = PlayerCircleZ - 5;
 		}
 	}
 
@@ -165,11 +237,28 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		SceneManager::GetInstance()->ChangeScene("TITLE");
 		Audio::GetInstance()->StopWave(0);
 	}
+	for (int i = 0; i < Max; i++) {
+		hit[i] = collision->SphereCollision(texpo.x, texpo.y, texpo.z, 0.8, enepos[i].x, enepos[i].y, enepos[i].z, 0.8);
 
-	bool hit = collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.5, FighterPosition.x, FighterPosition.y, FighterPosition.z, 0.5);
 
-	if (hit) {
-		debugText->Print("Hit", 5.0, 5.0, 5.0f);
+		if (hit[i]) {
+			EnemyAlive[i] = 0;
+		}
+
+		if (EnemyAlive[i] == 0) {
+			EnemyTimer[i]--;
+			if (EnemyTimer[i] == 0) {
+				EnemyTimer[i] = 100;
+				EnemyAlive[i] = 1;
+				EnemySpeed[i] = (float)(rand() % 360);
+				Enemyscale[i] = (float)(rand() % 10);
+				Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
+				EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
+				EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
+				enepos[i].x = EnemyCircleX[i];
+				enepos[i].y = EnemyCircleZ[i];
+			}
+		}
 	}
 
 	//if (input->PushKey(DIK_0)) {
@@ -200,37 +289,26 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
-	//ImGui::Begin("Light");
-	////ImGui::SetWindowPos(ImVec2(0, 0));
-	////ImGui::SetWindowSize(ImVec2(500, 200));
-	////ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	////ImGui::InputFloat3("lightDir0", lightDir0);
-	////ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	////ImGui::InputFloat3("lightDir1", lightDir1);
-	////ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	////ImGui::InputFloat3("lightDir2", lightDir2);
-	////ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-	//ImGui::ColorEdit3("pointLightColor", pointLightColor, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("pointLightPos", pointLightPos);
-	//ImGui::InputFloat3("pointLightAtten", pointLightAtten);
-	//ImGui::End();
-
+	
 	ImGui::Begin("test");
 	if (ImGui::TreeNode("Debug"))
 	{
 		if (ImGui::TreeNode("Player"))
 		{
-			ImGui::SliderFloat("PlayerSpeed", &PlayerSpeed, 50, -50);
-			ImGui::SliderFloat("FantasySpeed", &fantasySpeed, 50, -50);
-			//ImGui::Text("HP,%d", PlayerHP);
+
+			ImGui::SliderFloat("Player", &texpo.x, 50, -50);
+			ImGui::SliderFloat("Player", &texpo.y, 50, -50);
+			ImGui::SliderFloat("fantasy", &fantasypos.x, 50, -50);
+			ImGui::SliderFloat("fantasy", &fantasypos.y, 50, -50);
+			ImGui::SliderFloat("Player", &pos.x, 50, -50);
+			ImGui::SliderFloat("Player", &pos.y, 50, -50);
+			ImGui::Text("movenumber%d", moveNumver);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
 	}
 	ImGui::End();
-
-
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw();
@@ -247,7 +325,9 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	}
 	titleTexture->Draw();
 	for (int i = 0; i < Max; i++) {
-		enemyTexture[i]->Draw();
+		if (EnemyAlive[i] == 1) {
+			enemyTexture[i]->Draw();
+		}
 	}
 	Texture::PostDraw();
 #pragma endregion

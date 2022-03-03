@@ -48,6 +48,8 @@ public:
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
 	XMFLOAT3 texpo = { 0,0,0 };
+	XMFLOAT3 pos = { 0,0,0 };
+	XMFLOAT3 inittexpo = { 0,0,0 };
 	XMFLOAT3 fantasypos = { 0,0,0 };
 	XMFLOAT3 enepos[Max];
 	
@@ -84,7 +86,16 @@ public:
 	float Playerscale = 20.0f;// LaneNum‚Æˆê‚É•Ï‚¦‚é‚±‚Æ
 	float PlayerCircleX = 0.0f;
 	float PlayerCircleZ = 0.0f;
-
+	float initScale = 0.0f;
+	float initSpeed = 0.0f;
+	float AttackSpeed = 0.0f;
+	int moveNumver = 0;
+	float angleX = 0.0f;
+	float angleZ = 0.0f;
+	double	angleR = 0;
+	//ƒŒ[ƒ“ˆÚ“®‚Ìˆ—
+	float frame = 0.0f;
+	float frameMax = 27.0f;
 	float fantasyradius = 0.0f;
 	float fantasySpeed = 0.0f;
 	float fantasyscale = 20.0f;// LaneNum‚Æˆê‚É•Ï‚¦‚é‚±‚Æ
@@ -97,4 +108,7 @@ public:
 	float Enemyscale[Max] = { 0.0f };// LaneNum‚Æˆê‚É•Ï‚¦‚é‚±‚Æ
 	float EnemyCircleX[Max] = { 0.0f };
 	float EnemyCircleZ[Max] = { 0.0f };
+	int EnemyAlive[Max] = { 1 };
+	int EnemyTimer[Max] = { 100 };
+	bool hit[Max] = { false };
 };
