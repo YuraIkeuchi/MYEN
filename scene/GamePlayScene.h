@@ -108,7 +108,9 @@ public:
 	float Enemyscale[Max] = { 0.0f };// LaneNum‚Æˆê‚É•Ï‚¦‚é‚±‚Æ
 	float EnemyCircleX[Max] = { 0.0f };
 	float EnemyCircleZ[Max] = { 0.0f };
-	int EnemyAlive[Max] = { 1 };
+	int EnemyAlive[Max] = { 0 };
 	int EnemyTimer[Max] = { 100 };
+	int EnemyMove[Max] = { 0 };
 	bool hit[Max] = { false };
+	bool enemyhit[Max] = { false };
 };
