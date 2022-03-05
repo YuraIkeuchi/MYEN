@@ -58,18 +58,18 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Texture::LoadTexture(1, L"Resources/ダウンロード.png");
 	for (int i = 0; i < Max; i++) {
 		EnemySpeed[i] = (float)(rand() % 360);
-		Enemyscale[i] = (float)(rand() % 10);
+		Enemyscale[i] = 0;
 		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
 		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
 		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
 		enepos[i].x = EnemyCircleX[i];
-		enepos[i].y = EnemyCircleZ[i];
+		enepos[i].y = EnemyCircleZ[i] - 5;
 		
 		enemyTexture[i] = Texture::Create(1, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
 		enemyTexture[i]->TextureCreate();
 		enemyTexture[i]->SetPosition(enepos[i]);
 		enemyTexture[i]->SetScale({ 0.3,0.3,0.3 });
-		EnemyAlive[i] = 1;
+		EnemyAlive[i] = 0;
 		EnemyTimer[i] = 100;
 	}
 	objSkydome->SetModel(modelSkydome);
@@ -84,13 +84,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	// カメラ注視点をセット
 	camera->SetTarget(texpo);
 	camera->SetEye(cameraPos);
-	/*lightGroup->SetDirLightActive(0, false);
-	lightGroup->SetDirLightActive(1, false);
-	lightGroup->SetDirLightActive(2, false);
-	lightGroup->SetPointLightActive(0, true);
-	pointLightPos[0] = 0.5f;
-	pointLightPos[1] = 1.0f;
-	pointLightPos[2] = 0.0f;*/
+
 	// モデル名を指定してファイル読み込み
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
@@ -116,7 +110,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
 	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
 	fantasypos.x = fantasyCircleX;
-	fantasypos.y = fantasyCircleZ + 20;
+	fantasypos.y = fantasyCircleZ - 5;
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -128,12 +122,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->TiltStick(input->Up) || input->PushKey(DIK_DOWN) || input->TiltStick(input->Down)) {
 		if (moveNumver == 0) {
-			if ((input->PushKey(DIK_UP)) || (input->TiltStick(input->Up))) {
+			if ((input->PushKey(DIK_UP)) || (input->TiltStick(input->Left))) {
 				if (AttackSpeed == 0.0f) {
 					PlayerSpeed += 2.0f;
 				}
 			}
-			if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Down))) {
+			if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Right))) {
 				if (AttackSpeed == 0.0f) {
 					PlayerSpeed -= 2.0f;
 				}
@@ -147,7 +141,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
-	if (input->TriggerKey(DIK_0)) {
+	if (input->TriggerKey(DIK_0) || input->TriggerButton(input->Button_B)) {
 		if (fantasyFlag == false) {
 			fantasyFlag = true;
 			fantasySpeed = PlayerSpeed;
@@ -159,51 +153,16 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 				inittexpo = texpo;
 				frame = 0;
 				moveNumver = 1;
-			
-				/*if (Playerscale <= 0.0f) {
-					moveNumver = 1;
-				} else {
-					moveNumver = 2;
-				}*/
+		
 			}
 		}
 	}
 
-	//if (moveNumver == 1) {
-	//	PlayerSpeed++;
-	//	Playerscale = initScale + 40.0f * easeInSine(frame / frameMax);
-	//	if (frame != frameMax) {
-	//		frame = frame + 1;
-	//	} else {
-	//		moveNumver = 0;
-	//	}
-	//} else if (moveNumver == 2) {
-	//	PlayerSpeed++;
-	//	Playerscale = initScale - 40.0f * easeInSine(frame / frameMax);
-	//	if (frame != frameMax) {
-	//		frame = frame + 1;
-	//	} else {
-	//		moveNumver = 0;
-	//	}
-	//}
-
-	//if (moveNumver == 1) {
-	//	texpo.x = inittexpo.x - (texpo.x - fantasypos.x) * easeInSine(frame / frameMax);
-	//	texpo.y = inittexpo.y - (texpo.y - fantasypos.y) * easeInSine(frame / frameMax);
-	//	PlayerSpeed = fantasySpeed;
-	//	if (frame != frameMax) {
-	//			frame = frame + 1;
-	//		} else {
-	//			moveNumver = 0;
-	//		}
-	//}
 	if (moveNumver == 1) {
 		AttackSpeed = 3 * easeInSine(frame / frameMax);
 		if (frame != frameMax) {
 					frame = frame + 1;
-		}/* else {
-			moveNumver = 0;
-		}*/
+		}
 		angleX = (texpo.x - fantasypos.x);
 		angleZ = (texpo.y - fantasypos.y);
 		angleR = sqrt((texpo.x - fantasypos.x) * (texpo.x - fantasypos.x)
@@ -239,8 +198,6 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 	for (int i = 0; i < Max; i++) {
 		hit[i] = collision->SphereCollision(texpo.x, texpo.y, texpo.z, 0.8, enepos[i].x, enepos[i].y, enepos[i].z, 0.8);
-
-
 		if (hit[i]) {
 			EnemyAlive[i] = 0;
 		}
@@ -251,26 +208,40 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 				EnemyTimer[i] = 100;
 				EnemyAlive[i] = 1;
 				EnemySpeed[i] = (float)(rand() % 360);
-				Enemyscale[i] = (float)(rand() % 10);
-				Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
-				EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
-				EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
-				enepos[i].x = EnemyCircleX[i];
-				enepos[i].y = EnemyCircleZ[i];
+				Enemyscale[i] = 0;
+				EnemyMove[i] = rand() % 2;
+			}
+		}
+
+		else {
+			if (Enemyscale[i] != 20.0f) {
+				Enemyscale[i] += 0.5f;;
+			} else {
+				if (EnemyMove[i] == 1) {
+					EnemySpeed[i] += 1.0f;
+				} else {
+					EnemySpeed[i] -= 1.0f;
+				}
+			}
+		}
+
+		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
+		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
+		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
+		enepos[i].x = EnemyCircleX[i];
+		enepos[i].y = EnemyCircleZ[i] - 5;
+	}
+
+	for (int i = 0; i < Max; i++) {
+		for (int j = 0; j < Max; j++) {
+			if (collision->SphereCollision(enepos[i].x, enepos[i].y, enepos[i].z, 0.8, enepos[!j].x, enepos[!j].y, enepos[!j].z, 0.8) == true) {
+				break;
 			}
 		}
 	}
 
-	//if (input->PushKey(DIK_0)) {
-	//	object1->PlayAnimation();
-	//}
-
 	object1->Update();
-	//{
-	//	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
-	//	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
-	//	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
-	//}
+
 	camera->SetEye(cameraPos);
 	camera->Update();
 	objPlayer->Update();
@@ -295,14 +266,23 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	{
 		if (ImGui::TreeNode("Player"))
 		{
-
 			ImGui::SliderFloat("Player", &texpo.x, 50, -50);
 			ImGui::SliderFloat("Player", &texpo.y, 50, -50);
 			ImGui::SliderFloat("fantasy", &fantasypos.x, 50, -50);
 			ImGui::SliderFloat("fantasy", &fantasypos.y, 50, -50);
 			ImGui::SliderFloat("Player", &pos.x, 50, -50);
 			ImGui::SliderFloat("Player", &pos.y, 50, -50);
-			ImGui::Text("movenumber%d", moveNumver);
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Enemy"))
+		{
+			ImGui::SliderFloat("Enemyscale0", &enepos[0].x, 50, -50);
+			ImGui::SliderFloat("Enemyscale1", &enepos[0].y, 50, -50);
+			ImGui::SliderFloat("Enemyscale2", &enepos[1].x, 50, -50);
+			ImGui::SliderFloat("EnemySpeed0", &enepos[1].y, 50, -50);
+			ImGui::SliderFloat("EnemySpeed0", &EnemySpeed[0], 50, -50);
+			ImGui::SliderFloat("EnemySpeed1", &EnemySpeed[1], 50, -50);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
