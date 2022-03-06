@@ -46,6 +46,9 @@
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{3b0ead00-f701-4b83-8671-360bdfbcb6f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\enemy">
+      <UniqueIdentifier>{3077d3d9-7b8e-45b2-8688-8d7867f46994}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Basic.hlsli">
@@ -202,6 +205,9 @@
     <ClCompile Include="2d\Texture.cpp">
       <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
+    <ClCompile Include="enemy\Enemy.cpp">
+      <Filter>ソース ファイル\enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -317,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="2d\Texture.h">
       <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy\Enemy.h">
+      <Filter>ソース ファイル\enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

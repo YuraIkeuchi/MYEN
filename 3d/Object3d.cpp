@@ -11,9 +11,7 @@ using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-/// <summary>
 /// Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
-/// </summary>
 ID3D12Device* Object3d::device = nullptr;
 ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
 Object3d::PipelineSet Object3d::pipelineSet;

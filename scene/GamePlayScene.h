@@ -10,6 +10,7 @@
 #include "DirectXCommon.h"
 #include "DirectXMath.h"
 #include "Texture.h"
+#include "Enemy.h"
 const int Max = 3;
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
@@ -47,11 +48,11 @@ public:
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
-	XMFLOAT3 texpo = { 0,0,0 };
+	XMFLOAT3 TexPosition = { 0,0,0 };
 	XMFLOAT3 pos = { 0,0,0 };
-	XMFLOAT3 inittexpo = { 0,0,0 };
-	XMFLOAT3 fantasypos = { 0,0,0 };
-	XMFLOAT3 enepos[Max];
+	XMFLOAT3 InitTexPosition = { 0,0,0 };
+	XMFLOAT3 FantasyPosition = { 0,0,0 };
+	XMFLOAT3 EnemyPosition[Max];
 	
 	//当たり判定 球
 	Sphere sphere;
@@ -83,7 +84,7 @@ public:
 	float PI = 3.14f;
 	float Playerradius = 0.0f;
 	float PlayerSpeed = 0.0f;
-	float Playerscale = 20.0f;// LaneNumと一緒に変えること
+	float Playerscale = 10.0f;// LaneNumと一緒に変えること
 	float PlayerCircleX = 0.0f;
 	float PlayerCircleZ = 0.0f;
 	float initScale = 0.0f;
@@ -98,7 +99,7 @@ public:
 	float frameMax = 27.0f;
 	float fantasyradius = 0.0f;
 	float fantasySpeed = 0.0f;
-	float fantasyscale = 20.0f;// LaneNumと一緒に変えること
+	float fantasyscale = 10.0f;// LaneNumと一緒に変えること
 	float fantasyCircleX = 0.0f;
 	float fantasyCircleZ = 0.0f;
 	bool fantasyFlag = false;
@@ -113,4 +114,7 @@ public:
 	int EnemyMove[Max] = { 0 };
 	bool hit[Max] = { false };
 	bool enemyhit[Max] = { false };
+	const int PlayerMax = 5;
+	Enemy* enemy[Max];
+	int control = 0;
 };

@@ -40,50 +40,53 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objGround = Object3d::Create();
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
-	modelPlayer = Model::LoadFromOBJ("senntouki3");
+	modelPlayer = Model::LoadFromOBJ("chr_sword");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
-	//普通のテクスチャ(板ポリ)
-	Texture::LoadTexture(0, L"Resources/Title.png");
-	titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
-	titleTexture->TextureCreate();
-	titleTexture->SetPosition(texpo);
-	titleTexture->SetScale({ 0.5,0.5,0.5 });
 
-	//普通のテクスチャ(板ポリ)
-	Texture::LoadTexture(2, L"Resources/Title.png");
-	fantasyTexture = Texture::Create(2, { 0,0,0 }, { 2,2,2 }, { 1,1,1,0.5 });
-	fantasyTexture->TextureCreate();
-	fantasyTexture->SetPosition(fantasypos);
-	fantasyTexture->SetScale({ 0.5,0.5,0.5 });
-	Texture::LoadTexture(1, L"Resources/ダウンロード.png");
 	for (int i = 0; i < Max; i++) {
+		enemy[i] = new Enemy();
+		enemy[i]->Initialize();
 		EnemySpeed[i] = (float)(rand() % 360);
 		Enemyscale[i] = 0;
 		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
 		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
 		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
-		enepos[i].x = EnemyCircleX[i];
-		enepos[i].y = EnemyCircleZ[i] - 5;
+		EnemyPosition[i].x = EnemyCircleX[i];
+		EnemyPosition[i].y = EnemyCircleZ[i];
 		
-		enemyTexture[i] = Texture::Create(1, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
-		enemyTexture[i]->TextureCreate();
-		enemyTexture[i]->SetPosition(enepos[i]);
-		enemyTexture[i]->SetScale({ 0.3,0.3,0.3 });
+		enemy[i]->SetPosition(EnemyPosition[i]);
 		EnemyAlive[i] = 0;
 		EnemyTimer[i] = 100;
 	}
+	////普通のテクスチャ(板ポリ)
+	//Texture::LoadTexture(0, L"Resources/Title.png");
+	//titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
+	//titleTexture->TextureCreate();
+	//titleTexture->SetPosition(TexPosition);
+	//titleTexture->SetScale({ 0.5,0.5,0.5 });
+
+	////普通のテクスチャ(板ポリ)
+	//Texture::LoadTexture(2, L"Resources/Title.png");
+	//fantasyTexture = Texture::Create(2, { 0,0,0 }, { 2,2,2 }, { 1,1,1,0.5 });
+	//fantasyTexture->TextureCreate();
+	//fantasyTexture->SetPosition(FantasyPosition);
+	//fantasyTexture->SetScale({ 0.5,0.5,0.5 });
+	//Texture::LoadTexture(1, L"Resources/ダウンロード.png");
+	//
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objPlayer->SetModel(modelPlayer);
 	objFighter->SetModel(modelFighter);
 
 	objFighter->SetPosition(FighterPosition);
+	objFighter->SetScale({ 0.7,0.7,0.7 });
 	objPlayer->SetPosition(PlayerPosition);
+	objPlayer->SetScale({ 0.7,0.7,0.7 });
 	objGround->SetPosition({ 0, -10, 0 });
 
 	// カメラ注視点をセット
-	camera->SetTarget(texpo);
-	camera->SetEye(cameraPos);
+	camera->SetTarget(TexPosition);
+	camera->SetEye({0,0,0});
 
 	// モデル名を指定してファイル読み込み
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
@@ -102,15 +105,15 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Playerradius = PlayerSpeed * PI / 180.0f;
 	PlayerCircleX = cosf(Playerradius) * Playerscale;
 	PlayerCircleZ = sinf(Playerradius) * Playerscale;
-	texpo.x = PlayerCircleX;
-	texpo.y = PlayerCircleZ - 5;
+	TexPosition.x = PlayerCircleX;
+	TexPosition.y = PlayerCircleZ;
 
 	//プレイヤー(幻想)
 	fantasyradius = fantasySpeed * PI / 180.0f;
 	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
 	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
-	fantasypos.x = fantasyCircleX;
-	fantasypos.y = fantasyCircleZ - 5;
+	FantasyPosition.x = fantasyCircleX;
+	FantasyPosition.y = fantasyCircleZ;
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -136,8 +139,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			Playerradius = PlayerSpeed * PI / 180.0f;
 			PlayerCircleX = cosf(Playerradius) * Playerscale;
 			PlayerCircleZ = sinf(Playerradius) * Playerscale;
-			texpo.x = PlayerCircleX;
-			texpo.y = PlayerCircleZ - 5;
+			TexPosition.x = PlayerCircleX;
+			TexPosition.y = PlayerCircleZ;
 		}
 	}
 
@@ -150,35 +153,34 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 				AttackSpeed = 0;
 				initScale = Playerscale;
 				initSpeed = PlayerSpeed;
-				inittexpo = texpo;
+				InitTexPosition = TexPosition;
 				frame = 0;
 				moveNumver = 1;
-		
 			}
 		}
 	}
 
 	if (moveNumver == 1) {
-		AttackSpeed = 3 * easeInSine(frame / frameMax);
+		AttackSpeed = 2 * easeInSine(frame / frameMax);
 		if (frame != frameMax) {
 					frame = frame + 1;
 		}
-		angleX = (texpo.x - fantasypos.x);
-		angleZ = (texpo.y - fantasypos.y);
-		angleR = sqrt((texpo.x - fantasypos.x) * (texpo.x - fantasypos.x)
-			+ (texpo.y - fantasypos.y) * (texpo.y - fantasypos.y));
-		texpo.x -= (angleX / angleR) * AttackSpeed;
-		texpo.y -= (angleZ / angleR) * AttackSpeed;
+		angleX = (TexPosition.x - FantasyPosition.x);
+		angleZ = (TexPosition.y - FantasyPosition.y);
+		angleR = sqrt((TexPosition.x - FantasyPosition.x) * (TexPosition.x - FantasyPosition.x)
+			+ (TexPosition.y - FantasyPosition.y) * (TexPosition.y - FantasyPosition.y));
+		TexPosition.x -= (angleX / angleR) * AttackSpeed;
+		TexPosition.y -= (angleZ / angleR) * AttackSpeed;
 		PlayerSpeed = fantasySpeed;
-		if (collision->SphereCollision(texpo.x, texpo.y, texpo.z, 0.5, fantasypos.x, fantasypos.y, fantasypos.z, 0.5) == true) {
+		if (collision->SphereCollision(TexPosition.x, TexPosition.y, TexPosition.z, 0.3, FantasyPosition.x, FantasyPosition.y, FantasyPosition.z, 0.3) == true) {
 			fantasyFlag = false;
 			moveNumver = 0;
 			AttackSpeed = 0.0f;
 			Playerradius = PlayerSpeed * PI / 180.0f;
 			PlayerCircleX = cosf(Playerradius) * Playerscale;
 			PlayerCircleZ = sinf(Playerradius) * Playerscale;
-			texpo.x = PlayerCircleX;
-			texpo.y = PlayerCircleZ - 5;
+			TexPosition.x = PlayerCircleX;
+			TexPosition.y = PlayerCircleZ;
 		}
 	}
 
@@ -186,18 +188,18 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	fantasyradius = fantasySpeed * PI / 180.0f;
 	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
 	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
-	fantasypos.x = fantasyCircleX;
-	fantasypos.y = fantasyCircleZ - 5;
-
-	objPlayer->SetPosition(PlayerPosition);
-	objFighter->SetPosition(FighterPosition);
-
+	FantasyPosition.x = fantasyCircleX;
+	FantasyPosition.y = fantasyCircleZ;
+	
+	objFighter->SetPosition(TexPosition);
+	objPlayer->SetPosition(FantasyPosition);
+	
 	if (input->PushKey(DIK_SPACE) || input->TriggerButton(input->Button_A)) {
 		SceneManager::GetInstance()->ChangeScene("TITLE");
 		Audio::GetInstance()->StopWave(0);
 	}
 	for (int i = 0; i < Max; i++) {
-		hit[i] = collision->SphereCollision(texpo.x, texpo.y, texpo.z, 0.8, enepos[i].x, enepos[i].y, enepos[i].z, 0.8);
+		hit[i] = collision->SphereCollision(TexPosition.x, TexPosition.y, TexPosition.z, 0.8, EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.8);
 		if (hit[i]) {
 			EnemyAlive[i] = 0;
 		}
@@ -214,7 +216,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		}
 
 		else {
-			if (Enemyscale[i] != 20.0f) {
+			if (Enemyscale[i] != 10.0f) {
 				Enemyscale[i] += 0.5f;;
 			} else {
 				if (EnemyMove[i] == 1) {
@@ -228,18 +230,23 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
 		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
 		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
-		enepos[i].x = EnemyCircleX[i];
-		enepos[i].y = EnemyCircleZ[i] - 5;
+		EnemyPosition[i].x = EnemyCircleX[i];
+		EnemyPosition[i].y = EnemyCircleZ[i];
+		enemy[i]->SetPosition(EnemyPosition[i]);
 	}
 
-	for (int i = 0; i < Max; i++) {
-		for (int j = 0; j < Max; j++) {
-			if (collision->SphereCollision(enepos[i].x, enepos[i].y, enepos[i].z, 0.8, enepos[!j].x, enepos[!j].y, enepos[!j].z, 0.8) == true) {
-				break;
+	if (sizeof(enemy) > 2) {//配列のサイズ確認
+		for (int colA = 0; colA < Max; colA++) {
+			for (int colB = 1; colB < Max; colB++) {
+				if (Collision::CheckSphere2Sphere(enemy[colA]->collider, enemy[colB]->collider) == true && colA != colB) {//当たり判定と自機同士の当たり判定の削除
+					DebugText::GetInstance()->Print("Hit", 0, 0, 5.0f);
+					enemy[colA]->SetRotation({ 0,(float)90.0f * colB,0 });
+					enemy[colB]->SetRotation({ 0,180,0 });
+					break;
+				}
 			}
 		}
 	}
-
 	object1->Update();
 
 	camera->SetEye(cameraPos);
@@ -248,14 +255,16 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objFighter->Update();
 	objSkydome->Update();
 	objGround->Update();
-	titleTexture->SetPosition(texpo);
-	titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
-	fantasyTexture->SetPosition(fantasypos);
-	fantasyTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	//titleTexture->SetPosition(TexPosition);
+	//titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	//fantasyTexture->SetPosition(FantasyPosition);
+	//fantasyTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+
 	for (int i = 0; i < Max; i++) {
-		enemyTexture[i]->SetPosition(enepos[i]);
-		enemyTexture[i]->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+		enemy[i]->Update();
+	
 	}
+
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -266,10 +275,10 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	{
 		if (ImGui::TreeNode("Player"))
 		{
-			ImGui::SliderFloat("Player", &texpo.x, 50, -50);
-			ImGui::SliderFloat("Player", &texpo.y, 50, -50);
-			ImGui::SliderFloat("fantasy", &fantasypos.x, 50, -50);
-			ImGui::SliderFloat("fantasy", &fantasypos.y, 50, -50);
+			ImGui::SliderFloat("Player", &TexPosition.x, 50, -50);
+			ImGui::SliderFloat("Player", &TexPosition.y, 50, -50);
+			ImGui::SliderFloat("fantasy", &FantasyPosition.x, 50, -50);
+			ImGui::SliderFloat("fantasy", &FantasyPosition.y, 50, -50);
 			ImGui::SliderFloat("Player", &pos.x, 50, -50);
 			ImGui::SliderFloat("Player", &pos.y, 50, -50);
 			ImGui::Unindent();
@@ -277,10 +286,10 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		}
 		if (ImGui::TreeNode("Enemy"))
 		{
-			ImGui::SliderFloat("Enemyscale0", &enepos[0].x, 50, -50);
-			ImGui::SliderFloat("Enemyscale1", &enepos[0].y, 50, -50);
-			ImGui::SliderFloat("Enemyscale2", &enepos[1].x, 50, -50);
-			ImGui::SliderFloat("EnemySpeed0", &enepos[1].y, 50, -50);
+			ImGui::SliderFloat("Enemyscale0", &EnemyPosition[0].x, 50, -50);
+			ImGui::SliderFloat("Enemyscale1", &EnemyPosition[0].y, 50, -50);
+			ImGui::SliderFloat("Enemyscale2", &EnemyPosition[1].x, 50, -50);
+			ImGui::SliderFloat("EnemySpeed0", &EnemyPosition[1].y, 50, -50);
 			ImGui::SliderFloat("EnemySpeed0", &EnemySpeed[0], 50, -50);
 			ImGui::SliderFloat("EnemySpeed1", &EnemySpeed[1], 50, -50);
 			ImGui::Unindent();
@@ -300,25 +309,35 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 深度バッファクリア
 	//dxCommon->ClearDepthBuffer();
 	Texture::PreDraw(dxCommon->GetCmdList());
-	if (fantasyFlag == true) {
-		fantasyTexture->Draw();
-	}
-	titleTexture->Draw();
-	for (int i = 0; i < Max; i++) {
-		if (EnemyAlive[i] == 1) {
-			enemyTexture[i]->Draw();
-		}
-	}
+	//if (fantasyFlag == true) {
+	//	fantasyTexture->Draw();
+	//}
+	//titleTexture->Draw();
+	//for (int i = 0; i < Max; i++) {
+	//	if (EnemyAlive[i] == 1) {
+	//		//enemyTexture[i]->Draw();
+	//	}
+	//}
 	Texture::PostDraw();
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
+	if (fantasyFlag == true) {
+		objPlayer->Draw();
+	}
+	//背景用
+	for (int i = 0; i < Max; i++) {
+		if (EnemyAlive[i] == 1) {
+			enemy[i]->Draw();
+		}
+	}
+
 	//object1->Draw(dxCommon->GetCmdList());
 	//objSkydome->Draw();
 	//objGround->Draw();
-	//objFighter->Draw();
+	objFighter->Draw();
 	//objPlayer->Draw();
 	Object3d::PostDraw();
 #pragma endregion
