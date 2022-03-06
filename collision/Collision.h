@@ -18,6 +18,8 @@ private: // エイリアス
 public:
 
 	//当たり判定関数
+	static bool CheckSphere2Sphere(const Sphere& sphere, const Sphere&
+		sphere2, DirectX::XMVECTOR* inter = nullptr);
 	//球と球
 	bool SphereCollision(const float& X1, const float& Y1, const float& Z1, const float& R1, const float& X2, const float& Y2, const float& Z2,const float& R2);
 	//平面と球

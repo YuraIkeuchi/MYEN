@@ -8,6 +8,18 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
+bool Collision::CheckSphere2Sphere(const Sphere& sphere, const Sphere& sphere2, DirectX::XMVECTOR* inter) {
+	float d = pow(sphere.center.m128_f32[0] - sphere2.center.m128_f32[0], 2)
+		+ pow(sphere.center.m128_f32[1] - sphere2.center.m128_f32[1], 2)
+		+ pow(sphere.center.m128_f32[2] - sphere2.center.m128_f32[2], 2);
+	float r1r2 = pow(sphere.radius + sphere2.radius, 2);
+	if (d < r1r2) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 bool Collision::SphereCollision(const float& X1, const float& Y1, const float& Z1,const float& R1, const float& X2, const float& Y2, const float& Z2, const float& R2) {
 	int a = X1 - X2;
 	int b = Y1 - Y2;

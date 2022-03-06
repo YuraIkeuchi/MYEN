@@ -9,9 +9,8 @@
 #include "Model.h"
 #include "Camera.h"
 #include "LightGroup.h"
-/// <summary>
+
 /// 3Dオブジェクト
-/// </summary>
 class Object3d
 {
 private: // エイリアス
@@ -45,36 +44,21 @@ public: // サブクラス
 private: // 定数
 
 
-public: // 静的メンバ関数
-	/// <summary>
-	/// 静的初期化
-	/// </summary>
-	/// <param name="device">デバイス</param>
-	/// <param name="window_width">画面幅</param>
-	/// <param name="window_height">画面高さ</param>
-	/// <returns>成否</returns>
+public: //静的メンバ関数
+	
+	//静的初期化
 	static bool StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera = nullptr);
 
-	/// <summary>
-	/// グラフィックパイプラインの生成
-	/// </summary>
+	
+	//グラフィックパイプラインの生成
 	static void CreateGraphicsPipeline();
 
-	/// <summary>
-	/// 描画前処理
-	/// </summary>
-	/// <param name="cmdList">描画コマンドリスト</param>
+	
+	//描画前処理
 	static void PreDraw();
-
-	/// <summary>
-	/// 描画後処理
-	/// </summary>
+	//描画後処理
 	static void PostDraw();
-
-	/// <summary>
-	/// 3Dオブジェクト生成
-	/// </summary>
-	/// <returns></returns>
+	//3Dオブジェクト生成
 	static Object3d* Create();
 
 	static void SetCamera(Camera* camera) {
@@ -84,17 +68,11 @@ public: // 静的メンバ関数
 	static void SetLightGroup(LightGroup* lightGroup) {
 		Object3d::lightGroup = lightGroup;
 	}
-
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
+	//ベクトルによる移動
 	static void CameraMoveVector(XMFLOAT3 move);
 
-	/// <summary>
-	/// ベクトルによる視点移動
-	/// </summary>
-	/// <param name="move">移動量</param>
+	
+	// ベクトルによる視点移動
 	static void CameraMoveEyeVector(XMFLOAT3 move);
 
 private: // 静的メンバ変数
@@ -124,56 +102,36 @@ private: // 静的メンバ変数
 	static LightGroup* lightGroup;
 
 
-private:// 静的メンバ関数
-
-	/// <summary>
-	/// カメラ初期化
-	/// </summary>
-	/// <param name="window_width">画面横幅</param>
-	/// <param name="window_height">画面縦幅</param>
+private:// 静的メンバ関数	
+	//カメラ初期化
 	static void InitializeCamera(int window_width, int window_height);
 
-	/// <summary>
-	/// ビュー行列を更新
-	/// </summary>
+	
+	//ビュー行列を更新
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
 	bool Initialize();
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
+	
+	//毎フレーム処理
 	void Update();
-
-	/// <summary>
-	/// 描画
-	/// </summary>
+	// 描画
 	void Draw();
 
-	/// <summary>
-	/// 座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
+	//座標の取得
 	const XMFLOAT3& GetPosition() { return position; }
 
-	/// <summary>
-	/// 座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
+	//回転の取得
+	const XMFLOAT3& GetRotation() { return rotation; }
+
+	
+	//座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
-
-	/// <summary>
-	/// スケールの設定
-	/// </summary>
-	/// <param name="position">スケール</param>
+	//スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
-
-	/// <summary>
-	/// モデルのセット
-	/// </summary>
-	/// <param name="model">モデル</param>
+	//モデルのセット
 	void SetModel(Model* model) { this->model = model; }
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
