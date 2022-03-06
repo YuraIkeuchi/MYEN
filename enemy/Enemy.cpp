@@ -6,7 +6,7 @@
 using namespace DirectX;
 
 Enemy::Enemy() {
-	model = Model::LoadFromOBJ("chr_sword");
+	model = Model::LoadFromOBJ("Block");
 	object3d = new Object3d();
 }
 
@@ -14,7 +14,7 @@ void Enemy::Initialize() {
 	object3d = Object3d::Create();
 	object3d->SetModel(model);
 	object3d->SetPosition(pos);
-	object3d->SetScale({ 1,1,1 });
+	object3d->SetScale({ 0.5,0.5,0.5 });
 	collider.radius=rad;
 }
 
@@ -27,7 +27,6 @@ void Enemy::Update() {
 void Enemy::Draw() {
 	Object3d::PreDraw();
 	object3d->Draw();
-
 }
 
 bool Enemy::Collision(XMFLOAT3 position,float radius) {
