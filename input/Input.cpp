@@ -214,6 +214,8 @@ bool Input::TriggerStick(int stick)
 	return false;
 }
 
+
+
 bool Input::PushButton(int Button)
 {
 	for (int i = 0; i < 32; i++)

@@ -73,6 +73,8 @@ private://メンバ変数
 	ComPtr<IDirectInputDevice8> devGamePad;
 	DIJOYSTATE gamePadState = {};
 	DIJOYSTATE oldGamePadState = {};
+	//DIJOYSTATE2 gamePadState2 = {};
+	//DIJOYSTATE2 oldGamePadState2 = {};
 	bool is_push[32] = {};
 	//スティックの無反応範囲
 	LONG unresponsive_range = 200;

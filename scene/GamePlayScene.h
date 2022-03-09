@@ -34,10 +34,12 @@ public:
 	Model* modelGround = nullptr;
 	Model* modelFighter = nullptr;
 	Model* modelPlayer = nullptr;
+	Model* modelAllow = nullptr;
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
 	Object3d* objPlayer = nullptr;
+	Object3d* objAllow = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
 	
@@ -53,7 +55,7 @@ public:
 	XMFLOAT3 InitTexPosition = { 0,0,0 };
 	XMFLOAT3 FantasyPosition = { 0,0,0 };
 	XMFLOAT3 EnemyPosition[Max];
-	
+	XMFLOAT3 ArrowRotation = { 0,180,0 };
 	//“–‚½‚è”»’è ‹…
 	Sphere sphere;
 	//“–‚½‚è”»’è •½–Ê
@@ -117,4 +119,5 @@ public:
 	const int PlayerMax = 5;
 	Enemy* enemy[Max];
 	int control = 0;
+	bool ButtunFlag = false;
 };

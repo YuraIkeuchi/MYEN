@@ -38,25 +38,16 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFighter = Object3d::Create();
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
+	objAllow = Object3d::Create();
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
 	modelPlayer = Model::LoadFromOBJ("chr_sword");
-	modelFighter = Model::LoadFromOBJ("chr_sword");
-
+	modelFighter = Model::LoadFromOBJ("chr_knight");
+	modelAllow = Model::LoadFromOBJ("Arrow");
 	for (int i = 0; i < Max; i++) {
 		enemy[i] = new Enemy();
 		enemy[i]->Initialize();
-		EnemySpeed[i] = (float)(rand() % 360);
-		Enemyscale[i] = 0;
-		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
-		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
-		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
-		EnemyPosition[i].x = EnemyCircleX[i];
-		EnemyPosition[i].y = EnemyCircleZ[i];
-		
-		enemy[i]->SetPosition(EnemyPosition[i]);
-		EnemyAlive[i] = 0;
-		EnemyTimer[i] = 100;
+		enemy[i]->SetPosition({ 0.0f,0.0,2.0 });
 	}
 	////普通のテクスチャ(板ポリ)
 	//Texture::LoadTexture(0, L"Resources/Title.png");
@@ -77,16 +68,18 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objGround->SetModel(modelGround);
 	objPlayer->SetModel(modelPlayer);
 	objFighter->SetModel(modelFighter);
-
+	objAllow->SetModel(modelAllow);
 	objFighter->SetPosition(FighterPosition);
-	objFighter->SetScale({ 0.7,0.7,0.7 });
+	objFighter->SetScale({ 3.0,3.0,3.0 });
 	objPlayer->SetPosition(PlayerPosition);
-	objPlayer->SetScale({ 0.7,0.7,0.7 });
-	objGround->SetPosition({ 0, -10, 0 });
-
+	objPlayer->SetScale({ 1.0,1.0,1.0 });
+	objGround->SetPosition({ 0, 0, 0 });
+	objAllow->SetScale({ 1.0f,2.0f,2.0f });
+	objAllow->SetRotation(ArrowRotation);
+	objAllow->SetPosition({ PlayerPosition.x,PlayerPosition.y,PlayerPosition.z + 3.0f });
 	// カメラ注視点をセット
-	camera->SetTarget(TexPosition);
-	camera->SetEye({0,0,0});
+	camera->SetTarget(PlayerPosition);
+	camera->SetEye({PlayerPosition.x,PlayerPosition.y + 10,PlayerPosition.z - 10});
 
 	// モデル名を指定してファイル読み込み
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
@@ -101,19 +94,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	//プレイヤー
-	Playerradius = PlayerSpeed * PI / 180.0f;
-	PlayerCircleX = cosf(Playerradius) * Playerscale;
-	PlayerCircleZ = sinf(Playerradius) * Playerscale;
-	TexPosition.x = PlayerCircleX;
-	TexPosition.y = PlayerCircleZ;
-
-	//プレイヤー(幻想)
-	fantasyradius = fantasySpeed * PI / 180.0f;
-	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
-	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
-	FantasyPosition.x = fantasyCircleX;
-	FantasyPosition.y = fantasyCircleZ;
+	
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -121,150 +102,57 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	Input* input = Input::GetInstance();
 	DebugText* debugText = DebugText::GetInstance();
 	lightGroup->Update();
-
-	// オブジェクト移動
-	if (input->PushKey(DIK_UP) || input->TiltStick(input->Up) || input->PushKey(DIK_DOWN) || input->TiltStick(input->Down)) {
-		if (moveNumver == 0) {
-			if ((input->PushKey(DIK_UP)) || (input->TiltStick(input->Left))) {
-				if (AttackSpeed == 0.0f) {
-					PlayerSpeed += 2.0f;
-				}
-			}
-			if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Right))) {
-				if (AttackSpeed == 0.0f) {
-					PlayerSpeed -= 2.0f;
-				}
-			}
-			//プレイヤー
-			Playerradius = PlayerSpeed * PI / 180.0f;
-			PlayerCircleX = cosf(Playerradius) * Playerscale;
-			PlayerCircleZ = sinf(Playerradius) * Playerscale;
-			TexPosition.x = PlayerCircleX;
-			TexPosition.y = PlayerCircleZ;
-		}
+	if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Right))) {
+		PlayerPosition.x += 0.3f;
 	}
 
-	if (input->TriggerKey(DIK_0) || input->TriggerButton(input->Button_B)) {
-		if (fantasyFlag == false) {
-			fantasyFlag = true;
-			fantasySpeed = PlayerSpeed;
-		} else {
-			if (moveNumver == 0) {
-				AttackSpeed = 0;
-				initScale = Playerscale;
-				initSpeed = PlayerSpeed;
-				InitTexPosition = TexPosition;
-				frame = 0;
-				moveNumver = 1;
-			}
-		}
+	if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Left))) {
+		PlayerPosition.x -= 0.3f;
 	}
 
-	if (moveNumver == 1) {
-		AttackSpeed = 2 * easeInSine(frame / frameMax);
-		if (frame != frameMax) {
-					frame = frame + 1;
-		}
-		angleX = (TexPosition.x - FantasyPosition.x);
-		angleZ = (TexPosition.y - FantasyPosition.y);
-		angleR = sqrt((TexPosition.x - FantasyPosition.x) * (TexPosition.x - FantasyPosition.x)
-			+ (TexPosition.y - FantasyPosition.y) * (TexPosition.y - FantasyPosition.y));
-		TexPosition.x -= (angleX / angleR) * AttackSpeed;
-		TexPosition.y -= (angleZ / angleR) * AttackSpeed;
-		PlayerSpeed = fantasySpeed;
-		if (collision->SphereCollision(TexPosition.x, TexPosition.y, TexPosition.z, 0.3, FantasyPosition.x, FantasyPosition.y, FantasyPosition.z, 0.3) == true) {
-			fantasyFlag = false;
-			moveNumver = 0;
-			AttackSpeed = 0.0f;
-			Playerradius = PlayerSpeed * PI / 180.0f;
-			PlayerCircleX = cosf(Playerradius) * Playerscale;
-			PlayerCircleZ = sinf(Playerradius) * Playerscale;
-			TexPosition.x = PlayerCircleX;
-			TexPosition.y = PlayerCircleZ;
-		}
+	if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Up))) {
+		PlayerPosition.z += 0.3f;
 	}
 
-	//プレイヤー(幻想)
-	fantasyradius = fantasySpeed * PI / 180.0f;
-	fantasyCircleX = cosf(fantasyradius) * fantasyscale;
-	fantasyCircleZ = sinf(fantasyradius) * fantasyscale;
-	FantasyPosition.x = fantasyCircleX;
-	FantasyPosition.y = fantasyCircleZ;
-	
-	objFighter->SetPosition(TexPosition);
-	objPlayer->SetPosition(FantasyPosition);
-	
-	if (input->PushKey(DIK_SPACE) || input->TriggerButton(input->Button_A)) {
-		SceneManager::GetInstance()->ChangeScene("TITLE");
-		Audio::GetInstance()->StopWave(0);
-	}
-	for (int i = 0; i < Max; i++) {
-		hit[i] = collision->SphereCollision(TexPosition.x, TexPosition.y, TexPosition.z, 0.8, EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.8);
-		if (hit[i]) {
-			EnemyAlive[i] = 0;
-		}
-
-		if (EnemyAlive[i] == 0) {
-			EnemyTimer[i]--;
-			if (EnemyTimer[i] == 0) {
-				EnemyTimer[i] = 100;
-				EnemyAlive[i] = 1;
-				EnemySpeed[i] = (float)(rand() % 360);
-				Enemyscale[i] = 0;
-				EnemyMove[i] = rand() % 2;
-			}
-		}
-
-		else {
-			if (Enemyscale[i] != 10.0f) {
-				Enemyscale[i] += 0.5f;;
-			} else {
-				if (EnemyMove[i] == 1) {
-					EnemySpeed[i] += 1.0f;
-				} else {
-					EnemySpeed[i] -= 1.0f;
-				}
-			}
-		}
-
-		Enemyradius[i] = EnemySpeed[i] * PI / 180.0f;
-		EnemyCircleX[i] = cosf(Enemyradius[i]) * Enemyscale[i];
-		EnemyCircleZ[i] = sinf(Enemyradius[i]) * Enemyscale[i];
-		EnemyPosition[i].x = EnemyCircleX[i];
-		EnemyPosition[i].y = EnemyCircleZ[i];
-		enemy[i]->SetPosition(EnemyPosition[i]);
+	if ((input->PushKey(DIK_DOWN)) || (input->TiltStick(input->Down))) {
+		PlayerPosition.z -= 0.3f;
 	}
 
-	if (sizeof(enemy) > 2) {//配列のサイズ確認
-		for (int colA = 0; colA < Max; colA++) {
-			for (int colB = 1; colB < Max; colB++) {
-				if (Collision::CheckSphere2Sphere(enemy[colA]->collider, enemy[colB]->collider) == true && colA != colB) {//当たり判定と自機同士の当たり判定の削除
-					DebugText::GetInstance()->Print("Hit", 0, 0, 5.0f);
-					enemy[colA]->SetRotation({ 0,(float)90.0f * colB,0 });
-					enemy[colB]->SetRotation({ 0,180,0 });
-					break;
-				}
-			}
-		}
+	if (input->PushButton(input->Button_RB)) {
+		ButtunFlag = true;
+	} else {
+		ButtunFlag = false;
 	}
+
+	if (input->PushButton(input->Button_B)) {
+		ArrowRotation.y++;
+	}
+
+	if (input->PushButton(input->Button_Y)) {
+		ArrowRotation.y--;
+	}
+
+
+
+	// カメラ注視点をセット
+	camera->SetTarget(PlayerPosition);
+	camera->SetEye({ PlayerPosition.x,PlayerPosition.y + 10,PlayerPosition.z - 10 });
+
 	object1->Update();
-
-	camera->SetEye(cameraPos);
 	camera->Update();
+	objPlayer->SetPosition(PlayerPosition);
 	objPlayer->Update();
+	objFighter->SetPosition(FighterPosition);
 	objFighter->Update();
 	objSkydome->Update();
 	objGround->Update();
-	//titleTexture->SetPosition(TexPosition);
-	//titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
-	//fantasyTexture->SetPosition(FantasyPosition);
-	//fantasyTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
+	objAllow->SetRotation(ArrowRotation);
+	objAllow->SetPosition({ PlayerPosition.x,PlayerPosition.y,PlayerPosition.z + 5.0f });
+	objAllow->Update();
 
 	for (int i = 0; i < Max; i++) {
 		enemy[i]->Update();
-	
 	}
-
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -275,12 +163,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	{
 		if (ImGui::TreeNode("Player"))
 		{
-			ImGui::SliderFloat("Player", &TexPosition.x, 50, -50);
-			ImGui::SliderFloat("Player", &TexPosition.y, 50, -50);
-			ImGui::SliderFloat("fantasy", &FantasyPosition.x, 50, -50);
-			ImGui::SliderFloat("fantasy", &FantasyPosition.y, 50, -50);
-			ImGui::SliderFloat("Player", &pos.x, 50, -50);
-			ImGui::SliderFloat("Player", &pos.y, 50, -50);
+			ImGui::SliderFloat("Player", &PlayerPosition.x, 50, -50);
+			ImGui::SliderFloat("Player", &PlayerPosition.y, 50, -50);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
@@ -329,16 +213,17 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	}
 	//背景用
 	for (int i = 0; i < Max; i++) {
-		if (EnemyAlive[i] == 1) {
 			enemy[i]->Draw();
-		}
 	}
 
-	//object1->Draw(dxCommon->GetCmdList());
-	//objSkydome->Draw();
-	//objGround->Draw();
+	object1->Draw(dxCommon->GetCmdList());
+	objSkydome->Draw();
+	objGround->Draw();
 	objFighter->Draw();
-	//objPlayer->Draw();
+	objPlayer->Draw();
+	if (ButtunFlag == true) {
+		objAllow->Draw();
+	}
 	Object3d::PostDraw();
 #pragma endregion
 
