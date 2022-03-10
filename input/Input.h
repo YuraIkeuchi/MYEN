@@ -18,8 +18,8 @@ public:
 		Button_RB,
 		Select,
 		Start,
-		Button_LS,
-		Button_RS,
+		Button_LeftStick,
+		Button_RightStick,
 		Cross_Up,
 		Cross_Down,
 		Cross_Right,
@@ -55,8 +55,10 @@ public:
 	bool TriggerMouseMiddle();
 	MouseMove GetMouseMove();
 	//ゲームパッド
-	bool TiltStick(int stick);
-	bool TriggerStick(int stick);
+	bool LeftTiltStick(int stick);
+	bool LeftTriggerStick(int stick);
+	bool RightTiltStick(int stick);
+	bool RightTriggerStick(int stick);
 	bool PushButton(int Button);
 	bool TriggerButton(int Button);
 	bool PushCrossKey(int CrossKey);
@@ -73,11 +75,12 @@ private://メンバ変数
 	ComPtr<IDirectInputDevice8> devGamePad;
 	DIJOYSTATE gamePadState = {};
 	DIJOYSTATE oldGamePadState = {};
-	//DIJOYSTATE2 gamePadState2 = {};
-	//DIJOYSTATE2 oldGamePadState2 = {};
+	DIJOYSTATE gamePadState2 = {};
+	DIJOYSTATE oldGamePadState2 = {};
 	bool is_push[32] = {};
 	//スティックの無反応範囲
 	LONG unresponsive_range = 200;
+	LONG unresponsive_range2 = 200;
 private:
 	WinApp* winApp = nullptr;
 };

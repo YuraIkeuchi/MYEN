@@ -11,7 +11,7 @@
 #include "DirectXMath.h"
 #include "Texture.h"
 #include "Enemy.h"
-const int Max = 3;
+const int Max = 10;
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
 {
@@ -29,12 +29,16 @@ public:
 	///ゲームシーン用
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
+	Sprite* spritePlayerHP = nullptr;
+	Sprite* spriteBossHP = nullptr;
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
 	Model* modelFighter = nullptr;
 	Model* modelPlayer = nullptr;
 	Model* modelAllow = nullptr;
+	Model* modelArm = nullptr;
+	Object3d* objArm = nullptr;
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
@@ -48,10 +52,12 @@ public:
 	Texture* enemyTexture[Max] = { nullptr };
 
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
+	XMFLOAT3 PlayerRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
 	XMFLOAT3 TexPosition = { 0,0,0 };
 	XMFLOAT3 pos = { 0,0,0 };
+	XMFLOAT3 ArmPosition = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 InitTexPosition = { 0,0,0 };
 	XMFLOAT3 FantasyPosition = { 0,0,0 };
 	XMFLOAT3 EnemyPosition[Max];
@@ -82,7 +88,7 @@ public:
 	float pointLightPos[3] = { 0,0,0 };
 	float pointLightColor[3] = { 1,1,1 };
 	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
-
+	//ぷれいやー関係
 	float PI = 3.14f;
 	float Playerradius = 0.0f;
 	float PlayerSpeed = 0.0f;
@@ -93,17 +99,23 @@ public:
 	float initSpeed = 0.0f;
 	float AttackSpeed = 0.0f;
 	int moveNumver = 0;
+	int PlayerHP = 10;
 	float angleX = 0.0f;
 	float angleZ = 0.0f;
 	double	angleR = 0;
-	//レーン移動の処理
+	bool PlayerAttackFlag = false;
+	//ぷれいやーの腕
 	float frame = 0.0f;
 	float frameMax = 27.0f;
-	float fantasyradius = 0.0f;
-	float fantasySpeed = 0.0f;
-	float fantasyscale = 10.0f;// LaneNumと一緒に変えること
-	float fantasyCircleX = 0.0f;
-	float fantasyCircleZ = 0.0f;
+	float frame2 = 0.0f;
+	float frameMax2 = 100.0f;
+	float frame3 = 0.0f;
+	float frameMax3 = 50.0f;
+	float Armradius = 0.0f;
+	float ArmSpeed = 0.0f;
+	float Armscale = 10.0f;// LaneNumと一緒に変えること
+	float ArmCircleX = 0.0f;
+	float ArmCircleZ = 0.0f;
 	bool fantasyFlag = false;
 	//敵関係
 	float Enemyradius[Max] = { 0.0f };
@@ -119,5 +131,9 @@ public:
 	const int PlayerMax = 5;
 	Enemy* enemy[Max];
 	int control = 0;
+	int BossHP = 20;
+	int CatchCount = 0;
 	bool ButtunFlag = false;
+	int ArmMoveNumber = 0;
+	int AttackMoveNumber = 0;
 };
