@@ -129,32 +129,34 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	Input* input = Input::GetInstance();
 	DebugText* debugText = DebugText::GetInstance();
 	lightGroup->Update();
+	//プレイヤーの行動
 	if (ArmMoveNumber <= 1) {
+		//移動
 		if ((input->PushKey(DIK_RIGHT)) || (input->LeftTiltStick(input->Right))) {
-			PlayerPosition.x += 0.3f;
+			PlayerPosition.x += PlayerMoveSpeed;
 			PlayerRotation.y = 90;
 			ArmSpeed = 0;
 		}
 
 		if ((input->PushKey(DIK_LEFT)) || (input->LeftTiltStick(input->Left))) {
-			PlayerPosition.x -= 0.3f;
+			PlayerPosition.x -= PlayerMoveSpeed;
 			PlayerRotation.y = 270;
 			ArmSpeed = 180;
 		}
 
 		if ((input->PushKey(DIK_UP)) || (input->LeftTiltStick(input->Up))) {
-			PlayerPosition.z += 0.3f;
+			PlayerPosition.z += PlayerMoveSpeed;
 			PlayerRotation.y = 0;
 			ArmSpeed = 90;
 		}
 
 		if ((input->PushKey(DIK_DOWN)) || (input->LeftTiltStick(input->Down))) {
-			PlayerPosition.z -= 0.3f;
+			PlayerPosition.z -= PlayerMoveSpeed;
 			PlayerRotation.y = 180;
 			ArmSpeed = 270;
 		}
 
-		if (input->PushButton(input->Button_RB)) {
+		if (input->PushButton(input->Button_RB) && PlayerAttackFlag == false) {
 			ButtunFlag = true;
 			ArmMoveNumber = 1;
 		} else {
@@ -165,8 +167,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 				frame = 0;
 			}
 		}
-
-		if (input->TriggerButton(input->Button_A) && PlayerAttackFlag == false) {
+		//攻撃
+		if (input->TriggerButton(input->Button_A) && PlayerAttackFlag == false && CatchCount != 0) {
 			PlayerAttackFlag = true;
 			AttackMoveNumber = 1;
 			initScale = Armscale;
@@ -175,9 +177,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			frame3 = 0;
 		}
 	}
-
+	//攻撃
 	if (PlayerAttackFlag == true) {
-		ArmSpeed = initSpeed + 720.0f * easeOutBack(frame2 / frameMax2);
+		ArmSpeed = initSpeed + 360.0f * easeOutBack(frame2 / frameMax2);
 		if (frame2 != frameMax2) {
 			frame2 = frame2 + 1;
 		} else {
@@ -214,6 +216,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		ArrowRotation.y--;
 	}
 
+	//腕を伸ばす
 	if (ArmMoveNumber == 2) {
 		Armscale = initScale + 3.0f * easeInSine(frame / frameMax);
 		if (frame != frameMax) {
@@ -234,9 +237,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			initScale = Armscale;
 		}
 	}
+
+	//各当たり判定
 	for (int i = 0; i < Max; i++) {
-		if (collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.5,
-			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true && EnemyAlive[i] == 1) {
+		if (collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.3,
+			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.3) == true && EnemyAlive[i] == 1
+			&& EnemyCatch[i] == false) {
 			EnemyAlive[i] = 0;
 			PlayerHP--;
 		}
@@ -245,10 +251,62 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < Max; i++) {
 		if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true && EnemyAlive[i] == 1
-			&& ArmMoveNumber >= 2) {
+			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false) {
+			EnemyCatch[i] = true;
+			CatchCount++;
+		}
+
+		if (EnemyCatch[i] == true) {
 			EnemyPosition[i] = ArmPosition;
 		}
 	}
+
+	if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
+		FighterPosition.x, FighterPosition.y, FighterPosition.z, 0.5) == true &&
+		PlayerAttackFlag == true) {
+		BossHit = true;
+		HitTimer = 10;
+		for (int i = 0; i < Max; i++) {
+			if (EnemyCatch[i] == true) {
+				EnemyCatch[i] = false;
+				EnemyAlive[i] = 0;
+			}
+		}
+	}
+
+	//ボスダメージ判定
+	if (BossHit == true) {
+		HitTimer--;
+		if (HitTimer == 0) {
+			BossHP -= 1 + (CatchCount * 2);
+			CatchCount = 0;
+			BossHit = false;
+		}
+	}
+
+
+	//追ってくる範囲
+	for (int i = 0; i < Max; i++) {
+		if (collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 5.0,
+			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 5.0) == true && EnemyAlive[i] == 1 && EnemyCatch[i] == false) {
+			CircleInFlag[i] = 1;
+		} else {
+			CircleInFlag[i] = 0;
+		}
+
+		if (CircleInFlag[i] == 1) {
+			EnemyangleX[i] = (PlayerPosition.x - 	EnemyPosition[i].x);
+			EnemyangleZ[i] = (PlayerPosition.z - 	EnemyPosition[i].z);
+			EnemyangleR[i] = sqrt((PlayerPosition.x - EnemyPosition[i].x) * (PlayerPosition.x - EnemyPosition[i].x)
+				+ (PlayerPosition.z - EnemyPosition[i].z) * (PlayerPosition.z - EnemyPosition[i].z));
+			EnemyPosition[i].x += (EnemyangleX[i] / EnemyangleR[i]) * 0.05;
+			EnemyPosition[i].z += (EnemyangleZ[i] / EnemyangleR[i]) * 0.05;
+		}
+
+
+		enemy[i]->SetPosition(EnemyPosition[i]);
+	}
+
 
 	for (int i = 0; i < Max; i++) {
 		if (EnemyAlive[i] == 0) {
@@ -258,7 +316,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		if (EnemyTimer[i] == 0) {
 			EnemyAlive[i] = 1;
 			EnemyTimer[i] = 100;
-
+			EnemyCatch[i] = false;
 			EnemySpeed[i] = (float)(rand() % 360);
 			Enemyscale[i] = (float)(rand() % 10 + 10);
 			
@@ -272,6 +330,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		enemy[i]->SetPosition(EnemyPosition[i]);
 	}
 
+	//腕の場所調整
 	Armradius = ArmSpeed * PI / 180.0f;
 	ArmCircleX = cosf(Armradius) * Armscale;
 	ArmCircleZ = sinf(Armradius) * Armscale;
@@ -314,6 +373,21 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			ImGui::SliderFloat("ArmScale", &Armscale, 50, -50);
 			ImGui::SliderFloat("frame3", &frame3, 50, -50);
 			ImGui::Text("ArmMove:%d", ArmMoveNumber);
+			ImGui::Text("catch:%d", CatchCount);
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Boss"))
+		{
+			ImGui::Text("BossHP:%d", BossHP);
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Enemy"))
+		{
+			ImGui::Text("InFlag:%d", CircleInFlag[0]);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
@@ -358,13 +432,13 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		}
 	}
 
-	object1->Draw(dxCommon->GetCmdList());
+	//object1->Draw(dxCommon->GetCmdList());
 	objSkydome->Draw();
 	objGround->Draw();
 	objFighter->Draw();
 	objPlayer->Draw();
 	if (ButtunFlag == true) {
-		objAllow->Draw();
+		//objAllow->Draw();
 	}
 	objArm->Draw();
 	Object3d::PostDraw();

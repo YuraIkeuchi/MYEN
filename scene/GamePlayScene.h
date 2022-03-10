@@ -98,6 +98,7 @@ public:
 	float initScale = 0.0f;
 	float initSpeed = 0.0f;
 	float AttackSpeed = 0.0f;
+	float PlayerMoveSpeed = 0.3f;
 	int moveNumver = 0;
 	int PlayerHP = 10;
 	float angleX = 0.0f;
@@ -126,8 +127,12 @@ public:
 	int EnemyAlive[Max] = { 0 };
 	int EnemyTimer[Max] = { 100 };
 	int EnemyMove[Max] = { 0 };
-	bool hit[Max] = { false };
-	bool enemyhit[Max] = { false };
+	float EnemyangleX[Max] = { 0.0f };
+	float EnemyangleZ[Max] = { 0.0f };
+	double	EnemyangleR[Max] = { 0 };
+	int CircleInFlag[Max] = { 0 };
+	bool EnemyCatch[Max] = { false };
+	
 	const int PlayerMax = 5;
 	Enemy* enemy[Max];
 	int control = 0;
@@ -136,4 +141,6 @@ public:
 	bool ButtunFlag = false;
 	int ArmMoveNumber = 0;
 	int AttackMoveNumber = 0;
+	bool BossHit = false;
+	int HitTimer = 10;
 };
