@@ -330,6 +330,15 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		enemy[i]->SetPosition(EnemyPosition[i]);
 	}
 
+	//ゲームオーバーに行く
+	if (PlayerHP == 0) {
+		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+	}
+
+	//ゲームクリア
+	if (BossHP <= 0) {
+		SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
+	}
 	//腕の場所調整
 	Armradius = ArmSpeed * PI / 180.0f;
 	ArmCircleX = cosf(Armradius) * Armscale;
@@ -374,6 +383,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			ImGui::SliderFloat("frame3", &frame3, 50, -50);
 			ImGui::Text("ArmMove:%d", ArmMoveNumber);
 			ImGui::Text("catch:%d", CatchCount);
+			ImGui::Text("PlayerHP:%d", PlayerHP);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
