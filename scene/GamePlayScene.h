@@ -53,6 +53,7 @@ public:
 
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 PlayerRotation = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 InitPlayerRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
 	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
 	XMFLOAT3 TexPosition = { 0,0,0 };
@@ -109,7 +110,7 @@ public:
 	float frame = 0.0f;
 	float frameMax = 27.0f;
 	float frame2 = 0.0f;
-	float frameMax2 = 100.0f;
+	float frameMax2 = 80.0f;
 	float frame3 = 0.0f;
 	float frameMax3 = 50.0f;
 	float Armradius = 0.0f;
@@ -137,10 +138,11 @@ public:
 	Enemy* enemy[Max];
 	int control = 0;
 	int BossHP = 20;
-	int CatchCount = 0;
+	float EnemyWaight = 0.0f;
 	bool ButtunFlag = false;
 	int ArmMoveNumber = 0;
 	int AttackMoveNumber = 0;
+	int atframe = 0;
 	bool BossHit = false;
 	int HitTimer = 10;
 };
