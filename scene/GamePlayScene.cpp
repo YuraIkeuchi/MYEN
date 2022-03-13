@@ -128,6 +128,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	Input* input = Input::GetInstance();
 	DebugText* debugText = DebugText::GetInstance();
 	lightGroup->Update();
+
 	//プレイヤーの行動
 	if (ArmMoveNumber <= 1) {
 		//移動
@@ -167,7 +168,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			}
 		}
 		//攻撃
-		if (input->TriggerButton(input->Button_A) && PlayerAttackFlag == false && EnemyWaight != 0.0f) {
+		if (input->TriggerButton(input->Button_A) && PlayerAttackFlag == false && EnemyWeight != 0.0f) {
 			PlayerAttackFlag = true;
 			AttackMoveNumber = 1;
 			initScale = Armscale;
@@ -176,6 +177,22 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			frame2 = 0;
 			frame3 = 0;
 		}
+
+		if (input->TriggerCrossKey(input->Cross_Up) == true) {
+			if (SpeedWeight == false) {
+				SpeedWeight = true;
+			} else {
+				SpeedWeight = false;
+			}
+		}
+
+		if (input->TriggerCrossKey(input->Cross_Down) == true) {
+			if (AttackWeight == false) {
+				AttackWeight = true;
+			} else {
+				AttackWeight = false;
+			}
+		}
 	}
 
 	//攻撃
@@ -183,7 +200,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		atframe++;
 		ArmSpeed = initSpeed + 360.0f * easeOutBack(frame2 / frameMax2);
 		PlayerRotation.y = InitPlayerRotation.y - 360.0f * easeOutBack(frame2 / frameMax2);
-		if (frame2 != frameMax2 + (5 * EnemyWaight)) {
+		if (frame2 != frameMax2) {
 			frame2 = frame2 + 1;
 		} else {
 			PlayerAttackFlag = false;
@@ -192,7 +209,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	if (AttackMoveNumber == 1) {
 		Armscale = initScale + 5.0f * easeOutBack(frame3 / frameMax3);
-		if (frame3 != frameMax3 + (5 * EnemyWaight)) {
+		if (frame3 != frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
 			AttackMoveNumber = 2;
@@ -203,7 +220,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	else if (AttackMoveNumber == 2) {
 		Armscale = initScale - 5.0f * easeOutBack(frame3 / frameMax3);
-		if (frame3 != frameMax3 + (5 * EnemyWaight)) {
+		if (frame3 != frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
 			AttackMoveNumber = 0;
@@ -242,6 +259,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	//各当たり判定
+	//プレイヤーと敵の当たり判定
 	for (int i = 0; i < Max; i++) {
 		if (collision->SphereCollision(PlayerPosition.x, PlayerPosition.y, PlayerPosition.z, 0.3,
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.3) == true && EnemyAlive[i] == 1
@@ -250,22 +268,24 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			PlayerHP--;
 		}
 	}
-
+	//敵と腕の当たり判定(くっつける)
 	for (int i = 0; i < Max; i++) {
 		if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true && EnemyAlive[i] == 1
 			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false) {
 			EnemyCatch[i] = true;
-			EnemyWaight += 2.0f;
-
-			frameMax2 = frameMax2 + (EnemyWaight * 5);
+			EnemyWeight += 1.0f;
+			if (SpeedWeight == true) {
+				PlayerMoveSpeed = PlayerMoveSpeed - (EnemyWeight / 100);
+			}
+			frameMax2 = frameMax2 + (EnemyWeight * 5);
 		}
 
 		if (EnemyCatch[i] == true) {
 			EnemyPosition[i] = ArmPosition;
 		}
 	}
-
+	//腕とボスの当たり判定
 	if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
 		FighterPosition.x, FighterPosition.y, FighterPosition.z, 0.5) == true &&
 		PlayerAttackFlag == true) {
@@ -279,16 +299,28 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		}
 	}
 
+	//腕と敵の当たり判定(攻撃時)
+	for (int i = 0; i < Max; i++) {
+		if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
+			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true &&
+			PlayerAttackFlag == true && EnemyAlive[i] == 1 && EnemyCatch[i] == false) {
+			EnemyAlive[i] = 0;
+			if (EnemyWeight != 0.0f) {
+				EnemyWeight = 0.0f;
+			}
+
+		}
+	}
+
 	//ボスダメージ判定
 	if (BossHit == true) {
 		HitTimer--;
 		if (HitTimer == 0) {
-			BossHP -= 1 + (EnemyWaight * 2);
-			EnemyWaight = 0.0f;
+			BossHP -= (EnemyWeight * 2);
+			EnemyWeight = 0.0f;
 			BossHit = false;
 		}
 	}
-
 
 	//追ってくる範囲
 	for (int i = 0; i < Max; i++) {
@@ -333,8 +365,22 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		enemy[i]->SetPosition(EnemyPosition[i]);
 	}
 
+	//攻撃するかどうか
 	if (PlayerAttackFlag == false) {
 		DebugText::GetInstance()->Print("B to ATTACK!!", 200, 100, 1.0f);
+	}
+	//敵の重みでスピードが落ちるかどうか
+	if (SpeedWeight == false) {
+		DebugText::GetInstance()->Print("NoAdd SpeedWeight", 200, 120, 1.0f);
+	} else {
+		DebugText::GetInstance()->Print("YesAdd SpeedWeight", 200, 120, 1.0f);
+	}
+
+	//敵の重みでスピードが落ちるかどうか
+	if (AttackWeight == false) {
+		DebugText::GetInstance()->Print("NoAdd AttackWeight", 200, 140, 1.0f);
+	} else {
+		DebugText::GetInstance()->Print("YesAdd AttackWeight", 200, 140, 1.0f);
 	}
 
 	//ゲームオーバーに行く
@@ -385,11 +431,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		if (ImGui::TreeNode("Player"))
 		{
 			ImGui::SliderFloat("ArmSpeed", &ArmSpeed, 50, -50);
-			ImGui::SliderFloat("Weight", &EnemyWaight, 50, -50);
-			ImGui::SliderFloat("frameMax2", &frameMax3, 50, -50);
-			ImGui::SliderFloat("frame3", &frame3, 50, -50);
-			ImGui::Text("ArmMove:%d", ArmMoveNumber);
-			ImGui::Text("PlayerHP:%d", atframe);
+			ImGui::SliderFloat("Weight", &EnemyWeight, 50, -50);
+			ImGui::SliderFloat("PlayerMove", &PlayerMoveSpeed, 50, -50);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
@@ -403,7 +446,10 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 
 		if (ImGui::TreeNode("Enemy"))
 		{
-			ImGui::Text("InFlag:%d", CircleInFlag[0]);
+			ImGui::Text("Alive:%d", EnemyAlive[0]);
+			ImGui::Text("Alive:%d", EnemyAlive[1]);
+			ImGui::Text("Catch:%d", EnemyCatch[0]);
+			ImGui::Text("Catch:%d", EnemyCatch[1]);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
@@ -477,11 +523,6 @@ void GamePlayScene::Finalize()
 	delete objFighter;
 	delete objAllow;
 	delete objArm;
-	delete fantasyTexture;
-	delete titleTexture;
-	for (int i = 0; i < Max; i++) {
-		delete enemyTexture[i];
-	}
 	//モデル開放
 	delete modelFighter;
 	delete modelPlayer;

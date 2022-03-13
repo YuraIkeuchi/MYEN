@@ -11,7 +11,8 @@
 #include "DirectXMath.h"
 #include "Texture.h"
 #include "Enemy.h"
-const int Max = 10;
+const int Max = 2;
+const int ArmMax = 2;
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
 {
@@ -46,22 +47,15 @@ public:
 	Object3d* objAllow = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
-	
-	Texture* titleTexture = nullptr;
-	Texture* fantasyTexture = nullptr;
-	Texture* enemyTexture[Max] = { nullptr };
 
 	XMFLOAT3 PlayerPosition = { -5.0f,0.0f,0.0f };
 	XMFLOAT3 PlayerRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 InitPlayerRotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 FighterPosition = { 5.0f,0.0f,0.0f };
-	XMFLOAT3 FloorPosition = { 0.0f,-2.0f,0.0f };
-	XMFLOAT3 TexPosition = { 0,0,0 };
-	XMFLOAT3 pos = { 0,0,0 };
+
 	XMFLOAT3 ArmPosition = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 InitTexPosition = { 0,0,0 };
-	XMFLOAT3 FantasyPosition = { 0,0,0 };
 	XMFLOAT3 EnemyPosition[Max];
+	XMFLOAT3 ArmEnemyPosition[ArmMax];
 	XMFLOAT3 ArrowRotation = { 0,180,0 };
 	//当たり判定 球
 	Sphere sphere;
@@ -114,8 +108,8 @@ public:
 	float frame3 = 0.0f;
 	float frameMax3 = 50.0f;
 	float Armradius = 0.0f;
-	float ArmSpeed = 0.0f;
-	float Armscale = 10.0f;// LaneNumと一緒に変えること
+	float ArmSpeed = 90.0f;
+	float Armscale = 1.0f;
 	float ArmCircleX = 0.0f;
 	float ArmCircleZ = 0.0f;
 	bool fantasyFlag = false;
@@ -136,13 +130,17 @@ public:
 	
 	const int PlayerMax = 5;
 	Enemy* enemy[Max];
+	Enemy* Armenemy[ArmMax];
 	int control = 0;
 	int BossHP = 20;
-	float EnemyWaight = 0.0f;
+	float EnemyWeight = 0.0f;
 	bool ButtunFlag = false;
 	int ArmMoveNumber = 0;
 	int AttackMoveNumber = 0;
 	int atframe = 0;
 	bool BossHit = false;
 	int HitTimer = 10;
+	//プロトタイプでバック用
+	bool SpeedWeight = false;
+	bool AttackWeight = false;
 };
