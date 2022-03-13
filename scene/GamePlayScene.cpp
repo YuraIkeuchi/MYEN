@@ -132,25 +132,25 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//プレイヤーの行動
 	if (ArmMoveNumber <= 1) {
 		//移動
-		if ((input->PushKey(DIK_RIGHT)) || (input->LeftTiltStick(input->Right))) {
+		if ((input->PushKey(DIK_RIGHT)) || (input->LeftTiltStick(input->Right)) && PlayerAttackFlag == false) {
 			PlayerPosition.x += PlayerMoveSpeed;
 			PlayerRotation.y = 90;
 			ArmSpeed = 0;
 		}
 
-		if ((input->PushKey(DIK_LEFT)) || (input->LeftTiltStick(input->Left))) {
+		if ((input->PushKey(DIK_LEFT)) || (input->LeftTiltStick(input->Left)) && PlayerAttackFlag == false) {
 			PlayerPosition.x -= PlayerMoveSpeed;
 			PlayerRotation.y = 270;
 			ArmSpeed = 180;
 		}
 
-		if ((input->PushKey(DIK_UP)) || (input->LeftTiltStick(input->Up))) {
+		if ((input->PushKey(DIK_UP)) || (input->LeftTiltStick(input->Up)) && PlayerAttackFlag == false) {
 			PlayerPosition.z += PlayerMoveSpeed;
 			PlayerRotation.y = 0;
 			ArmSpeed = 90;
 		}
 
-		if ((input->PushKey(DIK_DOWN)) || (input->LeftTiltStick(input->Down))) {
+		if ((input->PushKey(DIK_DOWN)) || (input->LeftTiltStick(input->Down)) && PlayerAttackFlag == false) {
 			PlayerPosition.z -= PlayerMoveSpeed;
 			PlayerRotation.y = 180;
 			ArmSpeed = 270;
@@ -176,6 +176,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			InitPlayerRotation = PlayerRotation;
 			frame2 = 0;
 			frame3 = 0;
+			a = EnemyWeight / 2;
 		}
 
 		if (input->TriggerCrossKey(input->Cross_Up) == true) {
@@ -183,6 +184,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 				SpeedWeight = true;
 			} else {
 				SpeedWeight = false;
+				PlayerMoveSpeed = 0.3f;
 			}
 		}
 
@@ -197,7 +199,6 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	//攻撃
 	if (PlayerAttackFlag == true) {
-		atframe++;
 		ArmSpeed = initSpeed + 360.0f * easeOutBack(frame2 / frameMax2);
 		PlayerRotation.y = InitPlayerRotation.y - 360.0f * easeOutBack(frame2 / frameMax2);
 		if (frame2 != frameMax2) {
@@ -208,7 +209,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	if (AttackMoveNumber == 1) {
-		Armscale = initScale + 5.0f * easeOutBack(frame3 / frameMax3);
+		Armscale = initScale + a * easeOutBack(frame3 / frameMax3);
 		if (frame3 != frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
@@ -219,12 +220,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 
 	else if (AttackMoveNumber == 2) {
-		Armscale = initScale - 5.0f * easeOutBack(frame3 / frameMax3);
+		Armscale = initScale - a * easeOutBack(frame3 / frameMax3);
 		if (frame3 != frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
 			AttackMoveNumber = 0;
-			initScale = Armscale;
+			Armscale = 1.0f;
 		}
 	}
 
@@ -308,7 +309,11 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			if (EnemyWeight != 0.0f) {
 				EnemyWeight = 0.0f;
 			}
-
+			for (int j = 0; j < Max; j++) {
+				if (EnemyCatch[j] == true) {
+					EnemyAlive[j] = 0;
+				}
+			}
 		}
 	}
 
@@ -430,7 +435,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	{
 		if (ImGui::TreeNode("Player"))
 		{
-			ImGui::SliderFloat("ArmSpeed", &ArmSpeed, 50, -50);
+			ImGui::SliderFloat("Armscale", &Armscale, 50, -50);
 			ImGui::SliderFloat("Weight", &EnemyWeight, 50, -50);
 			ImGui::SliderFloat("PlayerMove", &PlayerMoveSpeed, 50, -50);
 			ImGui::Unindent();
