@@ -12,6 +12,10 @@ float easeInSine(float x) {
 float easeOutBack(float x) {
 	return x == 1 ? 1 : 1 - powf(2, -10 * x);
 }
+
+float easeInOut(float x) {
+	return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
+}
 void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
@@ -132,31 +136,31 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//プレイヤーの行動
 	if (ArmMoveNumber <= 1) {
 		//移動
-		if ((input->PushKey(DIK_RIGHT)) || (input->LeftTiltStick(input->Right)) && PlayerAttackFlag == false) {
+		if ((input->PushKey(DIK_RIGHT)) || (input->LeftTiltStick(input->Right)) && PlayerAttackFlag == false && AttackMoveNumber == 0) {
 			PlayerPosition.x += PlayerMoveSpeed;
 			PlayerRotation.y = 90;
 			ArmSpeed = 0;
 		}
 
-		if ((input->PushKey(DIK_LEFT)) || (input->LeftTiltStick(input->Left)) && PlayerAttackFlag == false) {
+		if ((input->PushKey(DIK_LEFT)) || (input->LeftTiltStick(input->Left)) && PlayerAttackFlag == false && AttackMoveNumber == 0) {
 			PlayerPosition.x -= PlayerMoveSpeed;
 			PlayerRotation.y = 270;
 			ArmSpeed = 180;
 		}
 
-		if ((input->PushKey(DIK_UP)) || (input->LeftTiltStick(input->Up)) && PlayerAttackFlag == false) {
+		if ((input->PushKey(DIK_UP)) || (input->LeftTiltStick(input->Up)) && PlayerAttackFlag == false && AttackMoveNumber == 0) {
 			PlayerPosition.z += PlayerMoveSpeed;
 			PlayerRotation.y = 0;
 			ArmSpeed = 90;
 		}
 
-		if ((input->PushKey(DIK_DOWN)) || (input->LeftTiltStick(input->Down)) && PlayerAttackFlag == false) {
+		if ((input->PushKey(DIK_DOWN)) || (input->LeftTiltStick(input->Down)) && PlayerAttackFlag == false && AttackMoveNumber == 0) {
 			PlayerPosition.z -= PlayerMoveSpeed;
 			PlayerRotation.y = 180;
 			ArmSpeed = 270;
 		}
 
-		if (input->PushButton(input->Button_RB) && PlayerAttackFlag == false) {
+		if (input->PushButton(input->Button_RB) && PlayerAttackFlag == false && EnemyWeight <= 7.0f && AttackMoveNumber == 0) {
 			ButtunFlag = true;
 			ArmMoveNumber = 1;
 		} else {
@@ -176,12 +180,15 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			InitPlayerRotation = PlayerRotation;
 			frame2 = 0;
 			frame3 = 0;
-			a = EnemyWeight / 2;
+			Savescale = EnemyWeight / 2;
+			frameMax2 += EnemyWeight * 10;
+			frameMax3 += EnemyWeight * 10;
 		}
 
 		if (input->TriggerCrossKey(input->Cross_Up) == true) {
 			if (SpeedWeight == false) {
 				SpeedWeight = true;
+				PlayerMoveSpeed = PlayerMoveSpeed - (EnemyWeight / 100);
 			} else {
 				SpeedWeight = false;
 				PlayerMoveSpeed = 0.3f;
@@ -199,33 +206,36 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	//攻撃
 	if (PlayerAttackFlag == true) {
-		ArmSpeed = initSpeed + 360.0f * easeOutBack(frame2 / frameMax2);
-		PlayerRotation.y = InitPlayerRotation.y - 360.0f * easeOutBack(frame2 / frameMax2);
-		if (frame2 != frameMax2) {
+		ArmSpeed = initSpeed + 360.0f * easeInOut(frame2 / frameMax2);
+		PlayerRotation.y = InitPlayerRotation.y - 360.0f * easeInOut(frame2 / frameMax2);
+		if (frame2 <= frameMax2) {
 			frame2 = frame2 + 1;
 		} else {
 			PlayerAttackFlag = false;
+			frameMax2 = 80.0f;
 		}
 	}
 
 	if (AttackMoveNumber == 1) {
-		Armscale = initScale + a * easeOutBack(frame3 / frameMax3);
-		if (frame3 != frameMax3) {
+		Armscale = initScale + Savescale * easeInOut(frame3 / frameMax3);
+		if (frame3 <= frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
 			AttackMoveNumber = 2;
 			initScale = Armscale;
 			frame3 = 0;
+			frameMax3 = 20.0f;
 		}
 	}
 
 	else if (AttackMoveNumber == 2) {
-		Armscale = initScale - a * easeOutBack(frame3 / frameMax3);
-		if (frame3 != frameMax3) {
+		Armscale = initScale - Savescale * easeInOut(frame3 / frameMax3);
+		if (frame3 <= frameMax3) {
 			frame3 = frame3 + 1;
 		} else {
 			AttackMoveNumber = 0;
 			Armscale = 1.0f;
+			frameMax3 = 80.0f;
 		}
 	}
 
@@ -273,13 +283,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < Max; i++) {
 		if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true && EnemyAlive[i] == 1
-			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false) {
+			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false && EnemyWeight <= 7.0f) {
 			EnemyCatch[i] = true;
 			EnemyWeight += 1.0f;
 			if (SpeedWeight == true) {
 				PlayerMoveSpeed = PlayerMoveSpeed - (EnemyWeight / 100);
 			}
-			frameMax2 = frameMax2 + (EnemyWeight * 5);
 		}
 
 		if (EnemyCatch[i] == true) {
@@ -292,6 +301,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		PlayerAttackFlag == true) {
 		BossHit = true;
 		HitTimer = 10;
+		frame2 = frameMax2;
+		PlayerAttackFlag = false;
 		for (int i = 0; i < Max; i++) {
 			if (EnemyCatch[i] == true) {
 				EnemyCatch[i] = false;
@@ -306,6 +317,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true &&
 			PlayerAttackFlag == true && EnemyAlive[i] == 1 && EnemyCatch[i] == false) {
 			EnemyAlive[i] = 0;
+			PlayerAttackFlag = false;
+			frame2 = frameMax2;
 			if (EnemyWeight != 0.0f) {
 				EnemyWeight = 0.0f;
 			}
@@ -344,8 +357,6 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			EnemyPosition[i].x += (EnemyangleX[i] / EnemyangleR[i]) * 0.05;
 			EnemyPosition[i].z += (EnemyangleZ[i] / EnemyangleR[i]) * 0.05;
 		}
-
-
 		enemy[i]->SetPosition(EnemyPosition[i]);
 	}
 
@@ -386,6 +397,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		DebugText::GetInstance()->Print("NoAdd AttackWeight", 200, 140, 1.0f);
 	} else {
 		DebugText::GetInstance()->Print("YesAdd AttackWeight", 200, 140, 1.0f);
+	}
+
+	if (EnemyWeight <= 7.0f) {
+		DebugText::GetInstance()->Print("RB to Catch!!", 200, 160, 1.0f);
+	} else {
+		DebugText::GetInstance()->Print("Can not Catch!!", 200, 160, 1.0f);
 	}
 
 	//ゲームオーバーに行く
@@ -436,6 +453,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		if (ImGui::TreeNode("Player"))
 		{
 			ImGui::SliderFloat("Armscale", &Armscale, 50, -50);
+			ImGui::SliderFloat("ArmSpeed", &ArmSpeed, 50, -50);
 			ImGui::SliderFloat("Weight", &EnemyWeight, 50, -50);
 			ImGui::SliderFloat("PlayerMove", &PlayerMoveSpeed, 50, -50);
 			ImGui::Unindent();
@@ -455,6 +473,16 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			ImGui::Text("Alive:%d", EnemyAlive[1]);
 			ImGui::Text("Catch:%d", EnemyCatch[0]);
 			ImGui::Text("Catch:%d", EnemyCatch[1]);
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Frame"))
+		{
+			ImGui::SliderFloat("frame2", &frame2, 50, -50);
+			ImGui::SliderFloat("frame3", &frame3, 50, -50);
+			ImGui::SliderFloat("frameMax2", &frameMax2, 50, -50);
+			ImGui::SliderFloat("frameMax3", &frameMax3, 50, -50);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
@@ -516,7 +544,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	spritePlayerHP->Draw();
 	spritePlayerHP->SetSize({ (float)(PlayerHP * 30),20 });
 	spriteBossHP->Draw();
-	spriteBossHP->SetSize({ (float)(BossHP * 40),20 });
+	spriteBossHP->SetSize({ (float)(BossHP * 20),20 });
 }
 
 void GamePlayScene::Finalize()

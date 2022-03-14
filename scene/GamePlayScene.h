@@ -11,8 +11,8 @@
 #include "DirectXMath.h"
 #include "Texture.h"
 #include "Enemy.h"
-const int Max = 2;
-const int ArmMax = 2;
+const int Max = 15;
+
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
 {
@@ -55,7 +55,7 @@ public:
 
 	XMFLOAT3 ArmPosition = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 EnemyPosition[Max];
-	XMFLOAT3 ArmEnemyPosition[ArmMax];
+
 	XMFLOAT3 ArrowRotation = { 0,180,0 };
 	//当たり判定 球
 	Sphere sphere;
@@ -106,12 +106,13 @@ public:
 	float frame2 = 0.0f;
 	float frameMax2 = 80.0f;
 	float frame3 = 0.0f;
-	float frameMax3 = 50.0f;
+	float frameMax3 = 80.0f;
 	float Armradius = 0.0f;
 	float ArmSpeed = 90.0f;
 	float Armscale = 1.0f;
 	float ArmCircleX = 0.0f;
 	float ArmCircleZ = 0.0f;
+	float Savescale = 0.0f;
 	bool fantasyFlag = false;
 	//敵関係
 	float Enemyradius[Max] = { 0.0f };
@@ -130,9 +131,9 @@ public:
 	
 	const int PlayerMax = 5;
 	Enemy* enemy[Max];
-	Enemy* Armenemy[ArmMax];
+
 	int control = 0;
-	int BossHP = 20;
+	int BossHP = 50;
 	float EnemyWeight = 0.0f;
 	bool ButtunFlag = false;
 	int ArmMoveNumber = 0;

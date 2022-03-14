@@ -79,7 +79,7 @@ private://メンバ変数
 	DIJOYSTATE oldGamePadState2 = {};
 	bool is_push[32] = {};
 	//スティックの無反応範囲
-	LONG unresponsive_range = 200;
+	LONG unresponsive_range = 650;
 	LONG unresponsive_range2 = 200;
 private:
 	WinApp* winApp = nullptr;
