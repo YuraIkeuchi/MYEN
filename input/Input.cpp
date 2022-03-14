@@ -162,7 +162,7 @@ Input::MouseMove Input::GetMouseMove()
 	return tmp;
 }
 
-bool Input::TiltStick(int stick)
+bool Input::LeftTiltStick(int stick)
 {
 	//左
 	if (gamePadState.lX < -unresponsive_range && stick == Left)
@@ -188,7 +188,7 @@ bool Input::TiltStick(int stick)
 	return false;
 }
 
-bool Input::TriggerStick(int stick)
+bool Input::LeftTriggerStick(int stick)
 {
 	//左
 	if (gamePadState.lX < -unresponsive_range && !(oldGamePadState.lX < -unresponsive_range) && stick == Left)
@@ -213,6 +213,60 @@ bool Input::TriggerStick(int stick)
 
 	return false;
 }
+
+bool Input::RightTiltStick(int stick)
+{
+	//左
+	if (gamePadState.lRx < -unresponsive_range && stick == Left)
+	{
+		return true;
+	}
+	//右
+	else if (gamePadState.lRx > unresponsive_range && stick == Right)
+	{
+		return true;
+	}
+	//後ろ
+	if (gamePadState.lRy > unresponsive_range && stick == Down)
+	{
+		return true;
+	}
+	//前
+	else if (gamePadState.lRy < -unresponsive_range && stick == Up)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::RightTriggerStick(int stick)
+{
+	//左
+	if (gamePadState.lRx < -unresponsive_range && !(oldGamePadState.lRx < -unresponsive_range) && stick == Left)
+	{
+		return true;
+	}
+	//右
+	else if (gamePadState.lRx > unresponsive_range && !(oldGamePadState.lRx > unresponsive_range) && stick == Right)
+	{
+		return true;
+	}
+	//後ろ
+	if (gamePadState.lRy > unresponsive_range && !(oldGamePadState.lRy > unresponsive_range) && stick == Down)
+	{
+		return true;
+	}
+	//前
+	else if (gamePadState.lRy < -unresponsive_range && !(oldGamePadState.lRy < -unresponsive_range) && stick == Up)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 
 bool Input::PushButton(int Button)
 {
@@ -250,10 +304,10 @@ bool Input::PushButton(int Button)
 			is_push[ButtonKind::Start] = true;
 			break;
 		case 8:
-			is_push[ButtonKind::Button_LS] = true;
+			is_push[ButtonKind::Button_LeftStick] = true;
 			break;
 		case 9:
-			is_push[ButtonKind::Button_RS] = true;
+			is_push[ButtonKind::Button_RightStick] = true;
 			break;
 		default:
 			break;
@@ -316,10 +370,10 @@ bool Input::TriggerButton(int Button)
 			is_push[ButtonKind::Start] = true;
 			break;
 		case 8:
-			is_push[ButtonKind::Button_LS] = true;
+			is_push[ButtonKind::Button_LeftStick] = true;
 			break;
 		case 9:
-			is_push[ButtonKind::Button_RS] = true;
+			is_push[ButtonKind::Button_RightStick] = true;
 			break;
 		default:
 			break;

@@ -260,7 +260,9 @@
     <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene\BaseScene.cpp" />
+    <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="scene\Framework.cpp" />
+    <ClCompile Include="scene\GameoverScene.cpp" />
     <ClCompile Include="scene\GamePlayScene.cpp" />
     <ClCompile Include="scene\IkeGame.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
@@ -301,7 +303,9 @@
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="light\SpotLight.h" />
     <ClInclude Include="scene\BaseScene.h" />
+    <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="scene\Framework.h" />
+    <ClInclude Include="scene\GameoverScene.h" />
     <ClInclude Include="scene\GamePlayScene.h" />
     <ClInclude Include="scene\IkeGame.h" />
     <ClInclude Include="scene\SceneManager.h" />
