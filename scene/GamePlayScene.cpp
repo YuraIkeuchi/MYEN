@@ -188,7 +188,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		if (input->TriggerCrossKey(input->Cross_Up) == true) {
 			if (SpeedWeight == false) {
 				SpeedWeight = true;
-				PlayerMoveSpeed = PlayerMoveSpeed - (EnemyWeight / 100);
+				PlayerMoveSpeed = PlayerMoveSpeed - (EnemyWeight / 150);
 			} else {
 				SpeedWeight = false;
 				PlayerMoveSpeed = 0.3f;
@@ -283,7 +283,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < Max; i++) {
 		if (collision->SphereCollision(ArmPosition.x, ArmPosition.y, ArmPosition.z, 0.5,
 			EnemyPosition[i].x, EnemyPosition[i].y, EnemyPosition[i].z, 0.5) == true && EnemyAlive[i] == 1
-			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false && EnemyWeight <= 7.0f) {
+			&& ArmMoveNumber >= 2 && EnemyCatch[i] == false && EnemyWeight < 7.0f) {
 			EnemyCatch[i] = true;
 			EnemyWeight += 1.0f;
 			if (SpeedWeight == true) {
@@ -303,6 +303,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		HitTimer = 10;
 		frame2 = frameMax2;
 		PlayerAttackFlag = false;
+		PlayerMoveSpeed = 0.3f;
 		for (int i = 0; i < Max; i++) {
 			if (EnemyCatch[i] == true) {
 				EnemyCatch[i] = false;
@@ -319,6 +320,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			EnemyAlive[i] = 0;
 			PlayerAttackFlag = false;
 			frame2 = frameMax2;
+
+			PlayerMoveSpeed = 0.3f;
 			if (EnemyWeight != 0.0f) {
 				EnemyWeight = 0.0f;
 			}
@@ -399,7 +402,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		DebugText::GetInstance()->Print("YesAdd AttackWeight", 200, 140, 1.0f);
 	}
 
-	if (EnemyWeight <= 7.0f) {
+	if (EnemyWeight < 7.0f) {
 		DebugText::GetInstance()->Print("RB to Catch!!", 200, 160, 1.0f);
 	} else {
 		DebugText::GetInstance()->Print("Can not Catch!!", 200, 160, 1.0f);
@@ -456,6 +459,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			ImGui::SliderFloat("ArmSpeed", &ArmSpeed, 50, -50);
 			ImGui::SliderFloat("Weight", &EnemyWeight, 50, -50);
 			ImGui::SliderFloat("PlayerMove", &PlayerMoveSpeed, 50, -50);
+			ImGui::SliderFloat("SaveScale", &Savescale, 50, -50);
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
