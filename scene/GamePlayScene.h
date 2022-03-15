@@ -65,6 +65,7 @@ public:
 	Triangle triangle;
 	//“–‚½‚è”»’è ƒŒƒC
 	Ray ray;
+	Texture* titleTexture = nullptr;
 	//“–‚½‚è”»’è
 	Collision* collision = nullptr;
 	LightGroup* lightGroup = nullptr;

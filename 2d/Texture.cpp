@@ -569,3 +569,15 @@ void Texture::Draw()
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 }
+
+void Texture::SetColor(XMFLOAT4 color)
+{
+	this->color = color;
+	// 定数バッファにデータ転送
+	ConstBufferData* constMap = nullptr;
+	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
+	if (SUCCEEDED(result)) {
+		constMap->color = this->color;
+		this->constBuff->Unmap(0, nullptr);
+	}
+}

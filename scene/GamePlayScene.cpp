@@ -34,7 +34,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	spritePlayerHP = Sprite::Create(2, { 0.0f,0.0f });
 	spriteBossHP = Sprite::Create(3, { 0.0f,0.0f });
 
-	spriteBossHP->SetColor({ 1.0f,0.0f,0.0f,1.0 });
+	spriteBossHP->SetColor({ 0.0f,1.0f,0.0,1.0 });
+	//spriteBossHP->SetColor({ 1.0f,0.0f,0.0f,1.0 });
 	spritePlayerHP->SetPosition({ 0.0f,520.0f });
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -70,13 +71,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 		EnemyAlive[i] = 0;
 		EnemyTimer[i] = 100;
 	}
-	////普通のテクスチャ(板ポリ)
-	//Texture::LoadTexture(0, L"Resources/Title.png");
-	//titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
-	//titleTexture->TextureCreate();
-	//titleTexture->SetPosition(TexPosition);
-	//titleTexture->SetScale({ 0.5,0.5,0.5 });
-
+	//普通のテクスチャ(板ポリ)
+	Texture::LoadTexture(0, L"Resources/Title.png");
+	titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
+	titleTexture->TextureCreate();
+	titleTexture->SetPosition({0,0,0});
+	titleTexture->SetScale({ 0.5,0.5,0.5 });
+	titleTexture->SetColor({ 1.0f,1.0f,0.0f,0.4f });
 	////普通のテクスチャ(板ポリ)
 	//Texture::LoadTexture(2, L"Resources/Title.png");
 	//fantasyTexture = Texture::Create(2, { 0,0,0 }, { 2,2,2 }, { 1,1,1,0.5 });
@@ -161,10 +162,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		}
 
 		if (input->PushButton(input->Button_RB) && PlayerAttackFlag == false && EnemyWeight <= 7.0f && AttackMoveNumber == 0) {
-			ButtunFlag = true;
 			ArmMoveNumber = 1;
 		} else {
-			ButtunFlag = false;
 			if (ArmMoveNumber == 1) {
 				ArmMoveNumber = 2;
 				initScale = Armscale;
@@ -426,7 +425,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	// カメラ注視点をセット
 	camera->SetTarget(PlayerPosition);
-	camera->SetEye({ PlayerPosition.x,PlayerPosition.y + 10,PlayerPosition.z - 10 });
+	camera->SetEye({ PlayerPosition.x,PlayerPosition.y,PlayerPosition.z - 10 });
 
 	object1->Update();
 	camera->Update();
@@ -445,6 +444,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	for (int i = 0; i < Max; i++) {
 		enemy[i]->Update();
 	}
+
+	titleTexture->Update(camera->GetViewMatrix(), camera->GetViewProjectionMatrix());
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -509,7 +510,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	//if (fantasyFlag == true) {
 	//	fantasyTexture->Draw();
 	//}
-	//titleTexture->Draw();
+	titleTexture->Draw();
 	//for (int i = 0; i < Max; i++) {
 	//	if (EnemyAlive[i] == 1) {
 	//		//enemyTexture[i]->Draw();
@@ -521,25 +522,23 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
-	if (fantasyFlag == true) {
-		objPlayer->Draw();
-	}
-	//背景用
-	for (int i = 0; i < Max; i++) {
-		if (EnemyAlive[i] == 1) {
-			enemy[i]->Draw();
-		}
-	}
+	//if (fantasyFlag == true) {
+	//	objPlayer->Draw();
+	//}
+	////背景用
+	//for (int i = 0; i < Max; i++) {
+	//	if (EnemyAlive[i] == 1) {
+	//		enemy[i]->Draw();
+	//	}
+	//}
 
 	//object1->Draw(dxCommon->GetCmdList());
-	objSkydome->Draw();
+	/*objSkydome->Draw();
 	objGround->Draw();
 	objFighter->Draw();
 	objPlayer->Draw();
-	if (ButtunFlag == true) {
-		//objAllow->Draw();
-	}
-	objArm->Draw();
+	
+	objArm->Draw();*/
 	Object3d::PostDraw();
 #pragma endregion
 
