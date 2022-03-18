@@ -145,4 +145,6 @@ public:
 	//プロトタイプでバック用
 	bool SpeedWeight = false;
 	bool AttackWeight = false;
+	float rotX = 0;
+	float rotY = 0;
 };

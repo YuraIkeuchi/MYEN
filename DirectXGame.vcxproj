@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -259,6 +259,9 @@
     <ClCompile Include="light\PointLight.cpp" />
     <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\Matrix4.cpp" />
+    <ClCompile Include="math\Quaternion.cpp" />
+    <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="scene\BaseScene.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="scene\Framework.cpp" />
@@ -302,6 +305,9 @@
     <ClInclude Include="light\LightGroup.h" />
     <ClInclude Include="light\PointLight.h" />
     <ClInclude Include="light\SpotLight.h" />
+    <ClInclude Include="math\Matrix4.h" />
+    <ClInclude Include="math\Quaternion.h" />
+    <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="scene\BaseScene.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="scene\Framework.h" />

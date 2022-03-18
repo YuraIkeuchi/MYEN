@@ -63,6 +63,11 @@ public:
 	bool TriggerButton(int Button);
 	bool PushCrossKey(int CrossKey);
 	bool TriggerCrossKey(int CrossKey);
+public: // メンバ関数
+	const LONG& GetPositionX() { return  gamePadState2.lX; }
+	const LONG& GetPositionY() { return  gamePadState2.lY; }
+	const float& GetPosX() { return posX; }
+	const float& GetPosY() { return posY; }
 private://メンバ変数
 	//キーボードのデパイス
 	ComPtr<IDirectInputDevice8> devkeyboard;
@@ -73,14 +78,16 @@ private://メンバ変数
 	DIMOUSESTATE2 mouseStatePre = {};
 	//ゲームパッドデバイス
 	ComPtr<IDirectInputDevice8> devGamePad;
-	DIJOYSTATE gamePadState = {};
-	DIJOYSTATE oldGamePadState = {};
-	DIJOYSTATE gamePadState2 = {};
-	DIJOYSTATE oldGamePadState2 = {};
+	DIJOYSTATE2 gamePadState = {};
+	DIJOYSTATE2 oldGamePadState = {};
+	DIJOYSTATE2 gamePadState2 = {};
+	DIJOYSTATE2 oldGamePadState2 = {};
 	bool is_push[32] = {};
 	//スティックの無反応範囲
-	LONG unresponsive_range = 650;
+	LONG unresponsive_range = 640;
 	LONG unresponsive_range2 = 200;
+	float posX = 0;
+	float posY = 0;
 private:
 	WinApp* winApp = nullptr;
 };
