@@ -4,9 +4,9 @@
 #include <DirectXMath.h>
 #include <Input.h>
 #include"CollisionPrimitive.h"
-class Enemy {
+class Player {
 public:
-	Enemy();
+	Player();
 
 	void Initialize();
 	void Update();
@@ -19,7 +19,7 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-/// À•W‚ÌŽæ“¾
+	/// À•W‚ÌŽæ“¾
 	const XMFLOAT3& GetPosition() { return  object3d->GetPosition(); }
 
 	const XMFLOAT3& GetRotation() { return object3d->GetRotation(); }
@@ -28,14 +28,12 @@ public:
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
-	bool Collision(XMFLOAT3 position, float radius);
 private:
 	Object3d* object3d;
 	Model* model;
-	XMFLOAT3 pos = {-10,0,0};
+	XMFLOAT3 pos = { 10,0,0 };
 	float rad = 0.4f;
 public:
 	Sphere collider;
-
 };
 

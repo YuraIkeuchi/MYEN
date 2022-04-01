@@ -14,7 +14,7 @@ void Enemy::Initialize() {
 	object3d = Object3d::Create();
 	object3d->SetModel(model);
 	object3d->SetPosition(pos);
-	object3d->SetScale({ 0.5,0.5,0.5 });
+	object3d->SetScale({ 1.5,1.5,1.5 });
 	collider.radius=rad;
 }
 
