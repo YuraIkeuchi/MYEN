@@ -38,6 +38,9 @@ public:
 	Model* modelGround = nullptr;
 	Object3d* objGround;
 
+	Model* modelSphere = nullptr;
+	Object3d* objSphere;
+
 	Model* modelSkydome = nullptr;
 	Object3d* objSkydome;
 

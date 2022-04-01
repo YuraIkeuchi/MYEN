@@ -14,19 +14,12 @@ Player::Player() {
 }
 
 bool Player::Initialize() {
-	if (!Object3d::Initialize())
-	{
-		return false;
-	}
-
 	object3d = Object3d::Create();
 	object3d->SetModel(model);
 	object3d->SetPosition(pos);
 	object3d->SetScale({ 1.5,1.5,1.5 });
 	collider.radius = rad;
 	//コライダーの追加
-	float radius = 0.6;
-	SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	return true;
 }
 

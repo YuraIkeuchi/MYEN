@@ -56,13 +56,20 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
-	
+	objSphere = Object3d::Create();
+
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
+	modelSphere = Model::LoadFromOBJ("sphere");
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
+	objSphere->SetModel(modelSphere);
 	objGround->SetPosition({ 0, -5, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
+	objSphere->SetPosition({ -10, 0, 0 });
+	// コライダーの追加
+	objSphere->SetCollider(new SphereCollider);
+
 	////普通のテクスチャ(板ポリ)
 	//Texture::LoadTexture(0, L"Resources/Title.png");
 	//titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
@@ -110,8 +117,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	object1->Update();
 	objSkydome->Update();
 	objGround->Update();
+	objSphere->Update();
 	player->Update();
-	enemy->Update();
+	//enemy->Update();
 	particleMan->Update();
 	camera->Update();
 	camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
@@ -126,6 +134,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
+	// 全ての衝突をチェック
+	//collsionManager->CheckAllCollisions();
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -162,7 +172,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		objSkydome->Draw();
 		objGround->Draw();
 		player->Draw();
-		enemy->Draw();
+		//enemy->Draw();
+		objSphere->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
 		particleMan->Draw(dxCommon->GetCmdList());
