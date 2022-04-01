@@ -50,6 +50,8 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 	Texture::StaticInitialize(dxcommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
+	// パーティクルマネージャ初期化
+	ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
 
 }
 

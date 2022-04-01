@@ -4,12 +4,12 @@
 #include <DirectXMath.h>
 #include <Input.h>
 #include"CollisionPrimitive.h"
-class Player {
+class Player : public Object3d{
 public:
 	Player();
 
-	void Initialize();
-	void Update();
+	bool Initialize()override;
+	void Update()override;
 	void Draw();
 private:
 	// DirectX::‚ðÈ—ª
@@ -28,6 +28,7 @@ public:
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
+	void OnCollision(const CollisionInfo& info)override;
 private:
 	Object3d* object3d;
 	Model* model;

@@ -1,23 +1,18 @@
 cbuffer cbuff0 : register(b0)
 {
-	matrix mat; // ３Ｄ変換行列
-	matrix matBillboard;//ビルボード行列
-	float4 color;
+	matrix mat; // ビュープロジェクション行列
+	matrix matBillboard; // ビルボード行列
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体
 struct VSOutput
 {
-	//float4 svpos : SV_POSITION; // システム用頂点座標
-	//float3 normal :NORMAL; // 法線ベクトル
-	float  scale :TEXCOORD; // スケール
-	float4 pos : POSITION;
-	float4 color : COLOR;
+	float4 pos : POSITION; // 頂点座標
+	float scale : TEXCOORD; // スケール
 };
 
 struct GSOutput
 {
-	float4 svpos : SV_POSITION;
-	float2 uv : TEXCOORD;
-	//float4 color : COLOR;
+	float4 svpos : SV_POSITION; // システム用頂点座標
+	float2 uv  :TEXCOORD; // uv値
 };

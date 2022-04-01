@@ -6,6 +6,10 @@
 #include "TitleScene.h"
 #include "FbxLoader.h"
 #include"Texture.h"
+#include "SphereCollider.h"
+#include "CollisionManager.h"
+#include "Player.h"
+
 float easeInSine(float x) {
 	return x * x * x;
 }
@@ -39,12 +43,17 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
 	Object3d::SetLightGroup(lightGroup);
+	// パーティクルマネージャ生成
+	particleMan = ParticleManager::GetInstance();
+	particleMan->SetCamera(camera);
+
 	// 3Dオブジェクト生成
 	player = new Player();
 	player->Initialize();
 
 	enemy = new Enemy();
 	enemy->Initialize();
+
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
 	
@@ -103,6 +112,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objGround->Update();
 	player->Update();
 	enemy->Update();
+	particleMan->Update();
 	camera->Update();
 	camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
 	camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
@@ -154,6 +164,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		player->Draw();
 		enemy->Draw();
 		Object3d::PostDraw();
+		// パーティクルの描画
+		particleMan->Draw(dxCommon->GetCmdList());
 #pragma endregion
 
 		// 前景スプライト描画前処理
@@ -165,5 +177,29 @@ void GamePlayScene::Finalize()
 {
 	//スプライト開放
 	delete spriteBG;
+}
 
+void GamePlayScene::CreateParticles()
+{
+	for (int i = 0; i < 10; i++) {
+		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 10.0f;
+		XMFLOAT3 pos{};
+		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		const float rnd_vel = 0.1f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		// 追加
+		particleMan->Add(60, pos, vel, acc, 1.0f, 0.0f);
+	}
 }

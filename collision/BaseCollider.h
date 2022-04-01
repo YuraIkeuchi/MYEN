@@ -3,12 +3,13 @@
 #include"Object3d.h"
 #include "CollisionInfo.h"
 
-
+//コライダー基底クラス
 class BaseCollider {
 public:
 	BaseCollider() = default;
 
-
+	//仮想デストラクタ
+	virtual ~BaseCollider() = default;
 	inline void SetObject(Object3d* object) {
 		this->object3d = object;
 	}
@@ -16,16 +17,11 @@ public:
 	inline Object3d* GetObject3d() {
 		return object3d;
 	}
-	///<summary>
-	///衝突時コールバック関数
-	/// </summary>
-	/// <param name="info">衝突情報</param>
+	//衝突時コールバック関数
 	inline void OnCollision(const CollisionInfo& info) {
 		object3d->OnCollision(info);
 	}
-	///<summary>
-	///更新
-	///</summary>
+	//更新
 	virtual void Update() = 0;
 	//形状タイプ取得
 	inline CollisionShapeType GetShapeType() { return shapeType; }

@@ -7,9 +7,5 @@ enum CollisionShapeType {
 
 class CollisionTypes {
 
-
-
-
-
 };
 

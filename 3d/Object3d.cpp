@@ -6,6 +6,7 @@
 #include<sstream>
 #include<string>
 #include<vector>
+#include "BaseCollider.h"
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace std;
@@ -27,8 +28,7 @@ Camera* Object3d::camera = nullptr;
 LightGroup* Object3d::lightGroup = nullptr;
 
 Object3d::~Object3d() {
-	static int a = 0;
-	a++;
+	
 	if (collider) {
 		CollisionManager::GetInstance()->RemoveCollider(collider);
 		delete collider;
@@ -341,6 +341,7 @@ bool Object3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffB0));
+	//クラス名の文字列を取得
 	name = typeid(*this).name();
 
 	return true;
@@ -393,6 +394,7 @@ void Object3d::Update()
 	constMap->world = matWorld;
 	constMap->cameraPos = cameraPos;
 	constBuffB0->Unmap(0, nullptr);
+	//当たり判定更新
 	if (collider) {
 		collider->Update();
 	}

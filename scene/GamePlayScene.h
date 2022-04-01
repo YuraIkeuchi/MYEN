@@ -11,8 +11,9 @@
 #include "DirectXMath.h"
 #include "Texture.h"
 #include "Enemy.h"
-#include "Player.h"
-
+#include "ParticleManager.h"
+class CollisionManager;
+class Player;
 
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
@@ -28,6 +29,7 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 	//開放
 	void Finalize() override;
+	void CreateParticles();
 	///ゲームシーン用
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
@@ -41,7 +43,7 @@ public:
 
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
-
+	ParticleManager* particleMan = nullptr;
 	//当たり判定 レイ
 	Ray ray;
 	Texture* titleTexture = nullptr;
@@ -51,4 +53,5 @@ public:
 	XMFLOAT3 cameraPos = { 0, 3.0f, -20.0f };
 	Enemy* enemy = nullptr;
 	Player* player = nullptr;
+	CollisionManager* collsionManager = nullptr;
 };
