@@ -55,6 +55,9 @@
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{2e09b36f-568c-45e5-aa95-658e6cbb9e68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\ParticleManager">
+      <UniqueIdentifier>{f04362c3-1cff-42df-9d1a-656af883a6a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Basic.hlsli">
@@ -73,6 +76,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\Shaders\OBJShaderHeaderhlsli.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -99,6 +105,15 @@
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\OBJVertexShader.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
@@ -231,6 +246,24 @@
     </ClCompile>
     <ClCompile Include="player\Player.cpp">
       <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\BaseCollider.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionInfo.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionTypes.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager\ParticleManager.cpp">
+      <Filter>ソース ファイル\ParticleManager</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionManager.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\SphereCollider.cpp">
+      <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +401,24 @@
     </ClInclude>
     <ClInclude Include="player\Player.h">
       <Filter>ソース ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\BaseCollider.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionInfo.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionTypes.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager\ParticleManager.h">
+      <Filter>ソース ファイル\ParticleManager</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionManager.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\SphereCollider.h">
+      <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 #include<string>
 #include<vector>
 #pragma comment(lib, "d3dcompiler.lib")
+
 using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
@@ -24,6 +25,16 @@ XMMATRIX Object3d::matBillboard = XMMatrixIdentity();
 XMMATRIX Object3d::matBillboardY = XMMatrixIdentity();
 Camera* Object3d::camera = nullptr;
 LightGroup* Object3d::lightGroup = nullptr;
+
+Object3d::~Object3d() {
+	static int a = 0;
+	a++;
+	if (collider) {
+		CollisionManager::GetInstance()->RemoveCollider(collider);
+		delete collider;
+	}
+}
+
 bool Object3d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera)
 {
 	// nullptrチェック
@@ -305,6 +316,8 @@ void Object3d::UpdateViewMatrix()
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
+
+
 bool Object3d::Initialize()
 {
 	// nullptrチェック
@@ -328,6 +341,7 @@ bool Object3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffB0));
+	name = typeid(*this).name();
 
 	return true;
 }
@@ -379,6 +393,9 @@ void Object3d::Update()
 	constMap->world = matWorld;
 	constMap->cameraPos = cameraPos;
 	constBuffB0->Unmap(0, nullptr);
+	if (collider) {
+		collider->Update();
+	}
 }
 
 void Object3d::Draw()
@@ -402,3 +419,13 @@ void Object3d::Draw()
 	// モデル描画
 	model->Draw(cmdList);
 }
+
+void Object3d::SetCollider(BaseCollider* collider) {
+
+	collider->SetObject(this);
+	this->collider = collider;
+	//コリジョンマネージャーに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	collider->Update();
+}
+

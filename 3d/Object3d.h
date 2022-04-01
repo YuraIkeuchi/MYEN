@@ -9,6 +9,11 @@
 #include "Model.h"
 #include "Camera.h"
 #include "LightGroup.h"
+#include "BaseCollider.h"
+#include "CollisionManager.h"
+#include "CollisionInfo.h"
+
+class BaseCollider;
 
 /// 3Dオブジェクト
 class Object3d
@@ -111,18 +116,25 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
-	bool Initialize();
+
+	Object3d() = default;
+
+	virtual ~Object3d();
+
+	virtual	bool Initialize();
 	
 	//毎フレーム処理
-	void Update();
+	virtual void Update();
 	// 描画
-	void Draw();
+	virtual void Draw();
 
 	//座標の取得
 	const XMFLOAT3& GetPosition() { return position; }
 
 	//回転の取得
 	const XMFLOAT3& GetRotation() { return rotation; }
+
+	const XMMATRIX& GetMatWorld() { return matWorld; }
 
 	
 	//座標の設定
@@ -135,6 +147,12 @@ public: // メンバ関数
 	void SetModel(Model* model) { this->model = model; }
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
+
+	//当たり判定セット
+	void SetCollider(BaseCollider* collider);
+
+	//コールバック
+	virtual void OnCollision(const CollisionInfo& info) {}
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
@@ -154,5 +172,11 @@ private: // メンバ変数
 	Model* model = nullptr;
 	// ビルボード
 	bool isBillboard = false;
+protected:
+
+		const char* name = nullptr;
+
+		BaseCollider* collider = nullptr;
+
 };
 

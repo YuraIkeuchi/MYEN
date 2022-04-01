@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;$(ProjectDir)ParticleManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;$(ProjectDir)ParticleManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -159,6 +159,7 @@
     <None Include="Resources\Shaders\Basic.hlsli" />
     <None Include="Resources\Shaders\FBX.hlsli" />
     <None Include="Resources\Shaders\OBJShaderHeaderhlsli.hlsli" />
+    <None Include="Resources\Shaders\Particle.hlsli" />
     <None Include="Resources\Shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +207,24 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -241,8 +260,13 @@
     <ClCompile Include="audio\Audio.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
+    <ClCompile Include="collision\BaseCollider.cpp" />
     <ClCompile Include="collision\Collision.cpp" />
+    <ClCompile Include="collision\CollisionInfo.cpp" />
+    <ClCompile Include="collision\CollisionManager.cpp" />
     <ClCompile Include="collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="collision\CollisionTypes.cpp" />
+    <ClCompile Include="collision\SphereCollider.cpp" />
     <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="enginebase\AbstractSceneFactory.cpp" />
     <ClCompile Include="enginebase\DirectXCommon.cpp" />
@@ -262,6 +286,7 @@
     <ClCompile Include="math\Matrix4.cpp" />
     <ClCompile Include="math\Quaternion.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
+    <ClCompile Include="ParticleManager\ParticleManager.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="scene\BaseScene.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
@@ -286,8 +311,13 @@
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />
+    <ClInclude Include="collision\BaseCollider.h" />
     <ClInclude Include="collision\Collision.h" />
+    <ClInclude Include="collision\CollisionInfo.h" />
+    <ClInclude Include="collision\CollisionManager.h" />
     <ClInclude Include="collision\CollisionPrimitive.h" />
+    <ClInclude Include="collision\CollisionTypes.h" />
+    <ClInclude Include="collision\SphereCollider.h" />
     <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="enginebase\AbstractSceneFactory.h" />
     <ClInclude Include="enginebase\DirectXCommon.h" />
@@ -309,6 +339,7 @@
     <ClInclude Include="math\Matrix4.h" />
     <ClInclude Include="math\Quaternion.h" />
     <ClInclude Include="math\Vector3.h" />
+    <ClInclude Include="ParticleManager\ParticleManager.h" />
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="scene\BaseScene.h" />
     <ClInclude Include="scene\ClearScene.h" />
