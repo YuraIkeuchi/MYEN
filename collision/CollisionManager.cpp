@@ -1,7 +1,8 @@
 #include "CollisionManager.h"
+#include "MeshCollider.h"
 #include "BaseCollider.h"
 #include "Collision.h"
-#include "MeshCollider.h"
+
 using namespace DirectX;
 
 CollisionManager* CollisionManager::GetInstance()
@@ -57,7 +58,7 @@ void CollisionManager::CheckAllCollisions()
 	}
 }
 
-bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDistance)
+bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance)
 {
 	bool result = false;
 	std::forward_list<BaseCollider*>::iterator it;
@@ -69,6 +70,11 @@ bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDis
 	it = colliders.begin();
 	for (; it != colliders.end(); ++it) {
 		BaseCollider* colA = *it;
+
+		// 属性が合わなければスキップ
+		if (!(colA->attribute & attribute)) {
+			continue;
+		}
 
 		if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE) {
 			Sphere* sphere = dynamic_cast<Sphere*>(colA);

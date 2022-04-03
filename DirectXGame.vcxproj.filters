@@ -435,5 +435,8 @@
     <ClInclude Include="collision\TouchableObject.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
+    <ClInclude Include="collision\CollisionAttribute.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
