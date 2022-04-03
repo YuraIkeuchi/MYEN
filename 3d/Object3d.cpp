@@ -7,6 +7,7 @@
 #include<string>
 #include<vector>
 #include "BaseCollider.h"
+#include "CollisionManager.h"
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace std;
@@ -27,13 +28,7 @@ XMMATRIX Object3d::matBillboardY = XMMatrixIdentity();
 Camera* Object3d::camera = nullptr;
 LightGroup* Object3d::lightGroup = nullptr;
 
-Object3d::~Object3d() {
-	
-	if (collider) {
-		CollisionManager::GetInstance()->RemoveCollider(collider);
-		delete collider;
-	}
-}
+
 
 bool Object3d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera)
 {
@@ -316,7 +311,13 @@ void Object3d::UpdateViewMatrix()
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
+Object3d::~Object3d() {
 
+	if (collider) {
+		CollisionManager::GetInstance()->RemoveCollider(collider);
+		delete collider;
+	}
+}
 
 bool Object3d::Initialize()
 {

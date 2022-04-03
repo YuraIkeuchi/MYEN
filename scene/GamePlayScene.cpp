@@ -130,6 +130,26 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//enemy->Update();
 	particleMan->Update();
 	camera->Update();
+
+	Ray ray;
+	ray.start = { 10.0f, 0.5f, 0.0f, 1 };
+	ray.dir = { -1,0,0,0 };
+	RaycastHit raycastHit;
+
+	if (collsionManager->Raycast(ray, &raycastHit)) {
+		DebugText::GetInstance()->Print("Raycast Hit.",0,30,10);
+
+		for (int i = 0; i < 1; ++i) {
+
+			const float rnd_vel = 0.1f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+			ParticleManager::GetInstance()->Add(10, XMFLOAT3(raycastHit.inter.m128_f32), vel, XMFLOAT3(), 0.0f, 1.0f);
+		}
+	}
 	//camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
 	//
@@ -183,10 +203,9 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		objFighter->Draw();
 		//enemy->Draw();
 		objSphere->Draw();
-		particleMan->Draw(dxCommon->GetCmdList());
 		Object3d::PostDraw();
 		// パーティクルの描画
-	
+		particleMan->Draw(dxCommon->GetCmdList());
 #pragma endregion
 
 		// 前景スプライト描画前処理

@@ -10,7 +10,6 @@
 #include "Camera.h"
 #include "LightGroup.h"
 
-#include "CollisionManager.h"
 #include "CollisionInfo.h"
 
 class BaseCollider;
@@ -172,7 +171,6 @@ protected: // メンバ変数
 	Model* model = nullptr;
 	// ビルボード
 	bool isBillboard = false;
-protected:
 	//クラス名
 	const char* name = nullptr;
 	//コライダー

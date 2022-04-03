@@ -30,6 +30,7 @@ public:
 	void OnCollision(const CollisionInfo& info) override;
 
 private:
+	int hit = 0;
 	bool onGround = true;
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV;

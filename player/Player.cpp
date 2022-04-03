@@ -58,19 +58,19 @@ void Player::Update()
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
 	if (input->LeftTiltStick(input->Right)) {
-		position.x += 1.0f;
+		position.x += 0.3f;
 	}
 
 	if (input->LeftTiltStick(input->Left)) {
-		position.x -= 1.0f;
+		position.x -= 0.3f;
 	}
 
 	if (input->LeftTiltStick(input->Up)) {
-		position.z += 1.0f;
+		position.z += 0.3f;
 	}
 
 	if (input->LeftTiltStick(input->Down)) {
-		position.z -= 1.0f;
+		position.z -= 0.3f;
 	}
 
 	// s—ñ‚ÌXV‚È‚Ç

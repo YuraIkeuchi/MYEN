@@ -420,5 +420,8 @@
     <ClInclude Include="collision\SphereCollider.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
+    <ClInclude Include="collision\RaycastHit.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
