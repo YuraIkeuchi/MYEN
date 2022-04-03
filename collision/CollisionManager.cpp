@@ -1,7 +1,7 @@
 #include "CollisionManager.h"
 #include "BaseCollider.h"
 #include "Collision.h"
-
+#include "MeshCollider.h"
 using namespace DirectX;
 
 CollisionManager* CollisionManager::GetInstance()
@@ -34,6 +34,24 @@ void CollisionManager::CheckAllCollisions()
 					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
 					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
 				}
+			} else if (colA->GetShapeType() == COLLISIONSHAPE_MESH &&
+				colB->GetShapeType() == COLLISIONSHAPE_SPHERE) {
+				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
+				Sphere* sphere = dynamic_cast<Sphere*>(colB);
+				DirectX::XMVECTOR inter;
+				if (meshCollider->CheckCollisionSphere(*sphere, &inter)) {
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+				}
+			} else if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE &&
+				colB->GetShapeType() == COLLISIONSHAPE_MESH) {
+				MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colB);
+				Sphere* sphere = dynamic_cast<Sphere*>(colA);
+				DirectX::XMVECTOR inter;
+				if (meshCollider->CheckCollisionSphere(*sphere, &inter)) {
+					colA->OnCollision(CollisionInfo(colB->GetObject3d(), colB, inter));
+					colB->OnCollision(CollisionInfo(colA->GetObject3d(), colA, inter));
+				}
 			}
 		}
 	}
@@ -59,6 +77,18 @@ bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDis
 			XMVECTOR tempInter;
 
 			if (!Collision::CheckRay2Sphere(ray, *sphere, &tempDistance, &tempInter)) continue;
+			if (tempDistance >= distance) continue;
+
+			result = true;
+			distance = tempDistance;
+			inter = tempInter;
+			it_hit = it;
+		} else if (colA->GetShapeType() == COLLISIONSHAPE_MESH) {
+			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(colA);
+
+			float tempDistance;
+			DirectX::XMVECTOR tempInter;
+			if (!meshCollider->CheckCollisionRay(ray, &tempDistance, &tempInter)) continue;
 			if (tempDistance >= distance) continue;
 
 			result = true;

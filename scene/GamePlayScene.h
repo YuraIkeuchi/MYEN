@@ -12,9 +12,10 @@
 #include "Texture.h"
 #include "Enemy.h"
 #include "ParticleManager.h"
+
 class CollisionManager;
 class Player;
-
+class TouchableObject;
 //ゲームプレイシーン
 class GamePlayScene : public BaseScene
 {
@@ -36,7 +37,7 @@ public:
 	Sprite* spritePlayerHP = nullptr;
 	Sprite* spriteBossHP = nullptr;
 	Model* modelGround = nullptr;
-	Object3d* objGround;
+	TouchableObject* objGround = nullptr;
 
 	Model* modelSphere = nullptr;
 	Object3d* objSphere;

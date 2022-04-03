@@ -265,6 +265,12 @@
     <ClCompile Include="collision\SphereCollider.cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
+    <ClCompile Include="collision\MeshCollider.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\TouchableObject.cpp">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -421,6 +427,12 @@
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\RaycastHit.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\MeshCollider.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\TouchableObject.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
   </ItemGroup>

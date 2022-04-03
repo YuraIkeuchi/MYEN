@@ -135,7 +135,11 @@ public: // ƒƒ“ƒoŠÖ”
 
 	const XMMATRIX& GetMatWorld() { return matWorld; }
 
-	
+	/// <summary>
+/// ƒ‚ƒfƒ‹‚ğæ“¾
+/// </summary>
+	inline Model* GetModel() { return model; }
+
 	//À•W‚Ìİ’è
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 

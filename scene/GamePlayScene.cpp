@@ -9,6 +9,8 @@
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "TouchableObject.h"
+#include "MeshCollider.h"
 
 float easeInSine(float x) {
 	return x * x * x;
@@ -56,7 +58,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//enemy->Initialize();
 
 	objSkydome = Object3d::Create();
-	objGround = Object3d::Create();
+	
 	objSphere = Object3d::Create();
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
@@ -64,10 +66,10 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	modelSphere = Model::LoadFromOBJ("sphere");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
-	objGround->SetModel(modelGround);
+	objGround = TouchableObject::Create(modelGround);
 	objSphere->SetModel(modelSphere);
 	objFighter = Player::Create(modelFighter);
-	objGround->SetPosition({ 0, -5, 0 });
+	objGround->SetPosition({ 0, 0, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
 	objSphere->SetPosition({ -1, 1, -10 });
 
@@ -96,8 +98,9 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
+	camera->SetEye({ 0,5,-20 });
 	camera->SetTarget({ 0, 1, 0 });
-	camera->SetDistance(3.0f);
+	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
@@ -133,11 +136,11 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	Ray ray;
 	ray.start = { 10.0f, 0.5f, 0.0f, 1 };
-	ray.dir = { -1,0,0,0 };
+	ray.dir = { 0,-1,0,0 };
 	RaycastHit raycastHit;
 
 	if (collsionManager->Raycast(ray, &raycastHit)) {
-		DebugText::GetInstance()->Print("Raycast Hit.",0,30,10);
+		//DebugText::GetInstance()->Print("Raycast Hit.",0,30,10);
 
 		for (int i = 0; i < 1; ++i) {
 
@@ -162,6 +165,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
+	camera->SetEye({ 0,5,-20 });
+	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 }

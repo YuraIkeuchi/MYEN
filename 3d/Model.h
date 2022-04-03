@@ -38,6 +38,12 @@ public: // メンバ関数
 	void Initialize(const std::string& modelname);
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	/// <summary>
+/// メッシュコンテナを取得
+/// </summary>
+/// <returns>メッシュコンテナ</returns>
+	inline const std::vector<Mesh*>& GetMeshes() { return meshes; }
+
 
 private: // メンバ変数
 	// 名前
