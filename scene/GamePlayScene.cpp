@@ -63,7 +63,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
-	modelSphere = Model::LoadFromOBJ("sphere");
+	modelSphere = Model::LoadFromOBJ("box1x1x1");
 	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
 	objGround = TouchableObject::Create(modelGround);
