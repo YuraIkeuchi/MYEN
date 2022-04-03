@@ -1,40 +1,37 @@
 #pragma once
-#include"Object3d.h"
-#include"Model.h"
-#include <DirectXMath.h>
-#include <Input.h>
-#include"CollisionPrimitive.h"
-class Player : public Object3d{
+#include "Object3d.h"
+class Player :
+	public Object3d
+{
 public:
-	Player();
+	/// <summary>
+	/// 3Dオブジェクト生成
+	/// </summary>
+	/// <returns></returns>
+	static Player* Create(Model* model = nullptr);
 
-	bool Initialize()override;
-	void Update()override;
-	void Draw();
+public:
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <returns>成否</returns>
+	bool Initialize() override;
+
+	/// <summary>
+	/// 毎フレーム処理
+	/// </summary>
+	void Update() override;
+
+	/// <summary>
+	/// 衝突時コールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
+	void OnCollision(const CollisionInfo& info) override;
+
 private:
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMVECTOR = DirectX::XMVECTOR;
-	using XMMATRIX = DirectX::XMMATRIX;
-public:
-	/// 座標の取得
-	const XMFLOAT3& GetPosition() { return  object3d->GetPosition(); }
-
-	const XMFLOAT3& GetRotation() { return object3d->GetRotation(); }
-	/// 座標の設定
-	void SetPosition(XMFLOAT3 position) { object3d->SetPosition(position); }
-
-	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
-
-	void OnCollision(const CollisionInfo& info)override;
-private:
-	Object3d* object3d;
-	Model* model;
-	XMFLOAT3 pos = { 10,0,0 };
-	float rad = 0.4f;
-public:
-	Sphere collider;
+	bool onGround = true;
+	// 落下ベクトル
+	DirectX::XMVECTOR fallV;
 };
 

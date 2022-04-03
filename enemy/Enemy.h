@@ -6,11 +6,11 @@
 #include"CollisionPrimitive.h"
 class Enemy {
 public:
-	Enemy();
+	/*Enemy();
 
 	void Initialize();
 	void Update();
-	void Draw();
+	void Draw();*/
 private:
 	// DirectX::‚ðÈ—ª
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -28,7 +28,7 @@ public:
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
-	bool Collision(XMFLOAT3 position, float radius);
+	//bool Collision(XMFLOAT3 position, float radius);
 private:
 	Object3d* object3d;
 	Model* model;

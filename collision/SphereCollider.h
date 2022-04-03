@@ -5,7 +5,9 @@
 
 #include <DirectXMath.h>
 
-//球衝突判定オブジェクト
+/// <summary>
+/// 球衝突判定オブジェクト
+/// </summary>
 class SphereCollider : public BaseCollider, public Sphere
 {
 private: // エイリアス
@@ -20,14 +22,10 @@ public:
 		shapeType = COLLISIONSHAPE_SPHERE;
 	}
 
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update() override;
-
-	inline const XMVECTOR& GetOffset() { return offset; }
-
-	inline void SetOffset(const XMVECTOR& offset) { this->offset = offset; }
-
-	inline float GetRadius() { return radius; }
 
 	inline void SetRadius(float radius) { this->radius = radius; }
 

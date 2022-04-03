@@ -1,59 +1,85 @@
 #include "Player.h"
 #include "Input.h"
-#include"Collision.h"
 #include "DebugText.h"
 #include "SphereCollider.h"
 #include "ParticleManager.h"
-#include<sstream>
-#include<iomanip>
+#include "CollisionManager.h"
+
 using namespace DirectX;
 
-Player::Player() {
-	model = Model::LoadFromOBJ("chr_sword");
-	object3d = new Object3d();
+Player* Player::Create(Model* model)
+{
+	// 3Dオブジェクトのインスタンスを生成
+	Player* instance = new Player();
+	if (instance == nullptr) {
+		return nullptr;
+	}
+
+	// 初期化
+	if (!instance->Initialize()) {
+		delete instance;
+		assert(0);
+	}
+
+	if (model) {
+		instance->SetModel(model);
+	}
+
+	return instance;
 }
 
-bool Player::Initialize() {
-	object3d = Object3d::Create();
-	object3d->SetModel(model);
-	object3d->SetPosition(pos);
-	object3d->SetScale({ 1.5,1.5,1.5 });
-	collider.radius = rad;
-	//コライダーの追加
+bool Player::Initialize()
+{
+	if (!Object3d::Initialize())
+	{
+		return false;
+	}
+
+	// コライダーの追加
+	float radius = 0.6f;
+	SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
+
 	return true;
 }
 
-void Player::Update() {
+void Player::Update()
+{
 	Input* input = Input::GetInstance();
+
+	// A,Dで旋回
+	if (input->PushKey(DIK_A)) {
+		rotation.y -= 2.0f;
+	} else if (input->PushKey(DIK_D)) {
+		rotation.y += 2.0f;
+	}
+
+	// 移動ベクトルをY軸周りの角度で回転
+	XMVECTOR move = { 0,0,0.1f,0 };
+	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	move = XMVector3TransformNormal(move, matRot);
 	if (input->LeftTiltStick(input->Right)) {
-			pos.x += 0.2;
+		position.x += 1.0f;
 	}
 
 	if (input->LeftTiltStick(input->Left)) {
-			pos.x -= 0.2;
+		position.x -= 1.0f;
 	}
 
 	if (input->LeftTiltStick(input->Up)) {
-			pos.z += 0.2;
+		position.z += 1.0f;
 	}
 
 	if (input->LeftTiltStick(input->Down)) {
-		pos.z -= 0.2;
+		position.z -= 1.0f;
 	}
-	object3d->Update();
-	collider.center = XMVectorSet(pos.x, pos.y, pos.z, 1);
-	object3d->SetPosition(pos);
-}
 
-void Player::Draw() {
-	Object3d::PreDraw();
-	object3d->Draw();
+	// 行列の更新など
+	Object3d::Update();
 }
 
 void Player::OnCollision(const CollisionInfo& info)
 {
-	DebugText::GetInstance()->Print("Collision detected.",900,50,50);
-
+	DebugText::GetInstance()->Print("Collision detected.",0,0,10);
 
 	for (int i = 0; i < 1; ++i) {
 
@@ -66,4 +92,3 @@ void Player::OnCollision(const CollisionInfo& info)
 		ParticleManager::GetInstance()->Add(10, XMFLOAT3(info.inter.m128_f32), vel, XMFLOAT3(), 0.0f, 1.0f);
 	}
 }
-

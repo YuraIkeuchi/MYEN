@@ -92,8 +92,8 @@ Object3d* Object3d::Create()
 		assert(0);
 		return nullptr;
 	}
-	float scale_val = 5;
-	object3d->scale = { scale_val , scale_val , scale_val };
+	//float scale_val = 5;
+	//object3d->scale = { scale_val , scale_val , scale_val };
 
 	return object3d;
 }

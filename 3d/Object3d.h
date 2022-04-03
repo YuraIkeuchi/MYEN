@@ -18,7 +18,7 @@ class BaseCollider;
 /// 3Dオブジェクト
 class Object3d
 {
-private: // エイリアス
+protected: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
@@ -154,7 +154,7 @@ public: // メンバ関数
 	//コールバック
 	virtual void OnCollision(const CollisionInfo& info) {}
 
-private: // メンバ変数
+protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };

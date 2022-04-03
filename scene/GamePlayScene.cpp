@@ -24,6 +24,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
+	collsionManager = CollisionManager::GetInstance();
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	// テクスチャ1番に読み込み
@@ -47,12 +48,12 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
 
-	// 3Dオブジェクト生成
-	player = new Player();
-	player->Initialize();
+	//// 3Dオブジェクト生成
+	//player = new Player();
+	//player->Initialize();
 
-	enemy = new Enemy();
-	enemy->Initialize();
+	//enemy = new Enemy();
+	//enemy->Initialize();
 
 	objSkydome = Object3d::Create();
 	objGround = Object3d::Create();
@@ -61,12 +62,16 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
 	modelSphere = Model::LoadFromOBJ("sphere");
+	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objSphere->SetModel(modelSphere);
+	objFighter = Player::Create(modelFighter);
 	objGround->SetPosition({ 0, -5, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
-	objSphere->SetPosition({ -10, 0, 0 });
+	objSphere->SetPosition({ -1, 1, -10 });
+
+	objFighter->SetPosition(PlayerPosition);
 	// コライダーの追加
 	objSphere->SetCollider(new SphereCollider);
 
@@ -86,10 +91,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//Texture::LoadTexture(1, L"Resources/ダウンロード.png");
 	//
 	
-	// カメラ注視点をセット
-	camera->SetTarget(player->GetPosition());
-	camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
+	//// カメラ注視点をセット
+	//camera->SetTarget(player->GetPosition());
+	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
+		// カメラ注視点をセット
+	camera->SetTarget({ 0, 1, 0 });
+	camera->SetDistance(3.0f);
 	// モデル名を指定してファイル読み込み
 	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
@@ -103,7 +111,6 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -118,13 +125,14 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objSkydome->Update();
 	objGround->Update();
 	objSphere->Update();
-	player->Update();
+	objFighter->Update();
+	//player->Update();
 	//enemy->Update();
 	particleMan->Update();
 	camera->Update();
-	camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
-	camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
-	
+	//camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
+	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
+	//
 	////ゲームオーバーに行く
 	//if (PlayerHP == 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
@@ -135,7 +143,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
 	// 全ての衝突をチェック
-	//collsionManager->CheckAllCollisions();
+	collsionManager->CheckAllCollisions();
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -171,12 +179,14 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		object1->Draw(dxCommon->GetCmdList());
 		objSkydome->Draw();
 		objGround->Draw();
-		player->Draw();
+	//	player->Draw();
+		objFighter->Draw();
 		//enemy->Draw();
 		objSphere->Draw();
+		particleMan->Draw(dxCommon->GetCmdList());
 		Object3d::PostDraw();
 		// パーティクルの描画
-		particleMan->Draw(dxCommon->GetCmdList());
+	
 #pragma endregion
 
 		// 前景スプライト描画前処理
@@ -190,27 +200,27 @@ void GamePlayScene::Finalize()
 	delete spriteBG;
 }
 
-void GamePlayScene::CreateParticles()
-{
-	for (int i = 0; i < 10; i++) {
-		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 10.0f;
-		XMFLOAT3 pos{};
-		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-
-		const float rnd_vel = 0.1f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-		XMFLOAT3 acc{};
-		const float rnd_acc = 0.001f;
-		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
-
-		// 追加
-		particleMan->Add(60, pos, vel, acc, 1.0f, 0.0f);
-	}
-}
+//void GamePlayScene::CreateParticles()
+//{
+//	for (int i = 0; i < 10; i++) {
+//		// X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+//		const float rnd_pos = 10.0f;
+//		XMFLOAT3 pos{};
+//		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+//		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+//		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+//
+//		const float rnd_vel = 0.1f;
+//		XMFLOAT3 vel{};
+//		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+//		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+//		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+//
+//		XMFLOAT3 acc{};
+//		const float rnd_acc = 0.001f;
+//		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+//
+//		// 追加
+//		particleMan->Add(60, pos, vel, acc, 1.0f, 0.0f);
+//	}
+//}

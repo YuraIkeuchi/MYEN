@@ -29,7 +29,7 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 	//開放
 	void Finalize() override;
-	void CreateParticles();
+	//void CreateParticles();
 	///ゲームシーン用
 	DebugCamera* camera = nullptr;
 	Sprite* spriteBG = nullptr;
@@ -44,9 +44,12 @@ public:
 	Model* modelSkydome = nullptr;
 	Object3d* objSkydome;
 
+	Player* objFighter = nullptr;
+	Model* modelFighter = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
 	ParticleManager* particleMan = nullptr;
+	XMFLOAT3 PlayerPosition = { 1.0f,0.0f,0.0f };
 	//当たり判定 レイ
 	Ray ray;
 	Texture* titleTexture = nullptr;
