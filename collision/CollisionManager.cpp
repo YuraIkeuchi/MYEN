@@ -1,7 +1,7 @@
 #include "CollisionManager.h"
-#include "MeshCollider.h"
 #include "BaseCollider.h"
 #include "Collision.h"
+#include "MeshCollider.h"
 
 using namespace DirectX;
 
@@ -58,6 +58,11 @@ void CollisionManager::CheckAllCollisions()
 	}
 }
 
+bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo, float maxDistance)
+{
+	return Raycast(ray, 0xffff, hitInfo, maxDistance);
+}
+
 bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance)
 {
 	bool result = false;
@@ -112,4 +117,65 @@ bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, Raycast
 	}
 
 	return result;
+}
+
+void CollisionManager::QuerySphere(const Sphere& sphere, QueryCallback* callback, unsigned short attribute)
+{
+	assert(callback);
+
+	std::forward_list<BaseCollider*>::iterator it;
+
+	// 全てのコライダーと総当りチェック
+	it = colliders.begin();
+	for (; it != colliders.end(); ++it) {
+		BaseCollider* col = *it;
+
+		// 属性が合わなければスキップ
+		if (!(col->attribute & attribute)) {
+			continue;
+		}
+
+		// 球
+		if (col->GetShapeType() == COLLISIONSHAPE_SPHERE) {
+			Sphere* sphereB = dynamic_cast<Sphere*>(col);
+
+			XMVECTOR tempInter;
+			XMVECTOR tempReject;
+			if (!Collision::CheckSphere2Sphere(sphere, *sphereB, &tempInter, &tempReject)) continue;
+
+			// 交差情報をセット
+			QueryHit info;
+			info.collider = col;
+			info.object = col->GetObject3d();
+			info.inter = tempInter;
+			info.reject = tempReject;
+
+			// クエリーコールバック呼び出し
+			if (!callback->OnQueryHit(info)) {
+				// 戻り値がfalseの場合、継続せず終了
+				return;
+			}
+		}
+		// メッシュ
+		else if (col->GetShapeType() == COLLISIONSHAPE_MESH) {
+			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(col);
+
+			XMVECTOR tempInter;
+			XMVECTOR tempReject;
+			if (!meshCollider->CheckCollisionSphere(sphere, &tempInter, &tempReject)) continue;
+
+			// 交差情報をセット
+			QueryHit info;
+			info.collider = col;
+			info.object = col->GetObject3d();
+			info.inter = tempInter;
+			info.reject = tempReject;
+
+			// クエリーコールバック呼び出し
+			if (!callback->OnQueryHit(info)) {
+				// 戻り値がfalseの場合、継続せず終了
+				return;
+			}
+		}
+	}
 }

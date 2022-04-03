@@ -92,11 +92,54 @@ void Player::Update()
 		const float jumpVYFist = 0.2f;
 		fallV = { 0, jumpVYFist, 0, 0 };
 	}
-	// 行列の更新など
-	Object3d::Update();
+
+	// ワールド行列更新
+	UpdateWorldMatrix();
+	collider->Update();
 
 	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(collider);
 	assert(sphereCollider);
+
+	// クエリーコールバッククラス
+	class PlayerQueryCallback : public QueryCallback
+	{
+	public:
+		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
+
+		// 衝突時コールバック関数
+		bool OnQueryHit(const QueryHit& info) {
+
+			const XMVECTOR up = { 0,1,0,0 };
+
+			XMVECTOR rejectDir = XMVector3Normalize(info.reject);
+			float cos = XMVector3Dot(rejectDir, up).m128_f32[0];
+
+			// 地面判定しきい値
+			const float threshold = cosf(XMConvertToRadians(30.0f));
+
+			if (-threshold < cos && cos < threshold) {
+				sphere->center += info.reject;
+				move += info.reject;
+			}
+
+			return true;
+		}
+
+		Sphere* sphere = nullptr;
+		DirectX::XMVECTOR move = {};
+	};
+
+	PlayerQueryCallback callback(sphereCollider);
+
+	// 球と地形の交差を全検索
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE);
+	// 交差による排斥分動かす
+	position.x += callback.move.m128_f32[0];
+	position.y += callback.move.m128_f32[1];
+	position.z += callback.move.m128_f32[2];
+	// ワールド行列更新
+	UpdateWorldMatrix();
+	collider->Update();
 
 	// 球の上端から球の下端までのレイキャスト
 	Ray ray;
@@ -113,8 +156,6 @@ void Player::Update()
 		if (CollisionManager::GetInstance()->Raycast(ray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
 			onGround = true;
 			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-			// 行列の更新など
-			Object3d::Update();
 		}
 		// 地面がないので落下
 		else {
@@ -128,10 +169,10 @@ void Player::Update()
 			// 着地
 			onGround = true;
 			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-			// 行列の更新など
-			Object3d::Update();
 		}
 	}
+	// 行列の更新など
+	Object3d::Update();
 }
 
 void Player::OnCollision(const CollisionInfo& info)

@@ -126,6 +126,9 @@ public: // メンバ関数
 	virtual void Update();
 	// 描画
 	virtual void Draw();
+	//行列の更新
+	void UpdateWorldMatrix();
+
 
 	//座標の取得
 	const XMFLOAT3& GetPosition() { return position; }

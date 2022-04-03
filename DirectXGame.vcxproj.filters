@@ -438,5 +438,8 @@
     <ClInclude Include="collision\CollisionAttribute.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
+    <ClInclude Include="collision\QueryCallback.h">
+      <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
