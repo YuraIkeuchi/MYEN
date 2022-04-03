@@ -20,6 +20,7 @@ void ClearScene::Update(DirectXCommon* dxCommon) {
 	if (input->PushKey(DIK_RETURN) || input->TriggerButton(input->Button_B)) {
 		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
+	return;
 	DebugText::GetInstance()->Print("ENTER to TITLE!!", 200, 100, 1.0f);
 }
 

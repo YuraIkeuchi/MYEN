@@ -10,10 +10,14 @@
 #include "Camera.h"
 #include "LightGroup.h"
 
+#include "CollisionInfo.h"
+
+class BaseCollider;
+
 /// 3Dオブジェクト
 class Object3d
 {
-private: // エイリアス
+protected: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
@@ -111,12 +115,20 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
-	bool Initialize();
+
+	Object3d() = default;
+
+	virtual ~Object3d();
+
+	virtual	bool Initialize();
 	
 	//毎フレーム処理
-	void Update();
+	virtual void Update();
 	// 描画
-	void Draw();
+	virtual void Draw();
+	//行列の更新
+	void UpdateWorldMatrix();
+
 
 	//座標の取得
 	const XMFLOAT3& GetPosition() { return position; }
@@ -124,7 +136,13 @@ public: // メンバ関数
 	//回転の取得
 	const XMFLOAT3& GetRotation() { return rotation; }
 
-	
+	const XMMATRIX& GetMatWorld() { return matWorld; }
+
+	/// <summary>
+/// モデルを取得
+/// </summary>
+	inline Model* GetModel() { return model; }
+
 	//座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 
@@ -136,7 +154,13 @@ public: // メンバ関数
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
-private: // メンバ変数
+	//当たり判定セット
+	void SetCollider(BaseCollider* collider);
+
+	//コールバック
+	virtual void OnCollision(const CollisionInfo& info) {}
+
+protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };
@@ -154,5 +178,10 @@ private: // メンバ変数
 	Model* model = nullptr;
 	// ビルボード
 	bool isBillboard = false;
+	//クラス名
+	const char* name = nullptr;
+	//コライダー
+	BaseCollider* collider = nullptr;
+
 };
 

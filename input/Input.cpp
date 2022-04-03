@@ -32,7 +32,7 @@ void Input::Initialize(WinApp* winApp)
 	if (devGamePad != nullptr)
 	{
 		//入力データ形式のセット
-		result = devGamePad->SetDataFormat(&c_dfDIJoystick);
+		result = devGamePad->SetDataFormat(&c_dfDIJoystick2);
 
 		// 軸モードを絶対値モードとして設定
 		DIPROPDWORD diprop;
@@ -83,7 +83,7 @@ void Input::Update()
 		//前フレームの判定
 		oldGamePadState = gamePadState;
 		//全ボタンの情報を取得する
-		result = devGamePad->GetDeviceState(sizeof(DIJOYSTATE), &gamePadState);
+		result = devGamePad->GetDeviceState(sizeof(DIJOYSTATE2), &gamePadState);
 		//リセット
 		for (int i = 0; i < 32; i++)
 		{
@@ -164,6 +164,7 @@ Input::MouseMove Input::GetMouseMove()
 
 bool Input::LeftTiltStick(int stick)
 {
+	
 	//左
 	if (gamePadState.lX < -unresponsive_range && stick == Left)
 	{
@@ -174,6 +175,7 @@ bool Input::LeftTiltStick(int stick)
 	{
 		return true;
 	}
+
 	//後ろ
 	if (gamePadState.lY > unresponsive_range && stick == Down)
 	{
@@ -184,7 +186,8 @@ bool Input::LeftTiltStick(int stick)
 	{
 		return true;
 	}
-
+	posX = (float)gamePadState.lX;
+	posY = (float)gamePadState.lY;
 	return false;
 }
 

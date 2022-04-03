@@ -8,17 +8,32 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-bool Collision::CheckSphere2Sphere(const Sphere& sphere, const Sphere& sphere2, DirectX::XMVECTOR* inter) {
-	float d = pow(sphere.center.m128_f32[0] - sphere2.center.m128_f32[0], 2)
-		+ pow(sphere.center.m128_f32[1] - sphere2.center.m128_f32[1], 2)
-		+ pow(sphere.center.m128_f32[2] - sphere2.center.m128_f32[2], 2);
-	float r1r2 = pow(sphere.radius + sphere2.radius, 2);
-	if (d < r1r2) {
+bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, DirectX::XMVECTOR* inter, DirectX::XMVECTOR* reject)
+{
+	// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
+	float dist = XMVector3LengthSq(sphereA.center - sphereB.center).m128_f32[0];
+
+	float radius2 = sphereA.radius + sphereB.radius;
+	radius2 *= radius2;
+
+	if (dist <= radius2) {
+		if (inter) {
+			// Aの半径が0の時座標はBの中心　Bの半径が0の時座標はAの中心　となるよう補完
+			float t = sphereB.radius / (sphereA.radius + sphereB.radius);
+			*inter = XMVectorLerp(sphereA.center, sphereB.center, t);
+		}
+		// 押し出すベクトルを計算
+		if (reject) {
+			float rejectLen = sphereA.radius + sphereB.radius - sqrtf(dist);
+			*reject = XMVector3Normalize(sphereA.center - sphereB.center);
+			*reject *= rejectLen;
+		}
 		return true;
-	} else {
-		return false;
 	}
+
+	return false;
 }
+
 
 bool Collision::SphereCollision(const float& X1, const float& Y1, const float& Z1,const float& R1, const float& X2, const float& Y2, const float& Z2, const float& R2) {
 	int a = X1 - X2;
@@ -57,6 +72,7 @@ bool Collision::CheckSphere2Plane(const Sphere& sphere, const Plane& plane, XMVE
 	}
 	return true;
 }
+
 
 void Collision::ClodestPtPoint2Triangle(const XMVECTOR& point, const Triangle& triangle, XMVECTOR* closest)
 {
@@ -132,30 +148,32 @@ void Collision::ClodestPtPoint2Triangle(const XMVECTOR& point, const Triangle& t
 	*closest = triangle.p0 + p0_p1 * v + p0_p2 * w;
 }
 
-bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& triangle, XMVECTOR* inter)
+bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& triangle, DirectX::XMVECTOR* inter, DirectX::XMVECTOR* reject)
 {
 	XMVECTOR p;
-	//球の中心の対する最近接点である三角形上にある点pを見つける
+	// 球の中心に対する最近接点である三角形上にある点pを見つける
 	ClodestPtPoint2Triangle(sphere.center, triangle, &p);
-	//点p　と　球　の中心の差分ベクトル
+	// 点pと球の中心の差分ベクトル
 	XMVECTOR v = p - sphere.center;
-	//距離の二乗を求める
-	//(同じベクトル同士の内積は三平方の定理のルート内部の式と一致する)
-	v = XMVector3Dot(v, v);
-	//球と三角形の距離が半径以下なら当たっていない
-	if (v.m128_f32[0] > sphere.radius * sphere.radius)
-	{
-		return false;
-	}
-	//疑似交点を計算
-	if (inter)
-	{
-		//三角形上の最近接点p を疑似交点とする
+	// 距離の二乗を求める
+	//（同じベクトル同士の内積は三平方の定理のルート内部の式と一致する）
+	float distanceSquare = XMVector3Dot(v, v).m128_f32[0];
+	// 球と三角形の距離が半径以下なら当たっていない
+	if (distanceSquare > sphere.radius * sphere.radius)	return false;
+	// 擬似交点を計算
+	if (inter) {
+		// 三角形上の最近接点pを疑似交点とする
 		*inter = p;
+	}
+	// 押し出すベクトルを計算
+	if (reject) {
+		float ds = XMVector3Dot(sphere.center, triangle.normal).m128_f32[0];
+		float dt = XMVector3Dot(triangle.p0, triangle.normal).m128_f32[0];
+		float rejectLen = dt - ds + sphere.radius;
+		*reject = triangle.normal * rejectLen;
 	}
 	return true;
 }
-
 bool Collision::CheckRay2Plane(const Ray& ray, const Plane& plane, float* distance, XMVECTOR* inter)
 {
 	const float epsilon = 1.0e-5f;//誤差吸収用の微小な値

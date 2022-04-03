@@ -62,6 +62,16 @@ public: // メンバ関数
 	const D3D12_INDEX_BUFFER_VIEW& GetIBView() { return ibView; }
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	/// </summary>
+/// <returns>頂点配列</returns>
+	inline const std::vector<VertexPosNormalUv>& GetVertices() { return vertices; }
+
+	/// <summary>
+	/// インデックス配列を取得
+	/// </summary>
+	/// <returns>インデックス配列</returns>
+	inline const std::vector<unsigned short>& GetIndices() { return indices; }
+
 
 private: // メンバ変数
 	// 名前

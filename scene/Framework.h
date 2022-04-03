@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "LightGroup.h"
 #include "Texture.h"
+#include "ParticleManager.h"
 //フレームワーク
 class Framework
 {

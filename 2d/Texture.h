@@ -149,7 +149,9 @@ public: // メンバ関数
 
 	/// 座標の設定
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
-	void SetColor(XMFLOAT4 color) { this->color = color; }
+	/// カラーの設定
+	void Texture::SetColor(XMFLOAT4 color);
+
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	const XMFLOAT3& GetScale() { return scale; }
