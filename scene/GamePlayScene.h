@@ -12,6 +12,7 @@
 #include "Texture.h"
 #include "Enemy.h"
 #include "ParticleManager.h"
+#include <vector>
 
 class CollisionManager;
 class Player;
@@ -38,8 +39,12 @@ public:
 	Sprite* spriteBossHP = nullptr;
 	Model* modelGround = nullptr;
 	TouchableObject* objGround = nullptr;
-
 	Model* modelSphere = nullptr;
+	Model* modelPlane = nullptr;
+	Model* modelBox = nullptr;
+	Model* modelPyramid = nullptr;
+	std::vector<Object3d*> objects;
+
 	Object3d* objSphere;
 
 	Model* modelSkydome = nullptr;
@@ -50,7 +55,7 @@ public:
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
 	ParticleManager* particleMan = nullptr;
-	XMFLOAT3 PlayerPosition = { 1.0f,0.0f,0.0f };
+	XMFLOAT3 PlayerPosition = { 1.0f,5.0f,0.0f };
 	//“–‚½‚è”»’è ƒŒƒC
 	Ray ray;
 	Texture* titleTexture = nullptr;

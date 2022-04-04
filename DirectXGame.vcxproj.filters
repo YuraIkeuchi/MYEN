@@ -269,7 +269,7 @@
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\TouchableObject.cpp">
-      <Filter>ソース ファイル\collision</Filter>
+      <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,14 +432,14 @@
     <ClInclude Include="collision\MeshCollider.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
-    <ClInclude Include="collision\TouchableObject.h">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClInclude>
     <ClInclude Include="collision\CollisionAttribute.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\QueryCallback.h">
       <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\TouchableObject.h">
+      <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

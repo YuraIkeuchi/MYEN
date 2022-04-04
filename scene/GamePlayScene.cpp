@@ -63,15 +63,47 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
 	modelGround = Model::LoadFromOBJ("ground");
-	modelSphere = Model::LoadFromOBJ("box1x1x1");
+	modelSphere = Model::LoadFromOBJ("sphere");
+	modelPlane = Model::LoadFromOBJ("plane1x1");
+	modelBox = Model::LoadFromOBJ("box1x1x1");
+	modelPyramid = Model::LoadFromOBJ("pyramid1x1");
+
 	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
 	objGround = TouchableObject::Create(modelGround);
 	objSphere->SetModel(modelSphere);
 	objFighter = Player::Create(modelFighter);
+	objFighter->SetScale({ 3.0f,3.0f,3.0f });
 	objGround->SetPosition({ 0, 0, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
-	objSphere->SetPosition({ -1, 1, -10 });
+	objSphere->SetPosition({ 0, 1, 0 });
+
+	//Model* modeltable[10] = {
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelBox,
+	//	modelPyramid,
+	//};
+
+	//const int DIV_NUM = 10;
+	//const float LAND_SCALE = 3.0f;
+	//for (int i = 0; i < DIV_NUM; i++) {
+	//	for (int j = 0; j < DIV_NUM; j++) {
+
+	//		int modelIndex = rand() % 10;
+
+	//		TouchableObject* object = TouchableObject::Create(modeltable[modelIndex]);
+	//		object->SetScale(LAND_SCALE);
+	//		object->SetPosition({ (j - DIV_NUM / 2) * LAND_SCALE, 0, (i - DIV_NUM / 2) * LAND_SCALE });
+	//		objects.push_back(object);
+	//	}
+	//}
 
 	objFighter->SetPosition(PlayerPosition);
 	// コライダーの追加
