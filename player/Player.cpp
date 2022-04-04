@@ -8,33 +8,18 @@
 
 using namespace DirectX;
 
-Player* Player::Create(Model* model)
-{
-	// 3Dオブジェクトのインスタンスを生成
-	Player* instance = new Player();
-	if (instance == nullptr) {
-		return nullptr;
-	}
-
-	// 初期化
-	if (!instance->Initialize()) {
-		delete instance;
-		assert(0);
-	}
-
-	if (model) {
-		instance->SetModel(model);
-	}
-
-	return instance;
+Player::Player() {
+	model = Model::LoadFromOBJ("chr_sword");
+	object3d = new Object3d();
 }
+
 
 bool Player::Initialize()
 {
-	if (!Object3d::Initialize())
-	{
-		return false;
-	}
+	object3d = Object3d::Create();
+	object3d->SetModel(model);
+	object3d->SetPosition(position);
+	object3d->SetScale({ 1.7f,1.7f,1.7f });
 
 	// コライダーの追加
 	float radius = 0.6f;
@@ -46,7 +31,7 @@ bool Player::Initialize()
 void Player::Update()
 {
 	Input* input = Input::GetInstance();
-
+	object3d->Update();
 	// A,Dで旋回
 	if (input->PushKey(DIK_A)) {
 		rotation.y -= 2.0f;
@@ -171,9 +156,17 @@ void Player::Update()
 			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 		}
 	}
+	object3d->SetPosition(position);
 	// 行列の更新など
-	Object3d::Update();
+	object3d->Update();
 }
+
+//描画
+void Player::Draw() {
+	Object3d::PreDraw();
+	object3d->Draw();
+}
+
 
 void Player::OnCollision(const CollisionInfo& info)
 {

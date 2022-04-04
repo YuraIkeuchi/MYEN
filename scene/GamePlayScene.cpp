@@ -53,6 +53,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//// 3Dオブジェクト生成
 	//player = new Player();
 	//player->Initialize();
+	player = new Player();
+	player->Initialize();
 
 	//enemy = new Enemy();
 	//enemy->Initialize();
@@ -72,8 +74,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSkydome->SetModel(modelSkydome);
 	objGround = TouchableObject::Create(modelGround);
 	objSphere->SetModel(modelSphere);
-	objFighter = Player::Create(modelFighter);
-	objFighter->SetScale({ 3.0f,3.0f,3.0f });
+	
 	objGround->SetPosition({ 0, 0, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
 	objSphere->SetPosition({ 0, 1, 0 });
@@ -105,7 +106,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//	}
 	//}
 
-	objFighter->SetPosition(PlayerPosition);
+	//objFighter->SetPosition(PlayerPosition);
 	// コライダーの追加
 	objSphere->SetCollider(new SphereCollider);
 
@@ -160,8 +161,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objSkydome->Update();
 	objGround->Update();
 	objSphere->Update();
-	objFighter->Update();
-	//player->Update();
+	
+	player->Update();
 	//enemy->Update();
 	particleMan->Update();
 	camera->Update();
@@ -236,8 +237,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		object1->Draw(dxCommon->GetCmdList());
 		objSkydome->Draw();
 		objGround->Draw();
-	//	player->Draw();
-		objFighter->Draw();
+		player->Draw();
+		//objFighter->Draw();
 		//enemy->Draw();
 		objSphere->Draw();
 		Object3d::PostDraw();

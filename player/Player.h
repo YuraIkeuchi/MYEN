@@ -1,14 +1,17 @@
 #pragma once
 #include "Object3d.h"
+#include"Model.h"
 class Player :
 	public Object3d
 {
 public:
+	Player();
+
 	/// <summary>
 	/// 3Dオブジェクト生成
 	/// </summary>
 	/// <returns></returns>
-	static Player* Create(Model* model = nullptr);
+	//static Player* Create(Model* model = nullptr);
 
 public:
 
@@ -24,12 +27,27 @@ public:
 	void Update() override;
 
 	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	/// <summary>
 	/// 衝突時コールバック関数
 	/// </summary>
 	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
+public:
+	const XMFLOAT3& GetPosition() { return  object3d->GetPosition(); }
+
+	const XMFLOAT3& GetRotation() { return object3d->GetRotation(); }
+
+	void SetPosition(XMFLOAT3 position) { object3d->SetPosition(position); }
+
+	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
 private:
+	Object3d* object3d;
+	Model* model;
 	int hit = 0;
 	bool onGround = true;
 	// 落下ベクトル

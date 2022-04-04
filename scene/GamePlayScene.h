@@ -50,7 +50,7 @@ public:
 	Model* modelSkydome = nullptr;
 	Object3d* objSkydome;
 
-	Player* objFighter = nullptr;
+	//Player* player = nullptr;
 	Model* modelFighter = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
