@@ -46,6 +46,7 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
 private:
+	XMFLOAT3 pos = { 0,0,-10 };
 	Object3d* object3d;
 	Model* model;
 	int hit = 0;

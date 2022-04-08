@@ -13,7 +13,6 @@ Player::Player() {
 	object3d = new Object3d();
 }
 
-
 bool Player::Initialize()
 {
 	object3d = Object3d::Create();
@@ -117,7 +116,7 @@ void Player::Update()
 	PlayerQueryCallback callback(sphereCollider);
 
 	// ‹…‚Æ’nŒ`‚ÌŒğ·‚ğ‘SŒŸõ
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE);
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
 	// Œğ·‚É‚æ‚é”rË•ª“®‚©‚·
 	position.x += callback.move.m128_f32[0];
 	position.y += callback.move.m128_f32[1];

@@ -64,7 +64,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere = Object3d::Create();
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
-	modelGround = Model::LoadFromOBJ("ground");
+	modelGround = Model::LoadFromOBJ("StartMap");
 	modelSphere = Model::LoadFromOBJ("sphere");
 	modelPlane = Model::LoadFromOBJ("plane1x1");
 	modelBox = Model::LoadFromOBJ("box1x1x1");
@@ -168,27 +168,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	camera->Update();
 
 	Ray ray;
-	ray.start = { 10.0f, 0.5f, 0.0f, 1 };
-	ray.dir = { 0,-1,0,0 };
+	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
+	//ray.dir = { 0,-1,0,0 };
 	RaycastHit raycastHit;
 
-	//if (collsionManager->Raycast(ray, &raycastHit)) {
-	//	//DebugText::GetInstance()->Print("Raycast Hit.",0,30,10);
-
-	//	for (int i = 0; i < 1; ++i) {
-
-	//		const float rnd_vel = 0.1f;
-	//		XMFLOAT3 vel{};
-	//		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-	//		ParticleManager::GetInstance()->Add(10, XMFLOAT3(raycastHit.inter.m128_f32), vel, XMFLOAT3(), 0.0f, 1.0f);
-	//	}
-	//}
-	//camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
-	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
-	//
 	////ゲームオーバーに行く
 	//if (PlayerHP == 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
@@ -198,7 +181,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,15,-20 });
 	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
