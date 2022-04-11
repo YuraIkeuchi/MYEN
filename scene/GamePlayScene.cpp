@@ -64,7 +64,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere = Object3d::Create();
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
-	modelGround = Model::LoadFromOBJ("StartMap");
+	modelBossMap = Model::LoadFromOBJ("BossMap");
+	modelFloor = Model::LoadFromOBJ("floor");
 	modelSphere = Model::LoadFromOBJ("sphere");
 	modelPlane = Model::LoadFromOBJ("plane1x1");
 	modelBox = Model::LoadFromOBJ("box1x1x1");
@@ -72,12 +73,14 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
-	objGround = TouchableObject::Create(modelGround);
+	objBossMap = TouchableObject::Create(modelBossMap);
+	objFloor = TouchableObject::Create(modelFloor);
 	objSphere->SetModel(modelSphere);
 	
-	objGround->SetPosition({ 0, 0, 0 });
+	objBossMap->SetPosition({ 0, 0, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
-	objSphere->SetPosition({ 0, 1, 0 });
+	objSphere->SetPosition({ -5, 1, 0 });
+	objFloor->SetScale({ 2.0f,2.0f,2.0f });
 
 	//Model* modeltable[10] = {
 	//	modelPlane,
@@ -159,7 +162,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 	object1->Update();
 	objSkydome->Update();
-	objGround->Update();
+	objBossMap->Update();
+	objFloor->Update();
 	objSphere->Update();
 	
 	player->Update();
@@ -219,7 +223,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		Object3d::PreDraw();
 		object1->Draw(dxCommon->GetCmdList());
 		objSkydome->Draw();
-		objGround->Draw();
+		objBossMap->Draw();
+		objFloor->Draw();
 		player->Draw();
 		//objFighter->Draw();
 		//enemy->Draw();

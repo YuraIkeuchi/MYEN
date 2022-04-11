@@ -155,6 +155,11 @@ void Player::Update()
 			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 		}
 	}
+
+	if (position.y <= 0.0f) {
+		onGround = true;
+		position.y = 0.0f;
+	}
 	object3d->SetPosition(position);
 	// s—ñ‚ÌXV‚È‚Ç
 	object3d->Update();

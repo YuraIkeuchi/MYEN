@@ -37,8 +37,10 @@ public:
 	Sprite* spriteBG = nullptr;
 	Sprite* spritePlayerHP = nullptr;
 	Sprite* spriteBossHP = nullptr;
-	Model* modelGround = nullptr;
-	TouchableObject* objGround = nullptr;
+	Model* modelBossMap = nullptr;
+	TouchableObject* objBossMap = nullptr;
+	Model* modelFloor = nullptr;
+	TouchableObject* objFloor = nullptr;
 	Model* modelSphere = nullptr;
 	Model* modelPlane = nullptr;
 	Model* modelBox = nullptr;
