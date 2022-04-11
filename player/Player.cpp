@@ -8,33 +8,17 @@
 
 using namespace DirectX;
 
-Player* Player::Create(Model* model)
-{
-	// 3Dオブジェクトのインスタンスを生成
-	Player* instance = new Player();
-	if (instance == nullptr) {
-		return nullptr;
-	}
-
-	// 初期化
-	if (!instance->Initialize()) {
-		delete instance;
-		assert(0);
-	}
-
-	if (model) {
-		instance->SetModel(model);
-	}
-
-	return instance;
+Player::Player() {
+	model = Model::LoadFromOBJ("chr_sword");
+	object3d = new Object3d();
 }
 
 bool Player::Initialize()
 {
-	if (!Object3d::Initialize())
-	{
-		return false;
-	}
+	object3d = Object3d::Create();
+	object3d->SetModel(model);
+	object3d->SetPosition(position);
+	object3d->SetScale({ 1.7f,1.7f,1.7f });
 
 	// コライダーの追加
 	float radius = 0.6f;
@@ -46,7 +30,7 @@ bool Player::Initialize()
 void Player::Update()
 {
 	Input* input = Input::GetInstance();
-
+	object3d->Update();
 	// A,Dで旋回
 	if (input->PushKey(DIK_A)) {
 		rotation.y -= 2.0f;
@@ -132,7 +116,7 @@ void Player::Update()
 	PlayerQueryCallback callback(sphereCollider);
 
 	// 球と地形の交差を全検索
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISION_ATTR_LANDSHAPE);
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
 	// 交差による排斥分動かす
 	position.x += callback.move.m128_f32[0];
 	position.y += callback.move.m128_f32[1];
@@ -171,9 +155,22 @@ void Player::Update()
 			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 		}
 	}
+
+	if (position.y <= 0.0f) {
+		onGround = true;
+		position.y = 0.0f;
+	}
+	object3d->SetPosition(position);
 	// 行列の更新など
-	Object3d::Update();
+	object3d->Update();
 }
+
+//描画
+void Player::Draw() {
+	Object3d::PreDraw();
+	object3d->Draw();
+}
+
 
 void Player::OnCollision(const CollisionInfo& info)
 {

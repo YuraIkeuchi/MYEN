@@ -53,6 +53,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//// 3Dオブジェクト生成
 	//player = new Player();
 	//player->Initialize();
+	player = new Player();
+	player->Initialize();
 
 	//enemy = new Enemy();
 	//enemy->Initialize();
@@ -62,18 +64,52 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere = Object3d::Create();
 
 	modelSkydome = Model::LoadFromOBJ("skydome");
-	modelGround = Model::LoadFromOBJ("ground");
+	modelBossMap = Model::LoadFromOBJ("BossMap");
+	modelFloor = Model::LoadFromOBJ("floor");
 	modelSphere = Model::LoadFromOBJ("sphere");
+	modelPlane = Model::LoadFromOBJ("plane1x1");
+	modelBox = Model::LoadFromOBJ("box1x1x1");
+	modelPyramid = Model::LoadFromOBJ("pyramid1x1");
+
 	modelFighter = Model::LoadFromOBJ("chr_sword");
 	objSkydome->SetModel(modelSkydome);
-	objGround = TouchableObject::Create(modelGround);
+	objBossMap = TouchableObject::Create(modelBossMap);
+	objFloor = TouchableObject::Create(modelFloor);
 	objSphere->SetModel(modelSphere);
-	objFighter = Player::Create(modelFighter);
-	objGround->SetPosition({ 0, 0, 0 });
+	
+	objBossMap->SetPosition({ 0, 0, 0 });
 	objSkydome->SetPosition({ 0, 0, 0 });
-	objSphere->SetPosition({ -1, 1, -10 });
+	objSphere->SetPosition({ -5, 1, 0 });
+	objFloor->SetScale({ 2.0f,2.0f,2.0f });
 
-	objFighter->SetPosition(PlayerPosition);
+	//Model* modeltable[10] = {
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelPlane,
+	//	modelBox,
+	//	modelPyramid,
+	//};
+
+	//const int DIV_NUM = 10;
+	//const float LAND_SCALE = 3.0f;
+	//for (int i = 0; i < DIV_NUM; i++) {
+	//	for (int j = 0; j < DIV_NUM; j++) {
+
+	//		int modelIndex = rand() % 10;
+
+	//		TouchableObject* object = TouchableObject::Create(modeltable[modelIndex]);
+	//		object->SetScale(LAND_SCALE);
+	//		object->SetPosition({ (j - DIV_NUM / 2) * LAND_SCALE, 0, (i - DIV_NUM / 2) * LAND_SCALE });
+	//		objects.push_back(object);
+	//	}
+	//}
+
+	//objFighter->SetPosition(PlayerPosition);
 	// コライダーの追加
 	objSphere->SetCollider(new SphereCollider);
 
@@ -126,36 +162,20 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 	object1->Update();
 	objSkydome->Update();
-	objGround->Update();
+	objBossMap->Update();
+	objFloor->Update();
 	objSphere->Update();
-	objFighter->Update();
-	//player->Update();
+	
+	player->Update();
 	//enemy->Update();
 	particleMan->Update();
 	camera->Update();
 
 	Ray ray;
-	ray.start = { 10.0f, 0.5f, 0.0f, 1 };
-	ray.dir = { 0,-1,0,0 };
+	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
+	//ray.dir = { 0,-1,0,0 };
 	RaycastHit raycastHit;
 
-	//if (collsionManager->Raycast(ray, &raycastHit)) {
-	//	//DebugText::GetInstance()->Print("Raycast Hit.",0,30,10);
-
-	//	for (int i = 0; i < 1; ++i) {
-
-	//		const float rnd_vel = 0.1f;
-	//		XMFLOAT3 vel{};
-	//		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-	//		ParticleManager::GetInstance()->Add(10, XMFLOAT3(raycastHit.inter.m128_f32), vel, XMFLOAT3(), 0.0f, 1.0f);
-	//	}
-	//}
-	//camera->SetTarget({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z + 5 });
-	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 15,player->GetPosition().z - 15 });
-	//
 	////ゲームオーバーに行く
 	//if (PlayerHP == 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
@@ -165,7 +185,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,15,-20 });
 	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
@@ -203,9 +223,10 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		Object3d::PreDraw();
 		object1->Draw(dxCommon->GetCmdList());
 		objSkydome->Draw();
-		objGround->Draw();
-	//	player->Draw();
-		objFighter->Draw();
+		objBossMap->Draw();
+		objFloor->Draw();
+		player->Draw();
+		//objFighter->Draw();
 		//enemy->Draw();
 		objSphere->Draw();
 		Object3d::PostDraw();
