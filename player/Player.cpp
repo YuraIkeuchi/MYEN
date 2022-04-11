@@ -171,6 +171,11 @@ void Player::Draw() {
 	object3d->Draw();
 }
 
+void Player::Finalize()
+{
+	delete object3d;
+}
+
 
 void Player::OnCollision(const CollisionInfo& info)
 {

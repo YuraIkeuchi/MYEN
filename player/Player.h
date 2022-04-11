@@ -32,6 +32,11 @@ public:
 	void Draw();
 
 	/// <summary>
+	/// 開放
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// 衝突時コールバック関数
 	/// </summary>
 	/// <param name="info">衝突情報</param>

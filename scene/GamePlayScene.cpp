@@ -243,6 +243,11 @@ void GamePlayScene::Finalize()
 {
 	//スプライト開放
 	delete spriteBG;
+	delete objBossMap;
+	delete modelBossMap;
+	delete objSkydome;
+	delete modelSkydome;
+	player->Finalize();
 }
 
 //void GamePlayScene::CreateParticles()
