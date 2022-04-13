@@ -46,17 +46,22 @@ public:
 
 	const XMFLOAT3& GetRotation() { return object3d->GetRotation(); }
 
+	const bool& GetOnGround() { return onGround; }
+
 	void SetPosition(XMFLOAT3 position) { object3d->SetPosition(position); }
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
 private:
-	XMFLOAT3 pos = { 0,0,-10 };
+	XMFLOAT3 pos = { 0,40,0 };
 	Object3d* object3d;
 	Model* model;
 	int hit = 0;
 	bool onGround = true;
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV;
+	const float Gravity = -0.7f / 60.0f;
+	float v = 0.0f;
+	int imageTimer = 0;
 };
 

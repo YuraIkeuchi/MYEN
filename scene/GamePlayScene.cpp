@@ -59,6 +59,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//// 3Dオブジェクト生成
 	//player = new Player();
 	//player->Initialize();
+
 	player = new Player();
 	player->Initialize();
 
@@ -117,7 +118,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	//objFighter->SetPosition(PlayerPosition);
 	// コライダーの追加
-	objSphere->SetCollider(new SphereCollider);
+	//objSphere->SetCollider(new SphereCollider);
 
 	////普通のテクスチャ(板ポリ)
 	//Texture::LoadTexture(0, L"Resources/Title.png");
@@ -140,7 +141,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,5,-80 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
@@ -168,10 +169,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	}
 	object1->Update();
 	objSkydome->Update();
-	objBossMap->Update();
-	objFloor->Update();
+	//objBossMap->Update();
+	/*objFloor->Update();
 	objSphere->Update();
-	
+	*/
 	player->Update();
 	//enemy->Update();
 	particleMan->Update();
@@ -191,10 +192,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,15,-20 });
+	camera->SetEye({ 0,1,-80 });
 	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
-	collsionManager->CheckAllCollisions();
+	//collsionManager->CheckAllCollisions();
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
@@ -204,7 +205,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 背景スプライト描画前処理
 		Sprite::PreDraw();
 
-		postEffect->Draw(dxCommon->GetCmdList());
+		//postEffect->Draw(dxCommon->GetCmdList());
 		// 背景スプライト描画
 		//spriteBG->Draw();
 
@@ -228,14 +229,14 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 #pragma region 3Dオブジェクト描画
 		// 3Dオブジェクト描画前処理
 		Object3d::PreDraw();
-		object1->Draw(dxCommon->GetCmdList());
-	/*	objSkydome->Draw();
+		//object1->Draw(dxCommon->GetCmdList());
+		objSkydome->Draw();
 		objBossMap->Draw();
 		objFloor->Draw();
-		player->Draw();*/
+		player->Draw();
 		//objFighter->Draw();
 		//enemy->Draw();
-		//objSphere->Draw();
+		objSphere->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
 		//particleMan->Draw(dxCommon->GetCmdList());
