@@ -60,14 +60,19 @@ private:
 	bool onGround = true;
 	// 落下ベクトル
 	DirectX::XMVECTOR fallV;
+	//重力加速度
 	const float GravityY = -1.2f / 60.0f;
 	const float GravityX = -0.4f / 60.0f;
+	//速さ
 	float vy = 0.0f;
 	float vx = 0.0f;
-	int imageTimer = 0;
+	//初速度
 	float FirstSpeedY = 0.0f;
 	float FirstSpeedX = 0.0f;
+	//ImGui用
 	float AddSpeed = 0.0f;
+	//大砲フラグ
 	bool ShotFlag = false;
+	int imageTimer = 0;
 };
 

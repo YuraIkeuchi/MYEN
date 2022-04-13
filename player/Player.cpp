@@ -70,7 +70,7 @@ void Player::Update()
 	if (onGround == false) {
 		vy += GravityY;
 		position.y += vy + FirstSpeedY;
-
+		//‘å–C‚Ìê‡
 		if (ShotFlag == true) {
 			if (vx >= -1.8f) {
 				vx += GravityX;
