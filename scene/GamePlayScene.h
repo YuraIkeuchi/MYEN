@@ -12,6 +12,7 @@
 #include "Texture.h"
 #include "Enemy.h"
 #include "ParticleManager.h"
+#include "PostEffect.h"
 #include <vector>
 
 class CollisionManager;
@@ -46,12 +47,9 @@ public:
 	Model* modelBox = nullptr;
 	Model* modelPyramid = nullptr;
 	std::vector<Object3d*> objects;
-
 	Object3d* objSphere;
-
 	Model* modelSkydome = nullptr;
 	Object3d* objSkydome;
-
 	//Player* player = nullptr;
 	Model* modelFighter = nullptr;
 	FBXModel* model1 = nullptr;
@@ -68,4 +66,5 @@ public:
 	Enemy* enemy = nullptr;
 	Player* player = nullptr;
 	CollisionManager* collsionManager = nullptr;
+	PostEffect* postEffect = nullptr;
 };

@@ -262,14 +262,17 @@
     <ClCompile Include="collision\CollisionManager.cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
-    <ClCompile Include="collision\SphereCollider.cpp">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClCompile>
     <ClCompile Include="collision\MeshCollider.cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\TouchableObject.cpp">
       <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\PostEffect.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\SphereCollider.cpp">
+      <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -423,9 +426,6 @@
     <ClInclude Include="collision\CollisionManager.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
-    <ClInclude Include="collision\SphereCollider.h">
-      <Filter>ソース ファイル\collision</Filter>
-    </ClInclude>
     <ClInclude Include="collision\RaycastHit.h">
       <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
@@ -440,6 +440,12 @@
     </ClInclude>
     <ClInclude Include="collision\TouchableObject.h">
       <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\PostEffect.h">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\SphereCollider.h">
+      <Filter>ソース ファイル\collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

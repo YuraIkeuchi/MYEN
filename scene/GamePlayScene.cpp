@@ -42,6 +42,12 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 	spriteBossHP->SetColor({ 1.0f,0.0f,0.0f,1.0 });
 	spritePlayerHP->SetPosition({ 0.0f,520.0f });
+	
+	//ポストエフェクト用テクスチャ読みこみ
+	Sprite::LoadTexture(100, L"Resources/white1x1.png");
+	//ポストエフェクトの初期化
+	postEffect = new PostEffect();
+	postEffect->Initialize();
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -198,6 +204,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 背景スプライト描画前処理
 		Sprite::PreDraw();
 
+		postEffect->Draw(dxCommon->GetCmdList());
 		// 背景スプライト描画
 		//spriteBG->Draw();
 
@@ -222,16 +229,16 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		// 3Dオブジェクト描画前処理
 		Object3d::PreDraw();
 		object1->Draw(dxCommon->GetCmdList());
-		objSkydome->Draw();
+	/*	objSkydome->Draw();
 		objBossMap->Draw();
 		objFloor->Draw();
-		player->Draw();
+		player->Draw();*/
 		//objFighter->Draw();
 		//enemy->Draw();
-		objSphere->Draw();
+		//objSphere->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
-		particleMan->Draw(dxCommon->GetCmdList());
+		//particleMan->Draw(dxCommon->GetCmdList());
 #pragma endregion
 
 		// 前景スプライト描画前処理
@@ -243,6 +250,12 @@ void GamePlayScene::Finalize()
 {
 	//スプライト開放
 	delete spriteBG;
+	delete objBossMap;
+	delete modelBossMap;
+	delete objSkydome;
+	delete modelSkydome;
+	delete postEffect;
+	player->Finalize();
 }
 
 //void GamePlayScene::CreateParticles()
