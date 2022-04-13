@@ -60,8 +60,14 @@ private:
 	bool onGround = true;
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV;
-	const float Gravity = -0.7f / 60.0f;
-	float v = 0.0f;
+	const float GravityY = -1.2f / 60.0f;
+	const float GravityX = -0.5f / 60.0f;
+	float vy = 0.0f;
+	float vx = 0.0f;
 	int imageTimer = 0;
+	float FirstSpeedY = 0.0f;
+	float FirstSpeedX = 0.0f;
+	float AddSpeed = 0.0f;
+	bool ShotFlag = false;
 };
 

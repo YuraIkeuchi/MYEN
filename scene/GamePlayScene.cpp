@@ -192,7 +192,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,1,-80 });
+	camera->SetEye({ 0,1,-170 });
 	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
 	//collsionManager->CheckAllCollisions();
@@ -230,13 +230,13 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		// 3Dオブジェクト描画前処理
 		Object3d::PreDraw();
 		//object1->Draw(dxCommon->GetCmdList());
-		objSkydome->Draw();
-		objBossMap->Draw();
-		objFloor->Draw();
+		//objSkydome->Draw();
+		//objBossMap->Draw();
+		//objFloor->Draw();
 		player->Draw();
 		//objFighter->Draw();
 		//enemy->Draw();
-		objSphere->Draw();
+		//objSphere->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
 		//particleMan->Draw(dxCommon->GetCmdList());

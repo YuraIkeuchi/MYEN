@@ -18,7 +18,7 @@ bool Player::Initialize()
 {
 	object3d = Object3d::Create();
 	object3d->SetModel(model);
-	position = { 0.0f,40.0f,0.0f };
+	position = { -150.0f,0.0f,0.0f };
 	object3d->SetPosition(position);
 	object3d->SetScale({ 1.7f,1.7f,1.7f });
 
@@ -47,7 +47,6 @@ void Player::Update()
 	if (input->LeftTiltStick(input->Right)) {
 		position.x += 0.1f;
 	}
-
 	if (input->LeftTiltStick(input->Left)) {
 		position.x -= 0.1f;
 	}
@@ -60,28 +59,43 @@ void Player::Update()
 		position.x -= 0.1f;
 	}
 
+	//プレイヤーに重力かかる
 	if (input->TriggerButton(input->Button_A) || input->TriggerKey(DIK_SPACE)) {
 		onGround = false;
+		FirstSpeedY = AddSpeed;
+		FirstSpeedX = 2.0f;
 	}
 
+	//落ちる処理
 	if (onGround == false) {
-		v += Gravity;
+		vy += GravityY;
+		position.y += vy + FirstSpeedY;
+
+		if (ShotFlag == true) {
+			if (vx >= -1.8f) {
+				vx += GravityX;
+			}
+			position.x += vx + FirstSpeedX;
+		}
 	}
 
-	position.y += v;
+	//もとに戻る
+	if (position.y <= -200.0f) {
+		onGround = true;
+		vy = 0.0f;
+		vx = 0.0f;
+		position = { -150.0f,0.0f,0.0f };
+		AddSpeed = 0.0f;
+	}
+	//デバッグテキスト
+	if (onGround == true) {
+		DebugText::GetInstance()->Print("PUSH SPACE", 0, 0, 2);
+	}
+
 	// ワールド行列更新
 	UpdateWorldMatrix();
 	collider->Update();
 
-	if (position.y <= -30.0f) {
-		onGround = true;
-		v = 0.0f;
-		position.y = 40.0f;
-	}
-	//デバッグテキスト
-	if (onGround == true) {
-		DebugText::GetInstance()->Print("PUSH SPACE", 0, 0, 5);
-	}
 	object3d->SetPosition(position);
 	// 行列の更新など
 	object3d->Update();
@@ -93,8 +107,23 @@ void Player::Draw() {
 	if (ImGui::TreeNode("Debug")) {
 		if (ImGui::TreeNode("Player")) {
 			ImGui::SliderFloat("position.z", &position.y, 50, -50);
-			ImGui::SliderFloat("v", &v, 50, -50);
-			//ImGui::SliderFloat("g", &Gravity, 50, -50);
+			ImGui::SliderFloat("AddSpeed", &AddSpeed, 2, 0);
+			ImGui::SliderFloat("vx", &vx, 50, -50);
+			if (ImGui::Button("ShotFlag")) {
+				if (ShotFlag == false) {
+					ShotFlag = true;
+				}
+				else {
+					ShotFlag = false;
+				}
+			}
+
+			if (ShotFlag == true) {
+				ImGui::Text("Shot!");
+			}
+			else {
+				ImGui::Text("No Shot");
+			}
 			ImGui::Unindent();
 			ImGui::TreePop();
 		}
