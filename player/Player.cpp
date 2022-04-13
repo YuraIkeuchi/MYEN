@@ -89,9 +89,9 @@ void Player::Update()
 	}
 	//デバッグテキスト
 	if (onGround == true) {
-		DebugText::GetInstance()->Print("PUSH SPACE", 0, 0, 2);
+		DebugText::GetInstance()->Print("PUSH SPACE", 900, 600, 1);
 	}
-
+	DebugText::GetInstance()->Print("PlayerSetting by ImGui", 900, 650, 1);
 	// ワールド行列更新
 	UpdateWorldMatrix();
 	collider->Update();
@@ -106,9 +106,7 @@ void Player::Draw() {
 	ImGui::Begin("test");
 	if (ImGui::TreeNode("Debug")) {
 		if (ImGui::TreeNode("Player")) {
-			ImGui::SliderFloat("position.z", &position.y, 50, -50);
 			ImGui::SliderFloat("AddSpeed", &AddSpeed, 2, 0);
-			ImGui::SliderFloat("vx", &vx, 50, -50);
 			if (ImGui::Button("ShotFlag")) {
 				if (ShotFlag == false) {
 					ShotFlag = true;

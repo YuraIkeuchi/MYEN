@@ -61,7 +61,7 @@ private:
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV;
 	const float GravityY = -1.2f / 60.0f;
-	const float GravityX = -0.5f / 60.0f;
+	const float GravityX = -0.4f / 60.0f;
 	float vy = 0.0f;
 	float vx = 0.0f;
 	int imageTimer = 0;
