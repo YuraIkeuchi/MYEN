@@ -4,14 +4,19 @@ void Framework::Run()
 {
 	Initialize(dxcommon);
 	while (true) {
-		//更新処理
-		Update(dxcommon);
-		//終了リクエストが来たら抜ける
-		if (endRequst) {
-			break;
+		if (FPSManager::GetInstance()->Run()) {
+
+			//毎フレーム更新
+			Update(dxcommon);
+
+			//終了リクエストが来たら抜ける
+			if (endRequst) {
+				break;
+			}
+
+			//描画
+			Draw(dxcommon);
 		}
-		//描画処理
-		Draw(dxcommon);
 	}
 	//解放処理
 	Finalize();
@@ -29,6 +34,9 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 
 	audio = Audio::GetInstance();
 	audio->Initialize();
+	//FPS固定
+	fpsManager = FPSManager::GetInstance();
+	fpsManager->Init();
 	// nullptrチェック
 	assert(dxcommon);
 	assert(input);

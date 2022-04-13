@@ -15,6 +15,7 @@
 #include "LightGroup.h"
 #include "Texture.h"
 #include "ParticleManager.h"
+#include"FPSManager.h"
 //フレームワーク
 class Framework
 {
@@ -45,4 +46,5 @@ protected:
 	WinApp* winApp = nullptr;
 	Camera* camera = nullptr;
 	AbstractSceneFactory* sceneFactory_ = nullptr;
+	FPSManager* fpsManager = nullptr;
 };

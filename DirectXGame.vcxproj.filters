@@ -58,6 +58,9 @@
     <Filter Include="ソース ファイル\ParticleManager">
       <UniqueIdentifier>{f04362c3-1cff-42df-9d1a-656af883a6a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\FPSManager">
+      <UniqueIdentifier>{e18e2545-5346-409a-ba4b-6e5f6edde9a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Basic.hlsli">
@@ -274,6 +277,9 @@
     <ClCompile Include="collision\SphereCollider.cpp">
       <Filter>ソース ファイル\collision</Filter>
     </ClCompile>
+    <ClCompile Include="FpsManager\FPSManager.cpp">
+      <Filter>ソース ファイル\FPSManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -446,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="collision\SphereCollider.h">
       <Filter>ソース ファイル\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsManager\FPSManager.h">
+      <Filter>ソース ファイル\FPSManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
