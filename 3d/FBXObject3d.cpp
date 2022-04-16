@@ -1,18 +1,21 @@
 #include "FBXObject3d.h"
+#include "FBXModel.h"
 #include "FbxLoader.h"
+
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
+ComPtr<ID3D12RootSignature> FBXObject3d::rootsignature;
+ComPtr<ID3D12PipelineState> FBXObject3d::pipelinestate;
+
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
 ID3D12Device* FBXObject3d::device = nullptr;
 Camera* FBXObject3d::camera = nullptr;
-ComPtr<ID3D12RootSignature> FBXObject3d::rootsignature;
-ComPtr<ID3D12PipelineState> FBXObject3d::pipelinestate;
 
 void FBXObject3d::CreateGraphicsPipeline()
 {
@@ -25,7 +28,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/FBXVS.hlsl",    // シェーダファイル名
+		L"Resources/Shaders/FBXVS.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",    // エントリーポイント名、シェーダーモデル指定
@@ -48,7 +51,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/FBXPS.hlsl",    // シェーダファイル名
+		L"Resources/Shaders/FBXPS.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",    // エントリーポイント名、シェーダーモデル指定
@@ -153,6 +156,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV（スキニング用）
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
+
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
 
@@ -177,14 +181,15 @@ void FBXObject3d::CreateGraphicsPipeline()
 void FBXObject3d::Initialize()
 {
 	HRESULT result;
-	// 定数バッファの生成
+	//定数バッファ
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataTransform) + 0xff) & ~0xff),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&constBuffTransform));
+		IID_PPV_ARGS(&constBuffTransform)
+	);
 
 	//定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -194,6 +199,7 @@ void FBXObject3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
+
 	//1フレーム分の時間を60FPSで設定
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 }
@@ -202,7 +208,7 @@ void FBXObject3d::Update()
 {
 	XMMATRIX matScale, matRot, matTrans;
 
-	// スケール、回転、平行移動行列の計算
+	//スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
 	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
@@ -210,21 +216,21 @@ void FBXObject3d::Update()
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 
-	// ワールド行列の合成
-	matWorld = XMMatrixIdentity(); // 変形をリセット
-	matWorld *= matScale; // ワールド行列にスケーリングを反映
-	matWorld *= matRot; // ワールド行列に回転を反映
-	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	//ワールド行列の合成
+	matWorld = XMMatrixIdentity();	//変形をリセット
+	matWorld *= matScale;			//ワールド行列にスケーリングを反映
+	matWorld *= matRot;				//ワールド行列に回転を反映
+	matWorld *= matTrans;			//ワールド行列に平行移動を反映
 
-	// ビュープロジェクション行列
+	//ビュープロジェクション行列
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
-	// モデルのメッシュトランスフォーム
+	//モデルのメッシュトランスフォーム
 	const XMMATRIX& modelTransform = model->GetModelTransform();
-	// カメラ座標
+	//カメラ座標
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
 	HRESULT result;
-	// 定数バッファへデータ転送
+	//定数バッファへのデータ転送
 	ConstBufferDataTransform* constMap = nullptr;
 	result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
@@ -246,7 +252,6 @@ void FBXObject3d::Update()
 			currentTime = startTime;
 		}
 	}
-
 	//定数バッファへデータ転送
 	ConstBufferDataSkin* constMapSkin = nullptr;
 	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
@@ -265,23 +270,22 @@ void FBXObject3d::Update()
 
 void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	// モデルの割り当てがなければ描画しない
+	//モデルの割り当てがなければ描画しない
 	if (model == nullptr) {
 		return;
 	}
-
-	// パイプラインステートの設定
+	//パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
-	// ルートシグネチャの設定
+	//ルートシグネチャの設定
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
-	// プリミティブ形状を設定
+	//プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	// 定数バッファビューをセット
+	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffTransform->GetGPUVirtualAddress());
 	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());
 
-	// モデル描画
+	//モデル描画
 	model->Draw(cmdList);
 }
 
