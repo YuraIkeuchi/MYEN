@@ -157,7 +157,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->Initialize();
 	object1->SetModel(model1);
 	object1->SetPosition({ 0.0f,0.0f,0.0f });
-	object1->SetRotation({ 0.0f,90.0f,0.0f });
+	//object1->SetRotation({ 0.0f,90.0f,0.0f });
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -201,6 +201,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
+
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	Draw(dxCommon);
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
