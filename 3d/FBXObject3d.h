@@ -79,6 +79,18 @@ public:	//メンバ関数
 	/// </summary>
 	void PlayAnimation();
 
+	void SetPosition(XMFLOAT3 position) { this->position = position; }
+
+	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+	/// <summary>
+	/// スケールの設定
+	/// </summary>
+	/// <param name="position">スケール</param>
+	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+
+
+
 protected:	//メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
@@ -106,7 +118,6 @@ protected:	//メンバ変数
 	bool isPlay = false;
 
 public:	//定数
-	void Setpos(XMFLOAT3 pos) { position = pos; }
 	//ボーンの最大数
 	static const int MAX_BONES = 32;
 

@@ -140,7 +140,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,5,-100 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
@@ -156,6 +156,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
+	object1->SetPosition({ 0.0f,0.0f,0.0f });
+	object1->SetRotation({ 0.0f,90.0f,0.0f });
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -191,7 +193,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,15,-20 });
+	camera->SetEye({ 0,15,-10 });
 	camera->SetTarget({ 0, 1, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
