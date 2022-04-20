@@ -144,7 +144,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Motti_Move");
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -156,8 +156,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	object1->SetPosition({ 0.0f,0.0f,0.0f });
-	//object1->SetRotation({ 0.0f,90.0f,0.0f });
+	object1->SetScale({ 0.03,0.03,0.03 });
+	//object1->SetPosition({ 0,0,30 });
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -193,8 +193,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,15,-10 });
-	camera->SetTarget({ 0, 1, 0 });
+	camera->SetEye({ 0,0,-10 });
+	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 }
@@ -202,9 +202,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
-	Draw(dxCommon);
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	//Draw(dxCommon);
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
