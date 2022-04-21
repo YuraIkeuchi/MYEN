@@ -140,11 +140,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-100 });
+	camera->SetEye({ 0,5,-120 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Motti_Move");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Fast Run");
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -156,7 +156,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	object1->SetScale({ 0.03,0.03,0.03 });
+	//object1->SetScale({ 0.03,0.03,0.03 });
 	//object1->SetPosition({ 0,0,30 });
 }
 
@@ -193,7 +193,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,0,-10 });
+	camera->SetEye({ 0,0,-30 });
 	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();

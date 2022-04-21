@@ -166,21 +166,26 @@ void FbxLoader::ParseMeshVertices(FBXModel* model, FbxMesh* fbxMesh)
 
     //頂点座標データの数
     const int controlPointsCount = fbxMesh->GetControlPointsCount();
+    fbxMesh->GetPolygonVertexCount();
     //必要数だけ頂点データ配列を確保
     FBXModel::VertexPosNormalUvSkin vert{};
     model->vertices.resize(controlPointsCount, vert);
 
-    //FBXノードのメッシュの頂点座標配列を取得
+
+    // FBXメッシュの頂点座標配列を取得 Get the vertex coordinate array of the FBX mesh
     FbxVector4* pCoord = fbxMesh->GetControlPoints();
 
-    //FBXノードのメッシュメッシュの全頂点座標をモデルないの配列にコピーする。
-    for (int i = 0; i < controlPointsCount; i++) {
+    // FBXメッシュの全頂点座標をモデル内の配列にコピーする Copy all vertex coordinates of the FBX mesh to an array in the model
+    for (int i = 0; i < controlPointsCount; i++)
+    {
         FBXModel::VertexPosNormalUvSkin& vertex = vertices[i];
-        //座標のコピー
+
+        // 座標のコピー Copy of coordinates
         vertex.pos.x = (float)pCoord[i][0];
         vertex.pos.y = (float)pCoord[i][1];
         vertex.pos.z = (float)pCoord[i][2];
     }
+
 }
 
 void FbxLoader::ParseMeshFaces(FBXModel* model, FbxMesh* fbxMesh)
@@ -207,11 +212,13 @@ void FbxLoader::ParseMeshFaces(FBXModel* model, FbxMesh* fbxMesh)
         //1頂点ずつ処理
         for (int j = 0; j < polygonSize; j++) {
             //FBXノードのメッシュ頂点配列のインデックス
+            //コントロールポイントインデックスのこと
             int index = fbxMesh->GetPolygonVertex(i, j);
             assert(index >= 0);
 
-            //頂点法線読込
+            // 頂点法線読み込み Read vertex normals
             FBXModel::VertexPosNormalUvSkin& vertex = vertices[index];
+            //頂点法線読込
             FbxVector4 normal;
             if (fbxMesh->GetPolygonVertexNormal(i, j, normal)) {
                 vertex.normal.x = (float)normal[0];
@@ -377,6 +384,8 @@ void FbxLoader::ParseSkin(FBXModel* model, FbxMesh* fbxMesh)
             //このボーンに影響を受ける頂点の配列
             int* controlPointIndices = fbxCluster->GetControlPointIndices();
             double* controlPointWeights = fbxCluster->GetControlPointWeights();
+
+        
 
             //影響えお受ける全頂点について
             for (int j = 0; j < controlPointIndicesCount; j++) {
