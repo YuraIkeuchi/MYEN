@@ -144,7 +144,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Fast Run");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
