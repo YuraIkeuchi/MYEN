@@ -66,16 +66,45 @@ void Player::Update()
 		FirstSpeedX = 2.0f;
 	}
 
+	if (input->TriggerKey(DIK_A)) {
+		//a -= 0.02;
+	}
 	//落ちる処理
+	//if (onGround == false) {
+	//	vy += GravityY;
+	//	position.y += vy + FirstSpeedY;
+	//	//大砲の場合
+	//	if (ShotFlag == true) {
+	//		if (vx >= -1.8f) {
+	//			vx += GravityX;
+	//		}
+	//		position.x += vx + FirstSpeedX;
+	//	}
+	//}
+
+	////もとに戻る
+	//if (position.y <= -200.0f) {
+	//	onGround = true;
+	//	vy = 0.0f;
+	//	vx = 0.0f;
+	//	position = { -150.0f,0.0f,0.0f };
+	//	AddSpeed = 0.0f;
+	//}
+
 	if (onGround == false) {
-		vy += GravityY;
-		position.y += vy + FirstSpeedY;
+		float g = weight * 2.0f;
+		FricrionPower = g * Fricrion;
+		vy = FricrionPower / weight;
+		position.x += vy;
 		//大砲の場合
-		if (ShotFlag == true) {
+	/*	if (ShotFlag == true) {
 			if (vx >= -1.8f) {
 				vx += GravityX;
 			}
 			position.x += vx + FirstSpeedX;
+		}*/
+		if (position.x >= 300) {
+			position.x = -150.0f;
 		}
 	}
 
@@ -87,6 +116,7 @@ void Player::Update()
 		position = { -150.0f,0.0f,0.0f };
 		AddSpeed = 0.0f;
 	}
+
 	//デバッグテキスト
 	if (onGround == true) {
 		DebugText::GetInstance()->Print("PUSH SPACE", 900, 600, 1);
@@ -106,7 +136,8 @@ void Player::Draw() {
 	ImGui::Begin("test");
 	if (ImGui::TreeNode("Debug")) {
 		if (ImGui::TreeNode("Player")) {
-			ImGui::SliderFloat("AddSpeed", &AddSpeed, 2, 0);
+			ImGui::SliderFloat("FricrionPower", &FricrionPower, 25, -25);
+			ImGui::SliderFloat("position.x", &position.x, 2, 0);
 			if (ImGui::Button("ShotFlag")) {
 				if (ShotFlag == false) {
 					ShotFlag = true;
