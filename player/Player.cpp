@@ -91,11 +91,23 @@ void Player::Update()
 	//	AddSpeed = 0.0f;
 	//}
 
+	//–€ŽCŠÖŒW
 	if (onGround == false) {
-		float g = weight * 2.0f;
+		if (vx >= 0.0f) {
+			MoveFricrion -= 0.01f;
+		}
+		else {
+			onGround = true;
+			vy = 0.0f;
+			vx = 0.0f;
+			MoveFricrion = 0.4f;
+			position = { -150.0f,0.0f,0.0f };
+		}
+		
+		float g = weight * 9.8f;
 		FricrionPower = g * Fricrion;
-		vy = FricrionPower / weight;
-		position.x += vy;
+		vx = FirstSpeedX + FricrionPower / weight * MoveFricrion;
+		position.x += vx;
 		//‘å–C‚Ìê‡
 	/*	if (ShotFlag == true) {
 			if (vx >= -1.8f) {
@@ -137,7 +149,8 @@ void Player::Draw() {
 	if (ImGui::TreeNode("Debug")) {
 		if (ImGui::TreeNode("Player")) {
 			ImGui::SliderFloat("FricrionPower", &FricrionPower, 25, -25);
-			ImGui::SliderFloat("position.x", &position.x, 2, 0);
+			ImGui::SliderFloat("vx", &vx, 25, -25);
+			ImGui::SliderFloat("MoveFriction", &MoveFricrion, 25, -25);
 			if (ImGui::Button("ShotFlag")) {
 				if (ShotFlag == false) {
 					ShotFlag = true;

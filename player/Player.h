@@ -77,7 +77,7 @@ private:
 	//–€ŽCŠÖŒW
 	float Fricrion = 0.8f;
 	float FricrionPower = 0.0f;
-	float weight = 20.0f;
-	float MoveFricrion = 0.0f;
+	float weight = 100.0f;
+	float MoveFricrion = 0.5f;
 };
 
