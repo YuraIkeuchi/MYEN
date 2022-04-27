@@ -144,7 +144,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Motti_Move");
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -156,7 +156,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	//object1->SetScale({ 0.03,0.03,0.03 });
+	object1->SetScale({ 0.03,0.03,0.03 });
 	//object1->SetPosition({ 0,0,30 });
 }
 
