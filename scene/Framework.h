@@ -16,6 +16,7 @@
 #include "Texture.h"
 #include "ParticleManager.h"
 #include"FPSManager.h"
+#include"ModelManager.h"
 //フレームワーク
 class Framework
 {

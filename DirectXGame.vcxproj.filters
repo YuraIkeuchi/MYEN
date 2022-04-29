@@ -280,6 +280,9 @@
     <ClCompile Include="FpsManager\FPSManager.cpp">
       <Filter>ソース ファイル\FPSManager</Filter>
     </ClCompile>
+    <ClCompile Include="3d\ModelManager.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -455,6 +458,9 @@
     </ClInclude>
     <ClInclude Include="FpsManager\FPSManager.h">
       <Filter>ソース ファイル\FPSManager</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\ModelManager.h">
+      <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

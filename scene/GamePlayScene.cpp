@@ -56,37 +56,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	particleMan = ParticleManager::GetInstance();
 	particleMan->SetCamera(camera);
 
-	//// 3Dオブジェクト生成
-	//player = new Player();
-	//player->Initialize();
+	////// 3Dオブジェクト生成
+	////player = new Player();
+	////player->Initialize();
 	player = new Player();
 	player->Initialize();
-
-	//enemy = new Enemy();
-	//enemy->Initialize();
-
-	objSkydome = Object3d::Create();
-	
-	objSphere = Object3d::Create();
-
-	modelSkydome = Model::LoadFromOBJ("skydome");
-	modelBossMap = Model::LoadFromOBJ("BossMap");
-	modelFloor = Model::LoadFromOBJ("floor");
-	modelSphere = Model::LoadFromOBJ("sphere");
-	modelPlane = Model::LoadFromOBJ("plane1x1");
-	modelBox = Model::LoadFromOBJ("box1x1x1");
-	modelPyramid = Model::LoadFromOBJ("pyramid1x1");
-
-	modelFighter = Model::LoadFromOBJ("chr_sword");
-	objSkydome->SetModel(modelSkydome);
-	objBossMap = TouchableObject::Create(modelBossMap);
-	objFloor = TouchableObject::Create(modelFloor);
-	objSphere->SetModel(modelSphere);
-	
-	objBossMap->SetPosition({ 0, 0, 0 });
-	objSkydome->SetPosition({ 0, 0, 0 });
-	objSphere->SetPosition({ -5, 1, 0 });
-	objFloor->SetScale({ 2.0f,2.0f,2.0f });
 
 	//Model* modeltable[10] = {
 	//	modelPlane,
@@ -115,26 +89,6 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//	}
 	//}
 
-	//objFighter->SetPosition(PlayerPosition);
-	// コライダーの追加
-	objSphere->SetCollider(new SphereCollider);
-
-	////普通のテクスチャ(板ポリ)
-	//Texture::LoadTexture(0, L"Resources/Title.png");
-	//titleTexture = Texture::Create(0, { 0,0,0 }, { 2,2,2 }, { 1,1,1,1 });
-	//titleTexture->TextureCreate();
-	//titleTexture->SetPosition(TexPosition);
-	//titleTexture->SetScale({ 0.5,0.5,0.5 });
-
-	////普通のテクスチャ(板ポリ)
-	//Texture::LoadTexture(2, L"Resources/Title.png");
-	//fantasyTexture = Texture::Create(2, { 0,0,0 }, { 2,2,2 }, { 1,1,1,0.5 });
-	//fantasyTexture->TextureCreate();
-	//fantasyTexture->SetPosition(FantasyPosition);
-	//fantasyTexture->SetScale({ 0.5,0.5,0.5 });
-	//Texture::LoadTexture(1, L"Resources/ダウンロード.png");
-	//
-	
 	//// カメラ注視点をセット
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
@@ -144,7 +98,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Motti_Move");
+	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Pla);
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -169,11 +123,6 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		object1->PlayAnimation();
 	}
 	object1->Update();
-	objSkydome->Update();
-	objBossMap->Update();
-	objFloor->Update();
-	objSphere->Update();
-	
 	player->Update();
 	//enemy->Update();
 	particleMan->Update();
@@ -210,7 +159,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	// 背景スプライト描画前処理
 		Sprite::PreDraw();
 
-		postEffect->Draw(dxCommon->GetCmdList());
+		//postEffect->Draw(dxCommon->GetCmdList());
 		// 背景スプライト描画
 		//spriteBG->Draw();
 
@@ -235,13 +184,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		// 3Dオブジェクト描画前処理
 		Object3d::PreDraw();
 		object1->Draw(dxCommon->GetCmdList());
-	/*	objSkydome->Draw();
-		objBossMap->Draw();
-		objFloor->Draw();
-		player->Draw();*/
-		//objFighter->Draw();
-		//enemy->Draw();
-		//objSphere->Draw();
+		player->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
 		//particleMan->Draw(dxCommon->GetCmdList());
@@ -249,17 +192,12 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 
 		// 前景スプライト描画前処理
 		Sprite::PreDraw();
-
 }
 
 void GamePlayScene::Finalize()
 {
 	//スプライト開放
 	delete spriteBG;
-	delete objBossMap;
-	delete modelBossMap;
-	delete objSkydome;
-	delete modelSkydome;
 	delete postEffect;
 	player->Finalize();
 }
