@@ -60,7 +60,7 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 	// パーティクルマネージャ初期化
 	ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
-
+	ModelManager::GetInstance()->Initialize();
 }
 
 void Framework::Finalize()

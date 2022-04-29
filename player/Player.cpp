@@ -5,11 +5,11 @@
 #include "ParticleManager.h"
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
-
+#include "ModelManager.h"
 using namespace DirectX;
 
 Player::Player() {
-	model = Model::LoadFromOBJ("chr_sword");
+	model = ModelManager::GetInstance()->GetModel(ModelManager::Player);
 	object3d = new Object3d();
 }
 

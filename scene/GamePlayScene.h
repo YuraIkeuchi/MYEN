@@ -13,6 +13,7 @@
 #include "Enemy.h"
 #include "ParticleManager.h"
 #include "PostEffect.h"
+#include "ModelManager.h"
 #include <vector>
 
 class CollisionManager;
@@ -38,20 +39,8 @@ public:
 	Sprite* spriteBG = nullptr;
 	Sprite* spritePlayerHP = nullptr;
 	Sprite* spriteBossHP = nullptr;
-	Model* modelBossMap = nullptr;
-	TouchableObject* objBossMap = nullptr;
-	Model* modelFloor = nullptr;
-	TouchableObject* objFloor = nullptr;
-	Model* modelSphere = nullptr;
-	Model* modelPlane = nullptr;
-	Model* modelBox = nullptr;
-	Model* modelPyramid = nullptr;
 	std::vector<Object3d*> objects;
-	Object3d* objSphere;
-	Model* modelSkydome = nullptr;
-	Object3d* objSkydome;
-	//Player* player = nullptr;
-	Model* modelFighter = nullptr;
+	Player* player = nullptr;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
 	ParticleManager* particleMan = nullptr;
@@ -64,7 +53,7 @@ public:
 	LightGroup* lightGroup = nullptr;
 	XMFLOAT3 cameraPos = { 0, 3.0f, -20.0f };
 	Enemy* enemy = nullptr;
-	Player* player = nullptr;
+	//Player* player = nullptr;
 	CollisionManager* collsionManager = nullptr;
 	PostEffect* postEffect = nullptr;
 };
