@@ -259,13 +259,11 @@ void FbxLoader::ParseMeshFaces(FBXModel* model, FbxMesh* fbxMesh)
                 indices.push_back(index0);
             }
 
-            if (PolygonVertexCount == PolygonVertexCountMax)
-            {
-            }
-            else
+            if (PolygonVertexCount < PolygonVertexCountMax)
             {
                 PolygonVertexCount++;
             }
+          
         }
     }
 }
@@ -382,6 +380,9 @@ void FbxLoader::ParseSkin(FBXModel* model, FbxMesh* fbxMesh)
             float weight;
         };
 
+        //ボーンの変更
+        // 頂点座標データの数の取得
+        int controlPointsCount = fbxMesh->GetControlPointsCount();
         //二次元配列（ジャグ配列）
         //list:頂点が影響を受けるボーンの全リスト
         //vector:それを全頂点分
@@ -400,11 +401,11 @@ void FbxLoader::ParseSkin(FBXModel* model, FbxMesh* fbxMesh)
             //影響えお受ける全頂点について
             for (int j = 0; j < controlPointIndicesCount; j++) {
                 //頂点番号
-                int vertIndex = controlPointIndices[j];
+                int controlPointIndex = controlPointIndices[j];
                 //スキンウェイト
                 float weight = (float)controlPointWeights[j];
                 //その頂点の影響を受けるボーンリストに、ボーンとウェイトのペアを追加
-                weightLists[vertIndex].emplace_back(WeightSet{ (UINT)i, weight });
+                weightLists[controlPointIndex].emplace_back(WeightSet{ (UINT)i, weight });
             }
 
             //頂点配列書き換え用の参照
