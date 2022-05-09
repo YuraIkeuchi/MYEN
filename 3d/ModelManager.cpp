@@ -14,6 +14,7 @@ void ModelManager::Initialize() {
 	LoadModel(Enemy, "chr_sword");*/
 	LoadModel(Player, "sphere");
 	LoadFBXModel(Pla, "Motti_move");
+	LoadFBXModel(Test, "boneTest");
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {

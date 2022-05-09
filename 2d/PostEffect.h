@@ -6,10 +6,14 @@ class PostEffect : public Sprite
 private:
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 public:
-	
+
 	//コンストラクタ
 	PostEffect();
-
+	/// <summary>
+  /// パイプライン生成
+  /// </summary>
+  /// <param name="cmdList"></param>
+	void CreateGraphicsPipeline();
 	//初期化
 	void Initialize();
 
@@ -25,7 +29,7 @@ public:
 	/// シーン描画後処理
 	/// </summary>
 	void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
-public://静的メンバ変数
+private://静的メンバ変数
 	static const float clearColor[4];
 private://メンバ変数
 	//テクスチャバッファ
@@ -38,4 +42,8 @@ private://メンバ変数
 	ComPtr<ID3D12DescriptorHeap> descHeapRTV;
 	//DSV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapDSV;
+	//グラフィックスパイプライン
+	ComPtr<ID3D12PipelineState>pipelineState;
+	//ルートシグネチャ
+	ComPtr<ID3D12RootSignature>rootSignature;
 };

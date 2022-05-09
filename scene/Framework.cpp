@@ -88,12 +88,9 @@ void Framework::Update(DirectXCommon* dxCommon)
 
 void Framework::Draw(DirectXCommon* dxCommon)
 {
-	dxCommon->PreDraw();
+	
 	//シーン描画
 	SceneManager::GetInstance()->Draw(dxCommon);
 	//でバックテキストの描画
-	debugText->DrawAll();
-
-	dxCommon->PostDraw();
-
+	//debugText->DrawAll();
 }

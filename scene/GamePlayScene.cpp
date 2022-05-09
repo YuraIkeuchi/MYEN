@@ -94,11 +94,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-120 });
+	camera->SetEye({ 0,5,-20 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Pla);
+	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Test);
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -110,7 +110,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	object1->SetScale({ 0.03,0.03,0.03 });
+	//object1->SetScale({ 0.03,0.03,0.03 });
 	//object1->SetPosition({ 0,0,30 });
 }
 
@@ -142,7 +142,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,0,-30 });
+	camera->SetEye({ 0,0,-10 });
 	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
@@ -151,47 +151,21 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//Draw(dxCommon);
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	GameDraw(dxCommon);
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-#pragma region 背景スプライト描画
-	// 背景スプライト描画前処理
-		Sprite::PreDraw();
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PostDraw();
 
-		//postEffect->Draw(dxCommon->GetCmdList());
-		// 背景スプライト描画
-		//spriteBG->Draw();
-
-		// スプライト描画後処理
-		Sprite::PostDraw();
-		// 深度バッファクリア
-		//dxCommon->ClearDepthBuffer();
-		Texture::PreDraw(dxCommon->GetCmdList());
-		//if (fantasyFlag == true) {
-		//	fantasyTexture->Draw();
-		//}
-		//titleTexture->Draw();
-		//for (int i = 0; i < Max; i++) {
-		//	if (EnemyAlive[i] == 1) {
-		//		//enemyTexture[i]->Draw();
-		//	}
-		//}
-		Texture::PostDraw();
-#pragma endregion
-
-#pragma region 3Dオブジェクト描画
-		// 3Dオブジェクト描画前処理
-		Object3d::PreDraw();
-		object1->Draw(dxCommon->GetCmdList());
-		player->Draw();
-		Object3d::PostDraw();
-		// パーティクルの描画
-		//particleMan->Draw(dxCommon->GetCmdList());
-#pragma endregion
-
-		// 前景スプライト描画前処理
-		Sprite::PreDraw();
+	/*dxCommon->PreDraw();
+	GameDraw(dxCommon);
+	dxCommon->PostDraw();*/
+	// 深度バッファクリア
+	//dxCommon->ClearDepthBuffer();
+	// パーティクルの描画
+	//particleMan->Draw(dxCommon->GetCmdList());
 }
 
 void GamePlayScene::Finalize()
@@ -200,6 +174,45 @@ void GamePlayScene::Finalize()
 	delete spriteBG;
 	delete postEffect;
 	player->Finalize();
+}
+
+//モデルの描画
+void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
+#pragma region 3Dオブジェクト描画
+	// 3Dオブジェクト描画前処理
+	Object3d::PreDraw();
+	object1->Draw(dxCommon->GetCmdList());
+	//player->Draw();
+	// 3Dオブジェクト描画後処理
+	Object3d::PostDraw();
+#pragma endregion
+}
+
+//上の描画にスプライトなども混ぜた
+void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
+{
+#pragma region 背景スプライト描画
+	// 背景スプライト描画前処理
+	Sprite::PreDraw();
+	// 背景スプライト描画
+	//spriteBG->Draw();
+	// スプライト描画後処理
+	Sprite::PostDraw();
+#pragma endregion
+	Texture::PreDraw(dxCommon->GetCmdList());
+
+	Texture::PostDraw();
+
+	//スプライトの描画
+	ModelDraw(dxCommon);
+	//FBXの描画
+	//object1->Draw(dxCommon->GetCmdList());
+}
+
+void GamePlayScene::ImGuiDraw() {
+	ImGui::Begin("test");
+	ImGui::Unindent();
+	ImGui::End();
 }
 
 //void GamePlayScene::CreateParticles()

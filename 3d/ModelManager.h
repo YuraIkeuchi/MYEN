@@ -19,7 +19,8 @@ public:
 		Player,
 	};
 	enum FBXName {
-		Pla
+		Pla,
+		Test
 	};
 
 public:

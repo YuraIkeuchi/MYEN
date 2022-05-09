@@ -23,9 +23,11 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon) {
+	dxCommon->PreDraw();
 	sprite->PreDraw();
 	//”wŒi—p
 	sprite->Draw();
+	dxCommon->PostDraw();
 }
 
 

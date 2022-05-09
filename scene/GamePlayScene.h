@@ -33,6 +33,9 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 	//開放
 	void Finalize() override;
+	void ModelDraw(DirectXCommon* dxCommon);
+	void GameDraw(DirectXCommon* dxCommon);
+	void ImGuiDraw();
 	//void CreateParticles();
 	///ゲームシーン用
 	DebugCamera* camera = nullptr;
