@@ -20,7 +20,8 @@ public:
 	};
 	enum FBXName {
 		Pla,
-		Test
+		Motti_moveF,
+		Test,
 	};
 
 public:

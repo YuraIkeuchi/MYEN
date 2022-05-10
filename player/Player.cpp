@@ -160,6 +160,7 @@ void Player::Update()
 		onGround = true;
 		position.y = 0.0f;
 	}
+	object3d->SetRotation(rotation);
 	object3d->SetPosition(position);
 	// s—ñ‚ÌXV‚È‚Ç
 	object3d->Update();
@@ -167,8 +168,12 @@ void Player::Update()
 
 //•`‰æ
 void Player::Draw() {
+	ImGui::Begin("test");
+	ImGui::SliderFloat("rotation.y", &rotation.y, 360, -360);
+	ImGui::Unindent();
+	ImGui::End();
 	Object3d::PreDraw();
-	object3d->Draw();
+	//object3d->Draw();
 }
 
 void Player::Finalize()

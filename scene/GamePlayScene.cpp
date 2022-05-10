@@ -94,11 +94,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,5,-40 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Test);
+	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Motti_moveF);
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -110,8 +110,9 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	//object1->SetScale({ 0.03,0.03,0.03 });
-	//object1->SetPosition({ 0,0,30 });
+	object1->SetRotation(player->GetRotation());
+	object1->SetScale({ 0.007f, 0.007f, 0.007f });
+	object1->SetPosition(player->GetPosition());
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -122,6 +123,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	if (input->PushKey(DIK_0)) {
 		object1->PlayAnimation();
 	}
+	object1->SetPosition(player->GetPosition());
+	object1->SetRotation(player->GetRotation());
+
 	object1->Update();
 	player->Update();
 	//enemy->Update();
@@ -142,8 +146,11 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	camera->SetEye({ 0,0,-10 });
-	camera->SetTarget({ 0, 0, 0 });
+	cameraPos.x = player->GetPosition().x;
+	cameraPos.y = player->GetPosition().y + 10;
+	cameraPos.z = player->GetPosition().z - 10;
+	camera->SetTarget(player->GetPosition());
+	camera->SetEye(cameraPos);
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 }
@@ -151,12 +158,20 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	/*postEffect->PreDrawScene(dxCommon->GetCmdList());
 	GameDraw(dxCommon);
 	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PostDraw();*/
+
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	//
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+
+	dxCommon->PreDraw();
+	GameDraw(dxCommon);
 	dxCommon->PostDraw();
 
 	/*dxCommon->PreDraw();
@@ -182,7 +197,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	object1->Draw(dxCommon->GetCmdList());
-	//player->Draw();
+	player->Draw();
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 #pragma endregion
