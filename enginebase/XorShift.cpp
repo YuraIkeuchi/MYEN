@@ -6,6 +6,7 @@ uint32_t XorShift::xorsft_z = 521288629;
 uint32_t XorShift::xorsft_w = 88675123;
 static unsigned long seed[4] = { 123456789, 362436069, 521288629, 88675123 };
 
+
 void XorShift::initrand(uint32_t seed) {
     do {
         seed = seed * 1812433253 + 1; seed ^= seed << 13; seed ^= seed >> 17;

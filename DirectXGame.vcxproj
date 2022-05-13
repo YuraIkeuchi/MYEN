@@ -290,6 +290,7 @@
     <ClCompile Include="enginebase\DirectXCommon.cpp" />
     <ClCompile Include="enginebase\SceneFactory.cpp" />
     <ClCompile Include="enginebase\WinApp.cpp" />
+    <ClCompile Include="enginebase\XorShift.cpp" />
     <ClCompile Include="FpsManager\FPSManager.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="enginebase\DirectXCommon.h" />
     <ClInclude Include="enginebase\SceneFactory.h" />
     <ClInclude Include="enginebase\WinApp.h" />
+    <ClInclude Include="enginebase\XorShift.h" />
     <ClInclude Include="FpsManager\FPSManager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
