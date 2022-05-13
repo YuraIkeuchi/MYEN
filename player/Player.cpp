@@ -168,10 +168,10 @@ void Player::Update()
 
 //•`‰æ
 void Player::Draw() {
-	ImGui::Begin("test");
+	/*ImGui::Begin("test");
 	ImGui::SliderFloat("rotation.y", &rotation.y, 360, -360);
 	ImGui::Unindent();
-	ImGui::End();
+	ImGui::End();*/
 	Object3d::PreDraw();
 	//object3d->Draw();
 }

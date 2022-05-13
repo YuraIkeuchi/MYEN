@@ -5,7 +5,7 @@
 #pragma comment(lib,"d3dcompiler.lib")
 using namespace DirectX;
 //静的メンバ変数の実態
-const float PostEffect::clearColor[4] = { 1.0f,0.5f,0.1f,0.0f };
+const float PostEffect::clearColor[4] = { 1.0f,1.0f,1.0f,0.0f };
 PostEffect::PostEffect()
 	: Sprite(
 		100,//テクスチャ番号
@@ -17,6 +17,7 @@ PostEffect::PostEffect()
 		false)//上下反転フラグ
 {
 }
+
 
 void PostEffect::CreateGraphicsPipeline()
 {

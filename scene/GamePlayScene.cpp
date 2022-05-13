@@ -158,21 +158,21 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 
-	/*postEffect->PreDrawScene(dxCommon->GetCmdList());
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	GameDraw(dxCommon);
 	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
-	dxCommon->PostDraw();*/
+	dxCommon->PostDraw();
 
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	//
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	dxCommon->PreDraw();
+	/*dxCommon->PreDraw();
 	GameDraw(dxCommon);
-	dxCommon->PostDraw();
+	dxCommon->PostDraw();*/
 
 	/*dxCommon->PreDraw();
 	GameDraw(dxCommon);
