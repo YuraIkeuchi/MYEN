@@ -93,12 +93,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
+
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-40 });
+	camera->SetEye({ 0,5,-20 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
-	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Motti_moveF);
+	model1 = ModelManager::GetInstance()->GetFBXModel(ModelManager::Test);
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -110,9 +111,6 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	object1->SetRotation(player->GetRotation());
-	object1->SetScale({ 0.007f, 0.007f, 0.007f });
-	object1->SetPosition(player->GetPosition());
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -146,11 +144,13 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//if (BossHP <= 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 	//}
-	cameraPos.x = player->GetPosition().x;
-	cameraPos.y = player->GetPosition().y + 10;
-	cameraPos.z = player->GetPosition().z - 10;
-	camera->SetTarget(player->GetPosition());
-	camera->SetEye(cameraPos);
+	//cameraPos.x = player->GetPosition().x;
+	//cameraPos.y = player->GetPosition().y + 10;
+	//cameraPos.z = player->GetPosition().z - 10;
+	//camera->SetTarget(player->GetPosition());
+	//camera->SetEye(cameraPos);
+	camera->SetEye({ 0,5,-10 });
+	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 }
