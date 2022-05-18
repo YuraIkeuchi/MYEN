@@ -48,9 +48,13 @@ public:
 
 	const bool& GetOnGround() { return onGround; }
 
+	const float& Getvx() { return vx; }
+
 	void SetPosition(XMFLOAT3 position) { object3d->SetPosition(position); }
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
+
+	void Setvx(const float vx) { this->vx = vx; }
 
 private:
 	XMFLOAT3 pos = { 0,40,0 };
@@ -75,9 +79,9 @@ private:
 	bool ShotFlag = false;
 	int imageTimer = 0;
 	//–€ŽCŠÖŒW
-	float Fricrion = 0.8f;
+	float Fricrion = 0.5f;
 	float FricrionPower = 0.0f;
-	float weight = 100.0f;
+	float weight = 1000.0f;
 	float MoveFricrion = 0.5f;
 };
 

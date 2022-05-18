@@ -20,7 +20,7 @@ bool Player::Initialize()
 	object3d->SetModel(model);
 	position = { -150.0f,0.0f,0.0f };
 	object3d->SetPosition(position);
-	object3d->SetScale({ 1.7f,1.7f,1.7f });
+	object3d->SetScale({ 3.7f,3.7f,3.7f });
 
 	// ƒRƒ‰ƒCƒ_[‚Ì’Ç‰Á
 	float radius = 0.6f;
@@ -93,21 +93,23 @@ void Player::Update()
 
 	//–€ŽCŠÖŒW
 	if (onGround == false) {
+
+		float g = weight * 9.8f;
+		
 		if (vx >= 0.0f) {
 			MoveFricrion -= 0.01f;
+			FricrionPower = g * Fricrion;
+			vx = FirstSpeedX + FricrionPower / weight * MoveFricrion;
+			position.x += vx;
 		}
 		else {
 			onGround = true;
 			vy = 0.0f;
 			vx = 0.0f;
-			MoveFricrion = 0.4f;
-			position = { -150.0f,0.0f,0.0f };
+			MoveFricrion = 0.5f;
+			//position = { -150.0f,0.0f,0.0f };
 		}
 		
-		float g = weight * 9.8f;
-		FricrionPower = g * Fricrion;
-		vx = FirstSpeedX + FricrionPower / weight * MoveFricrion;
-		position.x += vx;
 		//‘å–C‚Ìê‡
 	/*	if (ShotFlag == true) {
 			if (vx >= -1.8f) {
@@ -115,9 +117,14 @@ void Player::Update()
 			}
 			position.x += vx + FirstSpeedX;
 		}*/
-		if (position.x >= 300) {
+
+		//if (vx <= 0.0f) {
+		//	vx = 0.0f;
+		//	MoveFricrion = 0.0f;
+		//}
+	/*	if (position.x >= 300) {
 			position.x = -150.0f;
-		}
+		}*/
 	}
 
 	//‚à‚Æ‚É–ß‚é

@@ -63,8 +63,9 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	player = new Player();
 	player->Initialize();
 
-	//enemy = new Enemy();
-	//enemy->Initialize();
+	enemy = new Enemy();
+	enemy->Initialize();
+	enemy->SetPlayer(player);
 
 	objSkydome = Object3d::Create();
 	
@@ -174,7 +175,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objSphere->Update();
 	*/
 	player->Update();
-	//enemy->Update();
+	enemy->Update();
 	particleMan->Update();
 	camera->Update();
 
@@ -235,7 +236,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		//objFloor->Draw();
 		player->Draw();
 		//objFighter->Draw();
-		//enemy->Draw();
+		enemy->Draw();
 		//objSphere->Draw();
 		Object3d::PostDraw();
 		// パーティクルの描画
