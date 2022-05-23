@@ -288,6 +288,7 @@
     <ClCompile Include="enemy\Enemy.cpp" />
     <ClCompile Include="enginebase\AbstractSceneFactory.cpp" />
     <ClCompile Include="enginebase\DirectXCommon.cpp" />
+    <ClCompile Include="enginebase\MyRand.cpp" />
     <ClCompile Include="enginebase\SceneFactory.cpp" />
     <ClCompile Include="enginebase\WinApp.cpp" />
     <ClCompile Include="enginebase\XorShift.cpp" />
@@ -349,6 +350,7 @@
     <ClInclude Include="enemy\Enemy.h" />
     <ClInclude Include="enginebase\AbstractSceneFactory.h" />
     <ClInclude Include="enginebase\DirectXCommon.h" />
+    <ClInclude Include="enginebase\MyRand.h" />
     <ClInclude Include="enginebase\SceneFactory.h" />
     <ClInclude Include="enginebase\WinApp.h" />
     <ClInclude Include="enginebase\XorShift.h" />

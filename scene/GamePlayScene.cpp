@@ -111,6 +111,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
+	object1->SetScale({ 0.005f,0.005f,0.005f });
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)

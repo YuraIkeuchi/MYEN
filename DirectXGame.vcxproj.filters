@@ -301,6 +301,9 @@
     <ClCompile Include="enginebase\XorShift.cpp">
       <Filter>ソース ファイル\enginebase</Filter>
     </ClCompile>
+    <ClCompile Include="enginebase\MyRand.cpp">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -484,6 +487,9 @@
       <Filter>ソース ファイル\ease</Filter>
     </ClInclude>
     <ClInclude Include="enginebase\XorShift.h">
+      <Filter>ソース ファイル\enginebase</Filter>
+    </ClInclude>
+    <ClInclude Include="enginebase\MyRand.h">
       <Filter>ソース ファイル\enginebase</Filter>
     </ClInclude>
   </ItemGroup>
