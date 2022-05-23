@@ -59,6 +59,12 @@ void Player::Update()
 		position.z -= 0.1f;
 	}
 
+	if (input->TriggerButton(input->Button_B)) {
+		object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	}
+	else if (input->TriggerButton(input->Button_A)) {
+		object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	}
 	// —‰ºˆ—
 	if (!onGround) {
 		// ‰ºŒü‚«‰Á‘¬“x
