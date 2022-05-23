@@ -39,7 +39,7 @@ bool Object3d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList*
 	Object3d::cmdList = cmdList;
 	Object3d::camera = camera;
 	// グラフィックパイプラインの生成
-	CreateGraphicsPipeline();
+	//CreateGraphicsPipeline();
 
 	// モデルの静的初期化
 	Model::StaticInitialize(device);
@@ -147,7 +147,7 @@ Object3d* Object3d::Create()
 //	);
 //}
 
-void Object3d::CreateGraphicsPipeline()
+void Object3d::CreateGraphicsPipeline(const wchar_t* vsShaderName, const wchar_t* psShaderName)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -157,7 +157,7 @@ void Object3d::CreateGraphicsPipeline()
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		//L"Resources/shaders/BasicVertexShader.hlsl",	// シェーダファイル名
-		L"Resources/shaders/BasicVS.hlsl",
+		vsShaderName,
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -181,7 +181,7 @@ void Object3d::CreateGraphicsPipeline()
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		//L"Resources/shaders/BasicPixelShader.hlsl",	// シェーダファイル名
-		L"Resources/shaders/BasicPS.hlsl",
+		psShaderName,
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定

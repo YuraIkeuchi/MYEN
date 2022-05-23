@@ -55,7 +55,7 @@ public: //静的メンバ関数
 
 	
 	//グラフィックパイプラインの生成
-	static void CreateGraphicsPipeline();
+	static void CreateGraphicsPipeline(const wchar_t* vsShaderName, const wchar_t* psShaderName);
 
 	
 	//描画前処理

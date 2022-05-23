@@ -16,6 +16,7 @@ Player::Player() {
 bool Player::Initialize()
 {
 	object3d = Object3d::Create();
+	object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	object3d->SetModel(model);
 	object3d->SetPosition(position);
 	object3d->SetScale({ 1.7f,1.7f,1.7f });
@@ -173,7 +174,7 @@ void Player::Draw() {
 	ImGui::Unindent();
 	ImGui::End();*/
 	Object3d::PreDraw();
-	//object3d->Draw();
+	object3d->Draw();
 }
 
 void Player::Finalize()

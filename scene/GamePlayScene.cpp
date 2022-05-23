@@ -158,22 +158,22 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
-
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	//ポストエフェクト用
+	/*postEffect->PreDrawScene(dxCommon->GetCmdList());
 	GameDraw(dxCommon);
 	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
-	dxCommon->PostDraw();
+	dxCommon->PostDraw();*/
 
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	//
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	/*dxCommon->PreDraw();
+	dxCommon->PreDraw();
 	GameDraw(dxCommon);
-	dxCommon->PostDraw();*/
+	dxCommon->PostDraw();
 
 	/*dxCommon->PreDraw();
 	GameDraw(dxCommon);
@@ -197,7 +197,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
-	object1->Draw(dxCommon->GetCmdList());
+	//object1->Draw(dxCommon->GetCmdList());
 	player->Draw();
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
