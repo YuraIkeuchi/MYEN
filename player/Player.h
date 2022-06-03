@@ -58,5 +58,11 @@ private:
 	bool onGround = true;
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV;
+	enum Shader {
+		normal,
+		one,
+	};
+
+	int Shadernumber = 0;
 };
 

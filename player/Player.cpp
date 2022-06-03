@@ -60,10 +60,22 @@ void Player::Update()
 	}
 
 	if (input->TriggerButton(input->Button_B)) {
-		object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+		Shadernumber = one;
 	}
 	else if (input->TriggerButton(input->Button_A)) {
+		Shadernumber = normal;
+	}
+
+	switch (Shadernumber)
+	{
+	case normal:
 		object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+		break;
+	case one:
+		object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+		break;
+	default:
+		break;
 	}
 	// —‰ºˆ—
 	if (!onGround) {
