@@ -7,7 +7,8 @@
 #include <d3dx12.h>
 
 #include "DirectionalLight.h"
-
+#include "PointLight.h"
+#include"SpotLight.h"
 /// <summary>
 /// ライト
 /// </summary>
@@ -24,7 +25,12 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // 定数
+	// 平行光源の数
 	static const int DirLightNum = 3;
+	// 点光源の数
+	static const int PointLightNum = 3;
+
+	static const int SpotLightNum = 3;
 
 public: // サブクラス
 
@@ -36,8 +42,21 @@ public: // サブクラス
 		float pad1;
 		// 平行光源用
 		DirectionalLight::ConstBufferData dirLights[DirLightNum];
+		// 点光源用
+		PointLight::ConstBufferData pointLights[PointLightNum];
+		//スポットライト
+		SpotLight::ConstBufferData spotLights[SpotLightNum];
 	};
+public:
+	//スポットライト
+	void SetSpotLightActive(int index, bool active);
+	void SetSpotLightDir(int index, const XMVECTOR& lightdir);
+	void SetSpotLightPos(int index, const XMFLOAT3& lightpos);
+	void SetSpotLightColor(int index, const XMFLOAT3& lightcolor);
+	void SetSpotLightAtten(int index, const XMFLOAT3& lightAtten);
+	void SetSpotLightFactorAngle(int index, const XMFLOAT2& lightFactorAngle);
 
+	SpotLight spotLights[SpotLightNum];
 public: // 静的メンバ関数
 	/// <summary>
 	/// 静的初期化
@@ -108,6 +127,34 @@ public: // メンバ関数
 	/// <param name="lightcolor">ライト色</param>
 	void SetDirLightColor(int index, const XMFLOAT3& lightcolor);
 
+	/// <summary>
+	/// 点光源の有効フラグをセット
+	/// </summary>
+	/// <param name="index">ライト番号</param>
+	/// <param name="active">有効フラグ</param>
+	void SetPointLightActive(int index, bool active);
+
+	/// <summary>
+	/// 点光源のライト座標をセット
+	/// </summary>
+	/// <param name="index">ライト番号</param>
+	/// <param name="lightpos">ライト座標</param>
+	void SetPointLightPos(int index, const XMFLOAT3& lightpos);
+
+	/// <summary>
+	/// 点光源のライト色をセット
+	/// </summary>
+	/// <param name="index">ライト番号</param>
+	/// <param name="lightcolor">ライト色</param>
+	void SetPointLightColor(int index, const XMFLOAT3& lightcolor);
+
+	/// <summary>
+	/// 点光源のライト距離減衰係数をセット
+	/// </summary>
+	/// <param name="index">ライト番号</param>
+	/// <param name="lightatten">ライト距離減衰係数</param>
+	void SetPointLightAtten(int index, const XMFLOAT3& lightAtten);
+
 private: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuff;
@@ -117,6 +164,9 @@ private: // メンバ変数
 
 	// 平行光源の配列
 	DirectionalLight dirLights[DirLightNum];
+
+	// 点光源の配列
+	PointLight pointLights[PointLightNum];
 
 	// ダーティフラグ
 	bool dirty = false;

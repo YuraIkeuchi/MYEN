@@ -59,4 +59,10 @@ public:
 	//Player* player = nullptr;
 	CollisionManager* collsionManager = nullptr;
 	PostEffect* postEffect = nullptr;
+	Model* modelFloor = nullptr;
+	Object3d* objFloor;
+
+	float pointLightPos[3] = { 0,0,0 };
+	float pointLightColor[3] = { 1,1,1 };
+	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
 };

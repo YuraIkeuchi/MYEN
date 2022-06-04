@@ -62,6 +62,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	player = new Player();
 	player->Initialize();
 
+	//ステージ床
+	objFloor = Object3d::Create();
+	modelFloor = Model::LoadFromOBJ("ground");
+	objFloor->SetModel(modelFloor);
+	objFloor->SetPosition({ 0, -1, 0 });
+	objFloor->SetScale({ 6.0f,1.0f,6.0f });
+
 	//Model* modeltable[10] = {
 	//	modelPlane,
 	//	modelPlane,
@@ -112,6 +119,15 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->Initialize();
 	object1->SetModel(model1);
 	object1->SetScale({ 0.005f,0.005f,0.005f });
+
+	lightGroup->SetDirLightActive(0, false);
+	lightGroup->SetDirLightActive(1, false);
+	lightGroup->SetDirLightActive(2, false);
+	lightGroup->SetPointLightActive(0, true);
+
+	pointLightPos[0] = 0.5f;
+	pointLightPos[1] = 1.0f;
+	pointLightPos[2] = 0.0f;
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -129,7 +145,12 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	player->Update();
 	//enemy->Update();
 	particleMan->Update();
+	objFloor->Update();
 	camera->Update();
+
+	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
+	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
+	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
 
 	Ray ray;
 	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
@@ -190,6 +211,9 @@ void GamePlayScene::Finalize()
 	delete spriteBG;
 	delete postEffect;
 	player->Finalize();
+	delete objFloor;
+	//delete objSphere;
+	delete modelFloor;
 }
 
 //モデルの描画
@@ -199,6 +223,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
 	player->Draw();
+	objFloor->Draw();
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 #pragma endregion

@@ -93,6 +93,9 @@
     <None Include="Resources\Shaders\SingleColor.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
+    <None Include="Resources\Shaders\PointLight.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\BasicPS.hlsl">
@@ -138,6 +141,12 @@
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\SingleColorPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PointLightVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PointLightPS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
