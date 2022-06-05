@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "TouchableObject.h"
 #include "MeshCollider.h"
+#include "imgui.h"
 
 float easeInSine(float x) {
 	return x * x * x;
@@ -68,6 +69,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFloor->SetModel(modelFloor);
 	objFloor->SetPosition({ 0, -1, 0 });
 	objFloor->SetScale({ 6.0f,1.0f,6.0f });
+	objFloor->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
 
 	//Model* modeltable[10] = {
 	//	modelPlane,
@@ -120,14 +122,21 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->SetModel(model1);
 	object1->SetScale({ 0.005f,0.005f,0.005f });
 
-	lightGroup->SetDirLightActive(0, false);
-	lightGroup->SetDirLightActive(1, false);
-	lightGroup->SetDirLightActive(2, false);
-	lightGroup->SetPointLightActive(0, true);
+	lightGroup->SetDirLightActive(0, true);
+	lightGroup->SetDirLightActive(1, true);
+	lightGroup->SetDirLightActive(2, true);
+
+	lightGroup->SetCircleShadowActive(0, true);
+	/*lightGroup->SetPointLightActive(0, true);
 
 	pointLightPos[0] = 0.5f;
 	pointLightPos[1] = 1.0f;
-	pointLightPos[2] = 0.0f;
+	pointLightPos[2] = 0.0f;*/
+
+	lightGroup->SetPointLightActive(0, false);
+	lightGroup->SetPointLightActive(1, false);
+	lightGroup->SetPointLightActive(2, false);
+	lightGroup->SetSpotLightActive(0, true);
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -147,11 +156,21 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	particleMan->Update();
 	objFloor->Update();
 	camera->Update();
-
-	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
+	
+	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
-	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
+	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));*/
+	/*lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
+	lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
+	lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
+	lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
+	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));*/
+	lightGroup->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
+	lightGroup->SetCircleShadowCasterPos(0, XMFLOAT3({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z }));
+	lightGroup->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
+	lightGroup->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));
 
+	
 	Ray ray;
 	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
 	//ray.dir = { 0,-1,0,0 };
@@ -222,8 +241,8 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
-	player->Draw();
 	objFloor->Draw();
+	player->Draw();
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 #pragma endregion
@@ -232,6 +251,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 //上の描画にスプライトなども混ぜた
 void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 {
+	ImGuiDraw();
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw();
@@ -251,8 +271,21 @@ void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 }
 
 void GamePlayScene::ImGuiDraw() {
-	ImGui::Begin("test");
-	ImGui::Unindent();
+	ImGui::Begin("Light");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 200));
+	//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir0", lightDir0);
+	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir1", lightDir1);
+	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir2", lightDir2);
+	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("circleShadowDir", circleShadowDir);
+	//ImGui::InputFloat3("circleShadowPos", circleShadowPos);
+	ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
+	ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
+	//ImGui::InputFloat3("fighterPos", fighterPos);
 	ImGui::End();
 }
 

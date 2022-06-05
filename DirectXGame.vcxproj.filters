@@ -510,5 +510,8 @@
     <ClInclude Include="enginebase\MyRand.h">
       <Filter>ソース ファイル\enginebase</Filter>
     </ClInclude>
+    <ClInclude Include="light\CircleShadow.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

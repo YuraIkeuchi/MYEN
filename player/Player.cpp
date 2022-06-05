@@ -18,7 +18,7 @@ bool Player::Initialize()
 	object3d = Object3d::Create();
 	object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
 	object3d->SetModel(model);
-	object3d->SetPosition(position);
+	object3d->SetPosition(pos);
 	object3d->SetScale({ 1.7f,1.7f,1.7f });
 
 	// コライダーの追加
@@ -44,19 +44,19 @@ void Player::Update()
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
 	if (input->LeftTiltStick(input->Right)) {
-		position.x += 0.1f;
+		pos.x += 0.1f;
 	}
 
 	if (input->LeftTiltStick(input->Left)) {
-		position.x -= 0.1f;
+		pos.x -= 0.1f;
 	}
 
 	if (input->LeftTiltStick(input->Up)) {
-		position.z += 0.1f;
+		pos.z += 0.1f;
 	}
 
 	if (input->LeftTiltStick(input->Down)) {
-		position.z -= 0.1f;
+		pos.z -= 0.1f;
 	}
 
 	if (input->TriggerButton(input->Button_B)) {
@@ -66,7 +66,7 @@ void Player::Update()
 		Shadernumber = normal;
 	}
 
-	switch (Shadernumber)
+	/*switch (Shadernumber)
 	{
 	case normal:
 		object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
@@ -76,7 +76,7 @@ void Player::Update()
 		break;
 	default:
 		break;
-	}
+	}*/
 	// 落下処理
 	if (!onGround) {
 		// 下向き加速度
@@ -85,9 +85,9 @@ void Player::Update()
 		// 加速
 		fallV.m128_f32[1] = max(fallV.m128_f32[1] + fallAcc, fallVYMin);
 		// 移動
-		position.x += fallV.m128_f32[0];
-		position.y += fallV.m128_f32[1];
-		position.z += fallV.m128_f32[2];
+		pos.x += fallV.m128_f32[0];
+		pos.y += fallV.m128_f32[1];
+		pos.z += fallV.m128_f32[2];
 	}
 	// ジャンプ操作
 	else if (input->TriggerButton(input->Button_A)) {
@@ -137,9 +137,9 @@ void Player::Update()
 	// 球と地形の交差を全検索
 	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
 	// 交差による排斥分動かす
-	position.x += callback.move.m128_f32[0];
-	position.y += callback.move.m128_f32[1];
-	position.z += callback.move.m128_f32[2];
+	pos.x += callback.move.m128_f32[0];
+	pos.y += callback.move.m128_f32[1];
+	pos.z += callback.move.m128_f32[2];
 	// ワールド行列更新
 	UpdateWorldMatrix();
 	collider->Update();
@@ -158,7 +158,7 @@ void Player::Update()
 		// 接地を維持
 		if (CollisionManager::GetInstance()->Raycast(ray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
 			onGround = true;
-			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			pos.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 		}
 		// 地面がないので落下
 		else {
@@ -171,16 +171,16 @@ void Player::Update()
 		if (CollisionManager::GetInstance()->Raycast(ray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
 			// 着地
 			onGround = true;
-			position.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
+			pos.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
 		}
 	}
 
-	if (position.y <= 0.0f) {
+	if (pos.y <= 1.0f) {
 		onGround = true;
-		position.y = 0.0f;
+		pos.y = 1.0f;
 	}
 	object3d->SetRotation(rotation);
-	object3d->SetPosition(position);
+	object3d->SetPosition(pos);
 	// 行列の更新など
 	object3d->Update();
 }

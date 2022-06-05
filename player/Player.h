@@ -42,7 +42,7 @@ public:
 	/// <param name="info">Õ“Ëî•ñ</param>
 	void OnCollision(const CollisionInfo& info) override;
 public:
-	const XMFLOAT3& GetPosition() { return  object3d->GetPosition(); }
+	const XMFLOAT3& GetPosition() { return  pos; }
 
 	const XMFLOAT3& GetRotation() { return object3d->GetRotation(); }
 
@@ -51,7 +51,7 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
 private:
-	XMFLOAT3 pos = { 0,0,-10 };
+	XMFLOAT3 pos = { 0,1,0 };
 	Object3d* object3d;
 	Model* model;
 	int hit = 0;
