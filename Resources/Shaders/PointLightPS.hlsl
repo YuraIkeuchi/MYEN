@@ -38,27 +38,60 @@ float4 main(VSOutput input) : SV_TARGET
 	//点光源
 	for (int i = 0; i < POINTLIGHT_NUM; i++) {
 		if (pointLights[i].active) {
-			float lightv = pointLights[i].lightpos - input.worldpos.xyz;
+			//ライトへのベクトル
+			float3 lightv = pointLights[i].lightpos - input.worldpos.xyz;
 			//ベクトルの長さ
 			float d = length(lightv);
-			//正帰化して別ベクトルにする
+			//正規化し、単位ベクトルにする
 			lightv = normalize(lightv);
 			//距離減衰係数
-			float atten = 1.0f / (pointLights[i].lightatten.x
-				+ pointLights[i].lightatten.y * d + pointLights[i].lightatten.z * d * d);
-			// ライトに向かうベクトルと法線の内積
+			float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d +
+				pointLights[i].lightatten.z * d * d);
+			//ライトに向かうベクトルと法線の内積
 			float3 dotlightnormal = dot(lightv, input.normal);
 			// 反射光ベクトル
-			float3 reflect = normalize(lightv + 2 * dotlightnormal * input.normal);
+			float3 reflect = normalize(-lightv + 2 * dotlightnormal * input.normal);
 			// 拡散反射光
 			float3 diffuse = dotlightnormal * m_diffuse;
 			// 鏡面反射光
 			float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
 
 			// 全て加算する
-			shadecolor.rgb += (diffuse + specular) * pointLights[i].lightcolor;
+			shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor;
 		}
 	}
+
+	//点光源
+	for (int i = 0; i < SPOTLIGHT_NUM; i++) {
+		if (spotLights[i].active) {
+			//ライトへのベクトル
+			float3 lightv = spotLights[i].lightpos - input.worldpos.xyz;
+			//ベクトルの長さ
+			float d = length(lightv);
+			//正規化し、単位ベクトルにする
+			lightv = normalize(lightv);
+			//距離減衰係数
+			float atten = saturate(1.0f / (spotLights[i].lightatten.x + spotLights[i].lightatten.y * d +
+				spotLights[i].lightatten.z * d * d));
+			//角度減衰
+			float cos = dot(lightv, spotLights[i].lightv);
+
+			float angleatten = smoothstep(spotLights[i].lightfactoranglecos.y, spotLights[i].lightfactoranglecos.x, cos);
+			atten *= angleatten;
+			//ライトに向かうベクトルと法線の内積
+			float3 dotlightnormal = dot(lightv, input.normal);
+			// 反射光ベクトル
+			float3 reflect = normalize(-lightv + 2 * dotlightnormal * input.normal);
+			// 拡散反射光
+			float3 diffuse = dotlightnormal * m_diffuse;
+			// 鏡面反射光
+			float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
+
+			// 全て加算する
+			shadecolor.rgb += atten * (diffuse + specular) * spotLights[i].lightcolor;
+		}
+	}
+
 	// シェーディングによる色で描画
 	return shadecolor * texcolor;
 }
