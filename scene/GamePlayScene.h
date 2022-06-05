@@ -72,16 +72,19 @@ public:
 	float lightDir2[3] = { 1,0,0 };
 	float lightColor2[3] = { 0,0,1 };
 
+	//点光源
 	float pointLightPos[3] = { 0,0,0 };
 	float pointLightColor[3] = { 1,1,1 };
 	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
 
+	//スポットライト
 	float spotLightDir[3] = { 0,-1,0 };
 	float spotLightPos[3] = { 0,10,0 };
 	float spotLightColor[3] = { 1,1,1 };
 	float spotLightAtten[3] = { 0.0f,0.0f,0.0f };
 	float spotLightFactorAngle[2] = { 20.0f,30.0f };
 
+	//丸影
 	float circleShadowDir[3] = { 0,-1,0 };
 	float circleShadowPos[3] = { 1,2,0 };
 	float circleShadowAtten[3] = { 0.5f,0.6f,0.0f };

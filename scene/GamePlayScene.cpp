@@ -122,11 +122,13 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->SetModel(model1);
 	object1->SetScale({ 0.005f,0.005f,0.005f });
 
+	//丸影のためのやつ
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightActive(1, true);
 	lightGroup->SetDirLightActive(2, true);
 
 	lightGroup->SetCircleShadowActive(0, true);
+	//ポイントライト
 	/*lightGroup->SetPointLightActive(0, true);
 
 	pointLightPos[0] = 0.5f;
@@ -157,14 +159,22 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objFloor->Update();
 	camera->Update();
 	
+	///ポイントライト
 	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));*/
+	
+	///スポットライト
 	/*lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 	lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
 	lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
 	lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
 	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));*/
+
+	/// <summary>
+	///丸影
+	/// </summary>
+	/// <param name="dxCommon"></param>
 	lightGroup->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
 	lightGroup->SetCircleShadowCasterPos(0, XMFLOAT3({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z }));
 	lightGroup->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
