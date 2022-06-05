@@ -2,6 +2,7 @@
 #include <d3dcompiler.h>
 #include <cassert>
 
+using namespace DirectX;
 #pragma comment(lib, "d3dcompiler.lib")
 /// 静的メンバ変数の実体
 ID3D12Device* Mesh::device = nullptr;
@@ -19,6 +20,7 @@ void Mesh::SetName(const std::string& name)
 	this->name = name;
 }
 
+
 void Mesh::AddVertex(const VertexPosNormalUv& vertex)
 {
 	vertices.emplace_back(vertex);
@@ -27,6 +29,30 @@ void Mesh::AddVertex(const VertexPosNormalUv& vertex)
 void Mesh::AddIndex(unsigned short index)
 {
 	indices.emplace_back(index);
+}
+
+void Mesh::AddSmoothData(unsigned short indexPosition, unsigned short indexVertex)
+{
+	smoothData[indexPosition].emplace_back(indexVertex);
+}
+
+void Mesh::CalculateSmoothedVertexNormals()
+{
+	auto itr = smoothData.begin();
+	for (; itr != smoothData.end(); ++itr) {
+		// 各面用の共通頂点コレクション
+		std::vector<unsigned short>& v = itr->second;
+		// 全頂点の法線を平均する
+		XMVECTOR normal = {};
+		for (unsigned short index : v) {
+			normal += XMVectorSet(vertices[index].normal.x, vertices[index].normal.y, vertices[index].normal.z, 0);
+		}
+		normal = XMVector3Normalize(normal / (float)v.size());
+
+		for (unsigned short index : v) {
+			vertices[index].normal = { normal.m128_f32[0], normal.m128_f32[1], normal.m128_f32[2] };
+		}
+	}
 }
 
 void Mesh::SetMaterial(Material* material)

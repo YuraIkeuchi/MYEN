@@ -70,7 +70,14 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFloor->SetPosition({ 0, -1, 0 });
 	objFloor->SetScale({ 6.0f,1.0f,6.0f });
 	objFloor->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	// モデル読み込み
+	modelSphere = Model::LoadFromOBJ("sphere", true);
 
+	// 3Dオブジェクト生成
+	objSphere = Object3d::Create();
+	objSphere->SetModel(modelSphere);
+	objSphere->SetPosition({ -2, 1, 0 });
+	objSphere->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
 	//Model* modeltable[10] = {
 	//	modelPlane,
 	//	modelPlane,
@@ -158,7 +165,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	particleMan->Update();
 	objFloor->Update();
 	camera->Update();
-	
+	objSphere->Update();
 	///ポイントライト
 	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
@@ -252,6 +259,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
 	objFloor->Draw();
+	objSphere->Draw();
 	player->Draw();
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();

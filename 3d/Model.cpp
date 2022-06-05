@@ -18,11 +18,11 @@ void Model::StaticInitialize(ID3D12Device* device)
 	Mesh::StaticInitialize(device);
 }
 
-Model* Model::LoadFromOBJ(const std::string& modelname)
+Model* Model::LoadFromOBJ(const std::string& modelname,bool smoothing)
 {
 	// メモリ確保
 	Model* instance = new Model;
-	instance->Initialize(modelname);
+	instance->Initialize(modelname,smoothing);
 
 	return instance;
 }
@@ -40,7 +40,44 @@ Model::~Model()
 	materials.clear();
 }
 
-void Model::Initialize(const std::string& modelname)
+void Model::Initialize(const std::string& modelname, bool smoothing)
+{
+	// モデル読み込み
+	LoadModel(modelname, smoothing);
+
+	// メッシュのマテリアルチェック
+	for (auto& m : meshes) {
+		// マテリアルの割り当てがない
+		if (m->GetMaterial() == nullptr) {
+			if (defaultMaterial == nullptr) {
+				// デフォルトマテリアルを生成
+				defaultMaterial = Material::Create();
+				defaultMaterial->name = "no material";
+				materials.emplace(defaultMaterial->name, defaultMaterial);
+			}
+			// デフォルトマテリアルをセット
+			m->SetMaterial(defaultMaterial);
+		}
+	}
+
+	// メッシュのバッファ生成
+	for (auto& m : meshes) {
+		m->CreateBuffers();
+	}
+
+	// マテリアルの数値を定数バッファに反映
+	for (auto& m : materials) {
+		m.second->Update();
+	}
+
+	// デスクリプタヒープ生成
+	CreateDescriptorHeap();
+
+	// テクスチャの読み込み
+	LoadTextures();
+}
+
+void Model::LoadModel(const std::string& modelname, bool smoothing)
 {
 	const string filename = modelname + ".obj";
 	const string directoryPath = baseDirectory + modelname + "/";
@@ -57,7 +94,8 @@ void Model::Initialize(const std::string& modelname)
 	name = modelname;
 
 	// メッシュ生成
-	Mesh* mesh = new Mesh;
+	meshes.emplace_back(new Mesh);
+	Mesh* mesh = meshes.back();
 	int indexCountTex = 0;
 	int indexCountNoTex = 0;
 
@@ -86,12 +124,16 @@ void Model::Initialize(const std::string& modelname)
 		}
 		// 先頭文字列がgならグループの開始
 		if (key == "g") {
+
 			// カレントメッシュの情報が揃っているなら
 			if (mesh->GetName().size() > 0 && mesh->GetVertexCount() > 0) {
-				// コンテナに登録
-				meshes.emplace_back(mesh);
+				// 頂点法線の平均によるエッジの平滑化
+				if (smoothing) {
+					mesh->CalculateSmoothedVertexNormals();
+				}
 				// 次のメッシュ生成
-				mesh = new Mesh;
+				meshes.emplace_back(new Mesh);
+				mesh = meshes.back();
 				indexCountTex = 0;
 			}
 
@@ -174,7 +216,12 @@ void Model::Initialize(const std::string& modelname)
 					vertex.normal = normals[indexNormal - 1];
 					vertex.uv = texcoords[indexTexcoord - 1];
 					mesh->AddVertex(vertex);
-				} else {
+					// エッジ平滑化用のデータを追加
+					if (smoothing) {
+						mesh->AddSmoothData(indexPosition, (unsigned short)mesh->GetVertexCount() - 1);
+					}
+				}
+				else {
 					char c;
 					index_stream >> c;
 					// スラッシュ2連続の場合、頂点番号のみ
@@ -185,7 +232,8 @@ void Model::Initialize(const std::string& modelname)
 						vertex.normal = { 0, 0, 1 };
 						vertex.uv = { 0, 0 };
 						mesh->AddVertex(vertex);
-					} else {
+					}
+					else {
 						index_stream.seekg(-1, ios_base::cur); // 1文字戻る
 						index_stream >> indexTexcoord;
 						index_stream.seekg(1, ios_base::cur); // スラッシュを飛ばす
@@ -196,6 +244,10 @@ void Model::Initialize(const std::string& modelname)
 						vertex.normal = normals[indexNormal - 1];
 						vertex.uv = { 0, 0 };
 						mesh->AddVertex(vertex);
+						// エッジ平滑化用のデータを追加
+						if (smoothing) {
+							mesh->AddSmoothData(indexPosition, (unsigned short)mesh->GetVertexCount() - 1);
+						}
 					}
 				}
 				// インデックスデータの追加
@@ -205,7 +257,8 @@ void Model::Initialize(const std::string& modelname)
 					mesh->AddIndex(indexCountTex - 1);
 					mesh->AddIndex(indexCountTex);
 					mesh->AddIndex(indexCountTex - 3);
-				} else
+				}
+				else
 				{
 					mesh->AddIndex(indexCountTex);
 				}
@@ -216,50 +269,10 @@ void Model::Initialize(const std::string& modelname)
 	}
 	file.close();
 
-	// コンテナに登録
-	meshes.emplace_back(mesh);
-
-	//// １つもマテリアルがなければ
-	//if (materials.size() == 0) {
-	//	// 生成して追加する
-	//	Material* material = Material::Create();
-	//	material->name = "no material";
-	//	materials.emplace(material->name, material);
-
-	//	// 全メッシュに適用
-	//	for_each(meshes.begin(), meshes.end(), [&](Mesh* m) {m->SetMaterial(material); });
-	//}
-
-	// メッシュのマテリアルチェック
-	for (auto& m : meshes) {
-		// マテリアルの割り当てがない
-		if (m->GetMaterial() == nullptr) {
-			if (defaultMaterial == nullptr) {
-				// デフォルトマテリアルを生成
-				defaultMaterial = Material::Create();
-				defaultMaterial->name = "no material";
-				materials.emplace(defaultMaterial->name, defaultMaterial);
-			}
-			// デフォルトマテリアルをセット
-			m->SetMaterial(defaultMaterial);
-		}
+	// 頂点法線の平均によるエッジの平滑化
+	if (smoothing) {
+		mesh->CalculateSmoothedVertexNormals();
 	}
-
-	// メッシュのバッファ生成
-	for (auto& m : meshes) {
-		m->CreateBuffers();
-	}
-
-	// マテリアルの数値を定数バッファに反映
-	for (auto& m : materials) {
-		m.second->Update();
-	}
-
-	// デスクリプタヒープ生成
-	CreateDescriptorHeap();
-
-	// テクスチャの読み込み
-	LoadTextures();
 }
 
 void Model::LoadMaterial(const std::string& directoryPath, const std::string& filename)

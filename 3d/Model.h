@@ -29,13 +29,13 @@ public: // 静的メンバ関数
 	// 静的初期化
 	static void StaticInitialize(ID3D12Device* device);
 	// OBJファイルからメッシュ生成
-	static Model* LoadFromOBJ(const std::string& modelname);
+	static Model* LoadFromOBJ(const std::string& modelname,bool smoothing = false);
 
 public: // メンバ関数
 	// デストラクタ
 	~Model();
 	// 初期化
-	void Initialize(const std::string& modelname);
+	void Initialize(const std::string& modelname,bool smoothing);
 	// 描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	/// <summary>
@@ -58,6 +58,8 @@ private: // メンバ変数
 	ComPtr<ID3D12DescriptorHeap> descHeap;
 
 private: // メンバ関数
+	//モデル読み込み
+	void LoadModel(const std::string& modelname, bool smoothing);
 	// マテリアル読み込み
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 	// マテリアル登録

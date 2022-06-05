@@ -61,6 +61,8 @@ public:
 	PostEffect* postEffect = nullptr;
 	Model* modelFloor = nullptr;
 	Object3d* objFloor;
+	Model* modelSphere = nullptr;
+	Object3d* objSphere = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
 	// Œõü•ûŒü‰Šú’l
 	float lightDir0[3] = { 0,0,1 };

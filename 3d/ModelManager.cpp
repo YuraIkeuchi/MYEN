@@ -20,7 +20,7 @@ void ModelManager::Initialize() {
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {
 	model[modelName] = new Model();
-	model[modelName] = Model::LoadFromOBJ(fileName);
+	model[modelName] = Model::LoadFromOBJ(fileName,true);
 }
 void ModelManager::LoadFBXModel(const FBXName modelName, std::string fileName) {
 	fbxModel[modelName] = new FBXModel();

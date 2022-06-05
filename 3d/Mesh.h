@@ -7,7 +7,7 @@
 #include <d3dx12.h>
 #include "Material.h"
 #include <vector>
-
+#include <unordered_map>
 
 // 形状データ
 class Mesh
@@ -19,6 +19,7 @@ private: // エイリアス
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // サブクラス	
@@ -50,6 +51,10 @@ public: // メンバ関数
 	// 頂点データの数を取得
 	// <returns>頂点データの数</returns>
 	inline size_t GetVertexCount() { return vertices.size(); }
+	//エッジ平滑化データの追加
+	void AddSmoothData(unsigned short indexPosition, unsigned short indexVertex);
+	//平滑化された頂点法線の計算
+	void CalculateSmoothedVertexNormals();
 	// マテリアルの取得
 	Material* GetMaterial() { return material; }
 	// マテリアルの割り当て
@@ -88,6 +93,8 @@ private: // メンバ変数
 	std::vector<VertexPosNormalUv> vertices;
 	// 頂点インデックス配列
 	std::vector<unsigned short> indices;
+	// 頂点法線スムージング用データ
+	std::unordered_map<unsigned short, std::vector<unsigned short>> smoothData;
 	// マテリアル
 	Material* material = nullptr;
 };
