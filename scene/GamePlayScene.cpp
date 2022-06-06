@@ -77,7 +77,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere = Object3d::Create();
 	objSphere->SetModel(modelSphere);
 	objSphere->SetPosition({ -2, 1, 0 });
-	objSphere->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objSphere->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
 	//Model* modeltable[10] = {
 	//	modelPlane,
 	//	modelPlane,
@@ -172,20 +172,20 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));*/
 	
 	///スポットライト
-	/*lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
+	lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 	lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
 	lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
 	lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
-	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));*/
+	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
 
 	/// <summary>
 	///丸影
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	lightGroup->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
+	/*lightGroup->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
 	lightGroup->SetCircleShadowCasterPos(0, XMFLOAT3({ player->GetPosition().x, player->GetPosition().y, player->GetPosition().z }));
 	lightGroup->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
-	lightGroup->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));
+	lightGroup->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));*/
 
 	
 	Ray ray;
