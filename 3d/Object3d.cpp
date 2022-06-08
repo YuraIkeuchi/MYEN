@@ -17,7 +17,7 @@ using namespace Microsoft::WRL;
 /// Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
 ID3D12Device* Object3d::device = nullptr;
 ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
-Object3d::PipelineSet Object3d::pipelineSet;
+//Object3d::PipelineSet Object3d::pipelineSet;
 XMMATRIX Object3d::matView{};
 XMMATRIX Object3d::matProjection{};
 XMFLOAT3 Object3d::eye = { 0, 3.0f, -10.0f };

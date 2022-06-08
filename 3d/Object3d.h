@@ -84,8 +84,7 @@ private: // 静的メンバ変数
 	static ID3D12Device* device;
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
-	// テクスチャあり用パイプライン
-	static PipelineSet pipelineSet;
+	
 	// ビュー行列
 	static XMMATRIX matView;
 	// 射影行列
@@ -161,6 +160,8 @@ public: // メンバ関数
 	virtual void OnCollision(const CollisionInfo& info) {}
 
 protected: // メンバ変数
+	// テクスチャあり用パイプライン
+	PipelineSet pipelineSet;
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };

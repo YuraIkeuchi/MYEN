@@ -77,7 +77,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere = Object3d::Create();
 	objSphere->SetModel(modelSphere);
 	objSphere->SetPosition({ -2, 1, 0 });
-	objSphere->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
+	objSphere->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
 	//Model* modeltable[10] = {
 	//	modelPlane,
 	//	modelPlane,
@@ -130,9 +130,9 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->SetScale({ 0.005f,0.005f,0.005f });
 
 	//丸影のためのやつ
-	lightGroup->SetDirLightActive(0, true);
-	lightGroup->SetDirLightActive(1, true);
-	lightGroup->SetDirLightActive(2, true);
+	lightGroup->SetDirLightActive(0, false);
+	lightGroup->SetDirLightActive(1, false);
+	lightGroup->SetDirLightActive(2, false);
 
 	lightGroup->SetCircleShadowActive(0, true);
 	//ポイントライト
