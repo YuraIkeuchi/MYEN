@@ -6,7 +6,7 @@
 using namespace std;
 
 /// Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
-const std::string Model::baseDirectory = "Resources/";
+const std::string Model::baseDirectory = "Resources/3d/";
 ID3D12Device* Model::device = nullptr;
 UINT Model::descriptorHandleIncrementSize = 0;
 

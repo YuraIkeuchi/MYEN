@@ -7,7 +7,7 @@
 
 void TitleScene::Initiallize(DirectXCommon* dxCommon) {
 	// テクスチャ読み込み
-	Sprite::LoadTexture(1, L"Resources/180_20220130123604.png");
+	Sprite::LoadTexture(1, L"Resources/2d/sceneback/180_20220130123604.png");
 
 	//背景スプライト生成
 	sprite = Sprite::Create(1, { 0.0f,0.0f });

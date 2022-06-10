@@ -44,7 +44,7 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 	const int debugTextTexNumber = 0;
 	Sprite::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	// デバッグテキスト用テクスチャ読み込み
-	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/debugfont.png")) {
+	if (!Sprite::LoadTexture(debugTextTexNumber, L"Resources/2d/debugfont.png")) {
 		assert(0);
 		return;
 	}
@@ -55,12 +55,13 @@ void Framework::Initialize(DirectXCommon* dxCommon)
 	debugText->Initialize(debugTextTexNumber);
 
 	Object3d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
-	Texture::StaticInitialize(dxcommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	Texture::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 	// パーティクルマネージャ初期化
 	ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
 	ModelManager::GetInstance()->Initialize();
+	ImageManager::GetIns()->LoadTex2D();
 }
 
 void Framework::Finalize()

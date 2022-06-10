@@ -331,6 +331,9 @@
     <ClCompile Include="enginebase\MyRand.cpp">
       <Filter>ソース ファイル\enginebase</Filter>
     </ClCompile>
+    <ClCompile Include="2d\ImageManager.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -521,6 +524,9 @@
     </ClInclude>
     <ClInclude Include="light\CircleShadow.h">
       <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\ImageManager.h">
+      <Filter>ソース ファイル\2d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

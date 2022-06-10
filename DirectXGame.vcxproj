@@ -300,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2d\DebugText.cpp" />
+    <ClCompile Include="2d\ImageManager.cpp" />
     <ClCompile Include="2d\PostEffect.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
     <ClCompile Include="2d\Texture.cpp" />
@@ -359,6 +360,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
+    <ClInclude Include="2d\ImageManager.h" />
     <ClInclude Include="2d\PostEffect.h" />
     <ClInclude Include="2d\Sprite.h" />
     <ClInclude Include="2d\Texture.h" />

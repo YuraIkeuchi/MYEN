@@ -27,25 +27,17 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
+	Texture::SetCamera(camera);
 	collsionManager = CollisionManager::GetInstance();
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	// テクスチャ1番に読み込み
-	Sprite::LoadTexture(1, L"Resources/BackGround.png");
-	Sprite::LoadTexture(2, L"Resources/PlayerHP.png");
-	Sprite::LoadTexture(3, L"Resources/PlayerHP.png");
 	Audio::GetInstance()->LoadSound(0, "Resources/Sound/kadai_BGM.wav");
 	Audio::GetInstance()->LoopWave(0, 0.3);
 	// 背景スプライト生成
-	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
-	spritePlayerHP = Sprite::Create(2, { 0.0f,0.0f });
-	spriteBossHP = Sprite::Create(3, { 0.0f,0.0f });
-
-	spriteBossHP->SetColor({ 1.0f,0.0f,0.0f,1.0 });
-	spritePlayerHP->SetPosition({ 0.0f,520.0f });
 	
 	//ポストエフェクト用テクスチャ読みこみ
-	Sprite::LoadTexture(100, L"Resources/white1x1.png");
+	Sprite::LoadTexture(100, L"Resources/2d/white1x1.png");
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
 	postEffect->Initialize();
@@ -278,9 +270,9 @@ void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 	// スプライト描画後処理
 	Sprite::PostDraw();
 #pragma endregion
-	Texture::PreDraw(dxCommon->GetCmdList());
+	/*Texture::PreDraw();
 
-	Texture::PostDraw();
+	Texture::PostDraw();*/
 
 	//スプライトの描画
 	ModelDraw(dxCommon);

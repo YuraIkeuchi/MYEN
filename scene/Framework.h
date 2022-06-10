@@ -17,6 +17,7 @@
 #include "ParticleManager.h"
 #include"FPSManager.h"
 #include"ModelManager.h"
+#include "ImageManager.h"
 //フレームワーク
 class Framework
 {
