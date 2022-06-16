@@ -17,6 +17,7 @@ public:
 	/*	Player,
 		Enemy,*/
 		Player,
+		Skydome,
 	};
 	enum FBXName {
 		Pla,

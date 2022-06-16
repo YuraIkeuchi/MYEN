@@ -16,7 +16,7 @@ Player::Player() {
 bool Player::Initialize()
 {
 	object3d = Object3d::Create();
-	object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	object3d->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
 	object3d->SetModel(model);
 	object3d->SetPosition(pos);
 	object3d->SetScale({ 1.7f,1.7f,1.7f });

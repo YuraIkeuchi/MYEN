@@ -56,20 +56,35 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	player->Initialize();
 
 	//ステージ床
-	objFloor = Object3d::Create();
+	Object3d* objFloor_ = new Object3d();
+	objFloor_ = Object3d::Create();
 	modelFloor = Model::LoadFromOBJ("ground");
-	objFloor->SetModel(modelFloor);
-	objFloor->SetPosition({ 0, -1, 0 });
-	objFloor->SetScale({ 6.0f,1.0f,6.0f });
-	objFloor->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objFloor_->SetModel(modelFloor);
+	objFloor_->SetPosition({ 0, -1, 0 });
+	objFloor_->SetScale({ 6.0f,1.0f,6.0f });
+	objFloor_->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objFloor.reset(objFloor_);
 	// モデル読み込み
 	modelSphere = Model::LoadFromOBJ("sphere", true);
 
 	// 3Dオブジェクト生成
-	objSphere = Object3d::Create();
-	objSphere->SetModel(modelSphere);
-	objSphere->SetPosition({ -2, 1, 0 });
-	objSphere->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	Object3d* objSphere_ = new Object3d();
+	objSphere_ = Object3d::Create();
+	objSphere_->SetModel(modelSphere);
+	objSphere_->SetPosition({ -2, 1, 0 });
+	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	objSphere.reset(objSphere_);
+	
+	modelSkydome = ModelManager::GetInstance()->GetModel(ModelManager::Skydome);
+	
+	
+	Object3d* objskydome_ = new Object3d();
+	objskydome_ = Object3d::Create();
+	objskydome_->SetModel(modelSkydome);
+	objskydome_->SetPosition({ 0, 0, 0 });
+	objskydome_->SetScale({ 2.0f,2.0f,2.0f });
+	objskydome_->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objSkydome.reset(objskydome_);
 	//Model* modeltable[10] = {
 	//	modelPlane,
 	//	modelPlane,
@@ -158,6 +173,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objFloor->Update();
 	camera->Update();
 	objSphere->Update();
+	objSkydome->Update();
 	///ポイントライト
 	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
@@ -184,7 +200,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
 	//ray.dir = { 0,-1,0,0 };
 	RaycastHit raycastHit;
-
+	if (input->TriggerButton(input->Button_A)) {
+		SceneManager::GetInstance()->ChangeScene("TITLE");
+	}
 	////ゲームオーバーに行く
 	//if (PlayerHP == 0) {
 	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
@@ -199,7 +217,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//cameraPos.z = player->GetPosition().z - 10;
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
-	camera->SetEye({ 0,5,-10 });
+	camera->SetEye({ 0,1,-10 });
 	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
@@ -239,7 +257,7 @@ void GamePlayScene::Finalize()
 	delete spriteBG;
 	delete postEffect;
 	player->Finalize();
-	delete objFloor;
+	//delete objFloor;
 	//delete objSphere;
 	delete modelFloor;
 }
@@ -250,6 +268,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
+	objSkydome->Draw();
 	objFloor->Draw();
 	objSphere->Draw();
 	player->Draw();

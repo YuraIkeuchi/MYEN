@@ -1,21 +1,5 @@
 #pragma once
-#include "Sprite.h"
-#include "Object3d.h"
-#include "CollisionPrimitive.h"
-#include "Collision.h"
 #include "BaseScene.h"
-#include "DebugCamera.h"
-#include "LightGroup.h"
-#include "FBXObject3d.h"
-#include "DirectXCommon.h"
-#include "DirectXMath.h"
-#include "Texture.h"
-#include "Enemy.h"
-#include "ParticleManager.h"
-#include "PostEffect.h"
-#include "ModelManager.h"
-#include <vector>
-
 class CollisionManager;
 class Player;
 class TouchableObject;
@@ -60,9 +44,11 @@ public:
 	CollisionManager* collsionManager = nullptr;
 	PostEffect* postEffect = nullptr;
 	Model* modelFloor = nullptr;
-	Object3d* objFloor;
+	unique_ptr <Object3d> objFloor;
 	Model* modelSphere = nullptr;
-	Object3d* objSphere = nullptr;
+	unique_ptr <Object3d> objSphere = nullptr;
+	Model* modelSkydome = nullptr;
+	unique_ptr <Object3d> objSkydome = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
 	// 光線方向初期値
 	float lightDir0[3] = { 0,0,1 };
@@ -80,8 +66,8 @@ public:
 	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
 
 	//スポットライト
-	float spotLightDir[3] = { 0,-1,0 };
-	float spotLightPos[3] = { 0,10,0 };
+	float spotLightDir[3] = { 0,0,1 };
+	float spotLightPos[3] = { 0,0,-2 };
 	float spotLightColor[3] = { 1,1,1 };
 	float spotLightAtten[3] = { 0.0f,0.0f,0.0f };
 	float spotLightFactorAngle[2] = { 20.0f,30.0f };
