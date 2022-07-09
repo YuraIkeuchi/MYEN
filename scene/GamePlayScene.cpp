@@ -303,17 +303,17 @@ void GamePlayScene::ImGuiDraw() {
 	ImGui::Begin("Light");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 200));
-	//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir0", lightDir0);
-	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir1", lightDir1);
-	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("lightDir2", lightDir2);
-	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("circleShadowDir", circleShadowDir);
-	//ImGui::InputFloat3("circleShadowPos", circleShadowPos);
-	ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
-	ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
+	ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir0", lightDir0);
+	ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir1", lightDir1);
+	ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir2", lightDir2);
+	ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
+	////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
+	//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
+	//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
 	//ImGui::InputFloat3("fighterPos", fighterPos);
 	ImGui::End();
 }

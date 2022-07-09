@@ -12,7 +12,7 @@ ModelManager* ModelManager::GetInstance() {
 void ModelManager::Initialize() {
 	/*LoadModel(Player, "cha_knight");
 	LoadModel(Enemy, "chr_sword");*/
-	LoadModel(Player, "player");
+	LoadModel(Player, "UVSphere");
 	LoadModel(Skydome, "skydome");
 	LoadFBXModel(Pla, "Motti_move");
 	LoadFBXModel(Motti_moveF, "Motti_moveF");
