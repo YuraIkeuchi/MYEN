@@ -118,7 +118,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 
 
 		// カメラ注視点をセット
-	camera->SetEye({ 0,5,-20 });
+	camera->SetEye({ 0,0,-5 });
 	camera->SetTarget({ 0, 1, 0 });
 	/*camera->SetDistance(3.0f);*/
 	// モデル名を指定してファイル読み込み
@@ -137,11 +137,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	object1->SetScale({ 0.005f,0.005f,0.005f });
 
 	//丸影のためのやつ
-	lightGroup->SetDirLightActive(0, false);
-	lightGroup->SetDirLightActive(1, false);
-	lightGroup->SetDirLightActive(2, false);
+	lightGroup->SetDirLightActive(0, true);
+	lightGroup->SetDirLightActive(1, true);
+	lightGroup->SetDirLightActive(2, true);
 
-	lightGroup->SetCircleShadowActive(0, true);
+	//lightGroup->SetCircleShadowActive(0, true);
 	//ポイントライト
 	/*lightGroup->SetPointLightActive(0, true);
 
@@ -149,10 +149,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	pointLightPos[1] = 1.0f;
 	pointLightPos[2] = 0.0f;*/
 
-	lightGroup->SetPointLightActive(0, false);
-	lightGroup->SetPointLightActive(1, false);
-	lightGroup->SetPointLightActive(2, false);
-	lightGroup->SetSpotLightActive(0, true);
+	//lightGroup->SetPointLightActive(0, false);
+	//lightGroup->SetPointLightActive(1, false);
+	//lightGroup->SetPointLightActive(2, false);
+	//lightGroup->SetSpotLightActive(0, true);
+	PostType = Normal;
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -175,16 +176,16 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objSphere->Update();
 	objSkydome->Update();
 	///ポイントライト
-	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
+	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
-	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));*/
+	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
 	
-	///スポットライト
+	/*///スポットライト
 	lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 	lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
 	lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
 	lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
-	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
+	lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));*/
 
 	/// <summary>
 	///丸影
@@ -217,7 +218,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//cameraPos.z = player->GetPosition().z - 10;
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
-	camera->SetEye({ 0,1,-10 });
+	camera->SetEye({ 0,5,-5 });
 	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
@@ -225,22 +226,40 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
-	//ポストエフェクト用
-	/*postEffect->PreDrawScene(dxCommon->GetCmdList());
-	GameDraw(dxCommon);
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//描画方法
+	switch (PostType)
+	{
+	case Normal://通常
+		postEffect->PreDrawScene(dxCommon->GetCmdList());
+		postEffect->Draw(dxCommon->GetCmdList());
+		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	dxCommon->PreDraw();
-	postEffect->Draw(dxCommon->GetCmdList());
-	dxCommon->PostDraw();*/
+		dxCommon->PreDraw();
+		GameDraw(dxCommon);
+		ImGuiDraw();
+		dxCommon->PostDraw();
+		break;
+	case Blur://ぼかし
+		postEffect->PreDrawScene(dxCommon->GetCmdList());
+		GameDraw(dxCommon);
+		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
+		dxCommon->PreDraw();
+		postEffect->Draw(dxCommon->GetCmdList());
+		ImGuiDraw();
+		dxCommon->PostDraw();
+		break;
+	default:
+		break;
+	}
+	
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	//
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
-
-	dxCommon->PreDraw();
-	GameDraw(dxCommon);
-	dxCommon->PostDraw();
+	//
+	//dxCommon->PreDraw();
+	//
+	//dxCommon->PostDraw();
 
 	/*dxCommon->PreDraw();
 	GameDraw(dxCommon);
@@ -280,7 +299,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 //上の描画にスプライトなども混ぜた
 void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 {
-	ImGuiDraw();
+	//ImGuiDraw();
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
 	Sprite::PreDraw();
@@ -300,22 +319,37 @@ void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 }
 
 void GamePlayScene::ImGuiDraw() {
-	ImGui::Begin("Light");
-	ImGui::SetWindowPos(ImVec2(0, 0));
-	ImGui::SetWindowSize(ImVec2(500, 200));
-	ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir0", lightDir0);
-	ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir1", lightDir1);
-	ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir2", lightDir2);
-	ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-	//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
-	////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
-	//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
-	//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
-	//ImGui::InputFloat3("fighterPos", fighterPos);
-	ImGui::End();
+	{
+		ImGui::Begin("Light");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
+		//ImGui::InputFloat3("lightDir0", lightDir0);
+		//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+		//ImGui::InputFloat3("lightDir1", lightDir1);
+		//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+		//ImGui::InputFloat3("lightDir2", lightDir2);
+		//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+		//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
+		////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
+		//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
+		//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
+		//ImGui::InputFloat3("fighterPos", fighterPos);
+		ImGui::ColorEdit3("PointColor", pointLightColor, ImGuiColorEditFlags_Float);
+		ImGui::InputFloat3("pointLightPos", pointLightPos);
+		ImGui::InputFloat3("pointLightAtten", pointLightAtten);
+		ImGui::End();
+	}
+	{
+		ImGui::Begin("postEffect");
+		if (ImGui::RadioButton("Blur", &PostType)) {
+			PostType = Blur;
+		}
+		if (ImGui::RadioButton("Default", &PostType)) {
+			PostType = Normal;
+		}
+		ImGui::End();
+	}
 }
 
 //void GamePlayScene::CreateParticles()
