@@ -33,4 +33,6 @@ bool FPSManager::Run()
 		timeStart = timeEnd; // “ü‚ê‘Ö‚¦
 		return true;
 	}
+
+	return true;
 }

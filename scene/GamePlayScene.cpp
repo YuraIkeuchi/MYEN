@@ -13,16 +13,16 @@
 #include "MeshCollider.h"
 #include "imgui.h"
 
-float easeInSine(float x) {
-	return x * x * x;
-}
-float easeOutBack(float x) {
-	return x == 1 ? 1 : 1 - powf(2, -10 * x);
-}
-
-float easeInOut(float x) {
-	return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
-}
+//float easeInSine(float x) {
+//	return x * x * x;
+//}
+//float easeOutBack(float x) {
+//	return x == 1 ? 1 : 1 - powf(2, -10 * x);
+//}
+//
+//float easeInOut(float x) {
+//	return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
+//}
 void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 {
 	// カメラ生成
@@ -33,7 +33,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Object3d::SetCamera(camera);
 	// テクスチャ1番に読み込み
 	Audio::GetInstance()->LoadSound(0, "Resources/Sound/kadai_BGM.wav");
-	Audio::GetInstance()->LoopWave(0, 0.3);
+	Audio::GetInstance()->LoopWave(0, 0.3f);
 	// 背景スプライト生成
 	
 	//ポストエフェクト用テクスチャ読みこみ
@@ -222,6 +222,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
+	DebugText::GetInstance()->Print("Raycast Hit.", 0, 30, 10);
 }
 
 void GamePlayScene::Draw(DirectXCommon* dxCommon)

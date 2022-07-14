@@ -89,9 +89,9 @@ void DirectXCommon::PreDraw()
 
 	//描画コマンド
 
-	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::window_width, WinApp::window_height));
+	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, (LONG)window_x, (LONG)window_y));
 
-	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
+	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, (LONG)window_x, (LONG)window_y));
 
 
 	// imgui開始
@@ -99,6 +99,11 @@ void DirectXCommon::PreDraw()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+	ImGui::Begin("window");
+	ImGui::SliderFloat("window.x", &window_x, 1280, 0);
+	ImGui::SliderFloat("window.y", &window_y, 720, 0);
+	ImGui::Unindent();
+	ImGui::End();
 }
 
 void DirectXCommon::PostDraw()

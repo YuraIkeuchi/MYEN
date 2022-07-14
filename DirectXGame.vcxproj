@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;$(ProjectDir)ParticleManager;$(ProjectDir)FpsManager;$(ProjectDir)ease;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +140,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)camera;$(ProjectDir)enginebase;$(ProjectDir)collision;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)light;$(ProjectDir)enemy;$(ProjectDir)math;$(ProjectDir)player;$(ProjectDir)ParticleManager;$(ProjectDir)FpsManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

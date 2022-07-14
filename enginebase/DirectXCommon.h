@@ -69,4 +69,6 @@ private:
 	UINT64 fenceVal = 0;
 	WinApp* winApp = nullptr;
 	ComPtr<ID3D12DescriptorHeap> imguiHeap;
+	float window_x = 1280.0f;
+	float window_y = 720.0f;
 };
