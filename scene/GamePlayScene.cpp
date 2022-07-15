@@ -218,8 +218,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//cameraPos.z = player->GetPosition().z - 10;
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
-	camera->SetEye({ 0,5,-5 });
-	camera->SetTarget({ 0, 0, 0 });
+	camera->SetEye({ 0,2,-10 });
+	camera->SetTarget({ 0, 2, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 	DebugText::GetInstance()->Print("Raycast Hit.", 0, 30, 10);
@@ -291,7 +291,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	objSkydome->Draw();
 	objFloor->Draw();
 	objSphere->Draw();
-	player->Draw();
+	player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 #pragma endregion
@@ -343,11 +343,28 @@ void GamePlayScene::ImGuiDraw() {
 	}
 	{
 		ImGui::Begin("postEffect");
+		ImGui::SetWindowPos(ImVec2(1000, 200));
+		ImGui::SetWindowSize(ImVec2(200, 200));
 		if (ImGui::RadioButton("Blur", &PostType)) {
 			PostType = Blur;
 		}
 		if (ImGui::RadioButton("Default", &PostType)) {
 			PostType = Normal;
+		}
+		ImGui::End();
+	}
+	{
+		ImGui::Begin("Material");
+		ImGui::SetWindowPos(ImVec2(1000, 400));
+		ImGui::SetWindowSize(ImVec2(200, 200));
+		if (ImGui::RadioButton("Normal", &MaterialNumber)) {
+			MaterialNumber = NormalMaterial;
+		}
+		if (ImGui::RadioButton("Toon", &MaterialNumber)) {
+			MaterialNumber = Toon;
+		}
+		if (ImGui::RadioButton("Single", &MaterialNumber)) {
+			MaterialNumber = Single;
 		}
 		ImGui::End();
 	}

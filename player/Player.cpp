@@ -10,17 +10,48 @@ using namespace DirectX;
 
 Player::Player() {
 	model = ModelManager::GetInstance()->GetModel(ModelManager::Player);
-	object3d = new Object3d();
+	//object3d = new Object3d();
 }
 
 bool Player::Initialize()
 {
-	object3d = Object3d::Create();
-	object3d->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
-	object3d->SetModel(model);
-	object3d->SetPosition(pos);
-	object3d->SetScale({ 1.7f,1.7f,1.7f });
+	scale = { 0.7f,0.7f,0.7f };
+	pos.y = -5.0f;
+	pos.z = -5.0f;
+	rotation.y = 90.0f;
+	Object3d* object3d_ = new Object3d();
+	object3d_ = Object3d::Create();
+	object3d_->SetModel(model);
+	object3d_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	
+	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
+	object3d_->SetPosition(pos);
+	object3d_->SetRotation(rotation);
+	object3d_->SetScale(scale);
+	object3d.reset(object3d_);
 
+	Object3d* Toon_object3d_ = new Object3d();
+	Toon_object3d_ = Object3d::Create();
+	Toon_object3d_->SetModel(model);
+	Toon_object3d_->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
+	position = { 100.0f,-60.0,0.0f };
+	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
+	Toon_object3d_->SetPosition(pos);
+	Toon_object3d_->SetRotation(rotation);
+	Toon_object3d_->SetScale(scale);
+	Toon_object3d.reset(Toon_object3d_);
+
+	Object3d* Single_object3d_ = new Object3d();
+	Single_object3d_ = Object3d::Create();
+	Single_object3d_->SetModel(model);
+	Single_object3d_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	position = { 100.0f,-60.0,0.0f };
+	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
+	Single_object3d_->SetPosition(pos);
+	Single_object3d_->SetRotation(rotation);
+	Single_object3d_->SetScale(scale);
+	Single_object3d.reset(Single_object3d_);
+	
 	// コライダーの追加
 	float radius = 0.6f;
 	SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
@@ -44,19 +75,11 @@ void Player::Update()
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
 	if (input->LeftTiltStick(input->Right)) {
-		pos.x += 0.1f;
+		rotation.y += 1.0f;
 	}
 
 	if (input->LeftTiltStick(input->Left)) {
-		pos.x -= 0.1f;
-	}
-
-	if (input->LeftTiltStick(input->Up)) {
-		pos.z += 0.1f;
-	}
-
-	if (input->LeftTiltStick(input->Down)) {
-		pos.z -= 0.1f;
+		rotation.y -= 1.0f;
 	}
 
 	if (input->TriggerButton(input->Button_B)) {
@@ -183,21 +206,37 @@ void Player::Update()
 	object3d->SetPosition(pos);
 	// 行列の更新など
 	object3d->Update();
+
+	Toon_object3d->SetRotation(rotation);
+	Toon_object3d->SetPosition(pos);
+	Toon_object3d->Update();
+
+	Single_object3d->SetRotation(rotation);
+	Single_object3d->SetPosition(pos);
+	Single_object3d->Update();
 }
 
 //描画
-void Player::Draw() {
+void Player::Draw(int DrawNumber) {
 	/*ImGui::Begin("test");
 	ImGui::SliderFloat("rotation.y", &rotation.y, 360, -360);
 	ImGui::Unindent();
 	ImGui::End();*/
 	Object3d::PreDraw();
-	object3d->Draw();
+	if (DrawNumber == 0) {
+		object3d->Draw();
+	}
+	else if (DrawNumber == 1) {
+		Toon_object3d->Draw();
+	}
+	else if (DrawNumber == 2) {
+		Single_object3d->Draw();
+	}
 }
 
 void Player::Finalize()
 {
-	delete object3d;
+	//delete object3d;
 }
 
 

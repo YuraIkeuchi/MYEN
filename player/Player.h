@@ -1,6 +1,9 @@
 #pragma once
 #include "Object3d.h"
 #include"Model.h"
+#include <memory>
+#include <list> // ヘッダファイルインクルード
+using namespace std;         //  名前空間指定
 class Player :
 	public Object3d
 {
@@ -29,7 +32,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(int DrawNumber);
 
 	/// <summary>
 	/// 開放
@@ -51,8 +54,10 @@ public:
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
 private:
-	XMFLOAT3 pos = { 0,1,0 };
-	Object3d* object3d;
+	XMFLOAT3 pos = { 0,-2,0 };
+	unique_ptr <Object3d> object3d;
+	unique_ptr <Object3d> Toon_object3d;
+	unique_ptr <Object3d> Single_object3d;
 	Model* model;
 	int hit = 0;
 	bool onGround = true;

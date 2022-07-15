@@ -92,6 +92,13 @@ public:
 		Blur,
 		Inversion,
 	};
+
+	int MaterialNumber = 0;
+	enum MaterialNumber {
+		NormalMaterial,
+		Toon,
+		Single,
+	};
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

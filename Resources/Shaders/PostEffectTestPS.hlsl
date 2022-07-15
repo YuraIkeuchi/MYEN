@@ -41,7 +41,7 @@ float4 main(VSOutput input) : SV_TARGET
 
      return float4(texcolor.rgb,1);
 
-    // //ここまでがぼかし
+     //ここまでがぼかし
     //// //ボーダー柄
     // float4 colortex0 = tex0.Sample(smp,input.uv);
     // float4 colortex1 = tex1.Sample(smp, input.uv);
@@ -56,7 +56,7 @@ float4 main(VSOutput input) : SV_TARGET
     //色暗くなるやつ
     //return float4(1-texcolor.rgb, 1);
     //色明るくなるやつ 目が終わる
-    // return float4(texcolor.rgb*2, 1);
+     //return float4(texcolor.rgb*2, 1);
     //return tex.Sample(smp,input.uv) * color;
 //return float4(1.0f, 1.0f, 1.0f, 1.0f);
 }

@@ -89,9 +89,9 @@ void DirectXCommon::PreDraw()
 
 	//描画コマンド
 
-	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, (LONG)window_x, (LONG)window_y));
+	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, (LONG)m_This_Like_window_x, (LONG)m_This_Like_window_y));
 
-	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, (LONG)window_x, (LONG)window_y));
+	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, (LONG)m_This_Like_window_x, (LONG)m_This_Like_window_y));
 
 
 	// imgui開始
@@ -99,11 +99,8 @@ void DirectXCommon::PreDraw()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("window");
-	ImGui::SliderFloat("window.x", &window_x, 1280, 0);
-	ImGui::SliderFloat("window.y", &window_y, 720, 0);
-	ImGui::Unindent();
-	ImGui::End();
+	WindowImGuiDraw();
+
 }
 
 void DirectXCommon::PostDraw()
@@ -377,5 +374,35 @@ bool DirectXCommon::InitImgui()
 	}
 
 	return true;
+}
+
+void DirectXCommon::WindowImGuiDraw() {
+	ImGui::Begin("SelectScreen");
+	ImGui::SetWindowPos(ImVec2(1000, 0));
+	ImGui::SetWindowSize(ImVec2(200, 200));
+	if (ImGui::RadioButton("Full", &FullScreen)) {
+		m_This_Like_save_x = m_This_Like_window_x;
+		m_This_Like_save_y = m_This_Like_window_y;
+		FullScreen = true;
+		m_This_Like_window_x = 1280.0f;
+		m_This_Like_window_y = 720.0f;
+	}
+	if (ImGui::RadioButton("NotFull", &FullScreen)) {
+		m_This_Like_window_x = m_This_Like_save_x;
+		m_This_Like_window_y = m_This_Like_save_y;
+		FullScreen = false;
+	}
+	if (!FullScreen) {
+		ImGui::SliderFloat("window.x", &m_This_Like_window_x, 1280, 0);
+		ImGui::SliderFloat("window.y", &m_This_Like_window_y, 720, 0);
+	}
+	ImGui::Unindent();
+	ImGui::End();
+	/*ImGui::Begin("SelectScreen");
+	ImGui::SetWindowPos(ImVec2(500, 300));
+	ImGui::SetWindowSize(ImVec2(200, 200));
+
+	ImGui::Unindent();
+	ImGui::End();*/
 }
 
