@@ -73,6 +73,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objSphere_->SetModel(modelSphere);
 	objSphere_->SetPosition({ -2, 1, 0 });
 	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere.reset(objSphere_);
 	
 	modelSkydome = ModelManager::GetInstance()->GetModel(ModelManager::Skydome);

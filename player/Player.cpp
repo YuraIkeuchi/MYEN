@@ -27,6 +27,8 @@ bool Player::Initialize()
 	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
 	object3d_->SetPosition(pos);
 	object3d_->SetRotation(rotation);
+	object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+
 	object3d_->SetScale(scale);
 	object3d.reset(object3d_);
 
@@ -49,6 +51,8 @@ bool Player::Initialize()
 	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
 	Single_object3d_->SetPosition(pos);
 	Single_object3d_->SetRotation(rotation);
+	//Single_object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	Single_object3d_->Update();
 	Single_object3d_->SetScale(scale);
 	Single_object3d.reset(Single_object3d_);
 	
@@ -74,32 +78,32 @@ void Player::Update()
 	XMVECTOR move = { 0,0,0.1f,0 };
 	XMMATRIX matRot = XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	move = XMVector3TransformNormal(move, matRot);
+	//À•WˆÚ“®
 	if (input->LeftTiltStick(input->Right)) {
-		rotation.y += 1.0f;
+		pos.x += 0.1f;
 	}
 
 	if (input->LeftTiltStick(input->Left)) {
+		pos.x -= 0.1f;
+	}
+
+	if (input->LeftTiltStick(input->Up)) {
+		pos.z += 0.1f;
+	}
+
+	if (input->LeftTiltStick(input->Down)) {
+		pos.z -= 0.1f;
+	}
+
+	//‰ñ“]
+	if (input->PushButton(input->Button_RB)) {
+		rotation.y += 1.0f;
+	}
+
+	if (input->PushButton(input->Button_LB)) {
 		rotation.y -= 1.0f;
 	}
-
-	if (input->TriggerButton(input->Button_B)) {
-		Shadernumber = one;
-	}
-	else if (input->TriggerButton(input->Button_A)) {
-		Shadernumber = normal;
-	}
-
-	/*switch (Shadernumber)
-	{
-	case normal:
-		object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-		break;
-	case one:
-		object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
-		break;
-	default:
-		break;
-	}*/
+	
 	// —‰ºˆ—
 	if (!onGround) {
 		// ‰ºŒü‚«‰Á‘¬“x

@@ -334,6 +334,9 @@
     <ClCompile Include="2d\ImageManager.cpp">
       <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
+    <ClCompile Include="3d\PipelineManager.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Material.h">
@@ -527,6 +530,9 @@
     </ClInclude>
     <ClInclude Include="2d\ImageManager.h">
       <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\PipelineManager.h">
+      <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

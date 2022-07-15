@@ -149,6 +149,8 @@ public: // メンバ関数
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	//スケールの設定
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	//色の設定
+	void SetColor(XMFLOAT4 color) { this->color = color; }
 	//モデルのセット
 	void SetModel(Model* model) { this->model = model; }
 
@@ -165,7 +167,7 @@ protected: // メンバ変数
 	PipelineSet pipelineSet;
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
-	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 color = { 1,0,0,0 };
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角

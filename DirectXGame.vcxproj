@@ -314,6 +314,7 @@
     <ClCompile Include="3d\Model.cpp" />
     <ClCompile Include="3d\ModelManager.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
+    <ClCompile Include="3d\PipelineManager.cpp" />
     <ClCompile Include="audio\Audio.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
@@ -374,6 +375,7 @@
     <ClInclude Include="3d\Model.h" />
     <ClInclude Include="3d\ModelManager.h" />
     <ClInclude Include="3d\Object3d.h" />
+    <ClInclude Include="3d\PipelineManager.h" />
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\DebugCamera.h" />

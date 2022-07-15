@@ -5,8 +5,8 @@ SamplerState smp:register(s0);
 float4 main(VSOutput input) : SV_TARGET
 {
      float4 texcolor = tex0.Sample(smp,input.uv);
-    // //default
-    //// return float4(texcolor.rgb, 1);
+    //// //default
+    ////// return float4(texcolor.rgb, 1);
      //ぼかし
      // 2.5テクセル分ずらすためのUV値を求める
      float offsetU = 3.5f / 1280.0f;
