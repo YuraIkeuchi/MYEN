@@ -128,14 +128,14 @@ float4 main(VSOutput input) : SV_TARGET
 	//return shadecolor * texcolor;
 
 	//トゥーンシェーダのための処理
-	float4 brightColor = shadecolor;							//明るい箇所の色
-	float4 bright = brightColor * smoothstep(0.3, 0.4, shadecolor.r);		//明るい箇所の判定
-	float4 darkColor = shadecolor * 0.5f;							//暗い箇所の色
-	float4 dark = darkColor * (1 - smoothstep(0.3, 0.4, shadecolor.r));		//暗い箇所の判定
-	float4 reflectionColor = float4(1.0, 1.0, 1.0, 1.0);					//反射光の箇所の色
-	float4 reflect = reflectionColor * smoothstep(0.98, 1.0, shadecolor.r);	//反射光の判定
+	float4 brightColor = float4(0.7, 0.7, 0.7, 1.0);							//明るい箇所の色
+	float4 bright = brightColor * smoothstep(0.3, 0.4, shadecolor);		//明るい箇所の判定
+	float4 darkColor = float4(0.2, 0.2, 0.2, 1.0);							//暗い箇所の色
+	float4 dark = darkColor * (1 - smoothstep(0.3, 0.4, shadecolor));		//暗い箇所の判定
+	float4 specular_Color = float4(1.0, 1.0, 1.0, 1.0);					//反射光の箇所の色
+	float4 toon_specular = specular_Color * smoothstep(0.98, 1.0, shadecolor);	//反射光の判定
 
-	float4 col = bright + dark + reflect;//色を足す
+	float4 col = bright + dark + toon_specular;//色を足す
 
 	// シェーディングによる色で描画
 	return col * texcolor;

@@ -15,7 +15,7 @@ Player::Player() {
 
 bool Player::Initialize()
 {
-	scale = { 0.7f,0.7f,0.7f };
+	scale = { 1.2f,1.2f,1.2f };
 	pos.y = -5.0f;
 	pos.z = -5.0f;
 	rotation.y = 90.0f;
@@ -65,9 +65,9 @@ void Player::Update()
 	object3d->Update();
 	// A,Dで旋回
 	if (input->PushKey(DIK_A)) {
-		rotation.y -= 2.0f;
+		pos.x -= 0.3f;
 	} else if (input->PushKey(DIK_D)) {
-		rotation.y += 2.0f;
+		pos.x += 0.3f;
 	}
 
 	// 移動ベクトルをY軸周りの角度で回転

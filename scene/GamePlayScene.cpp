@@ -140,7 +140,6 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightActive(1, true);
 	lightGroup->SetDirLightActive(2, true);
-
 	//lightGroup->SetCircleShadowActive(0, true);
 	//ポイントライト
 	/*lightGroup->SetPointLightActive(0, true);
