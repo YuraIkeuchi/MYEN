@@ -50,7 +50,9 @@ public:
 	Enemy* enemy = nullptr;
 	//Player* player = nullptr;
 	CollisionManager* collsionManager = nullptr;
+	//ポストエフェクト指定
 	PostEffect* postEffect = nullptr;
+	PostEffect* gaussian = nullptr;
 	Model* modelFloor = nullptr;
 	unique_ptr <Object3d> objFloor;
 	Model* modelSphere = nullptr;
