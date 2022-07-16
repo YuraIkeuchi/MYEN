@@ -1,4 +1,4 @@
-#include"TestPostEffect.hlsli"
+#include"Gaussian.hlsli"
 VSOutput main(float4 pos : POSITION, float2 uv : TEXCOORD)
 {
 	VSOutput output;

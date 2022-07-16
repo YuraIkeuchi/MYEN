@@ -166,7 +166,7 @@
     <None Include="Resources\Shaders\PostEffectTest.hlsli" />
     <None Include="Resources\Shaders\SingleColor.hlsli" />
     <None Include="Resources\Shaders\Sprite.hlsli" />
-    <None Include="Resources\Shaders\TestPostEffect.hlsli" />
+    <None Include="Resources\Shaders\Gaussian.hlsli" />
     <None Include="Resources\Shaders\Toon.hlsli" />
   </ItemGroup>
   <ItemGroup>
@@ -288,13 +288,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\TestPostEffectPS.hlsl">
+    <FxCompile Include="Resources\Shaders\GaussianPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\TestPostEffectVS.hlsl">
+    <FxCompile Include="Resources\Shaders\GaussianVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>

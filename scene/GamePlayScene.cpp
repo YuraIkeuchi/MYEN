@@ -225,7 +225,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		postEffect->CreateGraphicsPipeline(L"Resources/Shaders/PostEffectTestVS.hlsl", L"Resources/Shaders/PostEffectTestPS.hlsl");
 		break;
 	case Blur://‚Ú‚©‚µ
-		postEffect->CreateGraphicsPipeline(L"Resources/Shaders/TestPostEffectVS.hlsl", L"Resources/Shaders/TestPostEffectPS.hlsl");
+		postEffect->CreateGraphicsPipeline(L"Resources/Shaders/GaussianVS.hlsl", L"Resources/Shaders/GaussianPS.hlsl");
 		break;
 	default:
 		break;

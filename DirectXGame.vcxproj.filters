@@ -99,7 +99,7 @@
     <None Include="Resources\Shaders\Toon.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
-    <None Include="Resources\Shaders\TestPostEffect.hlsli">
+    <None Include="Resources\Shaders\Gaussian.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -161,10 +161,10 @@
     <FxCompile Include="Resources\Shaders\ToonPS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\TestPostEffectPS.hlsl">
+    <FxCompile Include="Resources\Shaders\GaussianPS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shaders\TestPostEffectVS.hlsl">
+    <FxCompile Include="Resources\Shaders\GaussianVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
