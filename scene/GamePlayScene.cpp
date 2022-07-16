@@ -288,9 +288,9 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
-	objSkydome->Draw();
-	objFloor->Draw();
-	objSphere->Draw();
+	//objSkydome->Draw();
+	//objFloor->Draw();
+	//objSphere->Draw();
 	player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
