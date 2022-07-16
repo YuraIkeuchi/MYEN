@@ -13,7 +13,7 @@ public:
   /// パイプライン生成
   /// </summary>
   /// <param name="cmdList"></param>
-	void CreateGraphicsPipeline();
+	void CreateGraphicsPipeline(const wchar_t* vsShaderName, const wchar_t* psShaderName);
 	//初期化
 	void Initialize();
 

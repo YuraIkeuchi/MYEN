@@ -153,7 +153,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//lightGroup->SetPointLightActive(1, false);
 	//lightGroup->SetPointLightActive(2, false);
 	//lightGroup->SetSpotLightActive(0, true);
-	PostType = Normal;
+	
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -218,6 +218,18 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//cameraPos.z = player->GetPosition().z - 10;
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
+	//ポストエフェクトの種類変更
+	switch (PostType)
+	{
+	case Stripe://しましま
+		postEffect->CreateGraphicsPipeline(L"Resources/Shaders/PostEffectTestVS.hlsl", L"Resources/Shaders/PostEffectTestPS.hlsl");
+		break;
+	case Blur://ぼかし
+		postEffect->CreateGraphicsPipeline(L"Resources/Shaders/TestPostEffectVS.hlsl", L"Resources/Shaders/TestPostEffectPS.hlsl");
+		break;
+	default:
+		break;
+	}
 	camera->SetEye({ 0,2,-10 });
 	camera->SetTarget({ 0, 2, 0 });
 	// 全ての衝突をチェック
@@ -228,19 +240,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 void GamePlayScene::Draw(DirectXCommon* dxCommon)
 {
 	//描画方法
-	switch (PostType)
-	{
-	case Normal://通常
-		postEffect->PreDrawScene(dxCommon->GetCmdList());
-		postEffect->Draw(dxCommon->GetCmdList());
-		postEffect->PostDrawScene(dxCommon->GetCmdList());
-
-		dxCommon->PreDraw();
-		GameDraw(dxCommon);
-		ImGuiDraw();
-		dxCommon->PostDraw();
-		break;
-	case Blur://ぼかし
+	//ポストエフェクトをかけるか
+	if (PlayPostEffect) {
 		postEffect->PreDrawScene(dxCommon->GetCmdList());
 		GameDraw(dxCommon);
 		postEffect->PostDrawScene(dxCommon->GetCmdList());
@@ -249,26 +250,17 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		postEffect->Draw(dxCommon->GetCmdList());
 		ImGuiDraw();
 		dxCommon->PostDraw();
-		break;
-	default:
-		break;
 	}
-	
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
-	//
-	//dxCommon->PreDraw();
-	//
-	//dxCommon->PostDraw();
+	else {
+		postEffect->PreDrawScene(dxCommon->GetCmdList());
+		postEffect->Draw(dxCommon->GetCmdList());
+		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	/*dxCommon->PreDraw();
-	GameDraw(dxCommon);
-	dxCommon->PostDraw();*/
-	// 深度バッファクリア
-	//dxCommon->ClearDepthBuffer();
-	// パーティクルの描画
-	//particleMan->Draw(dxCommon->GetCmdList());
+		dxCommon->PreDraw();
+		GameDraw(dxCommon);
+		ImGuiDraw();
+		dxCommon->PostDraw();
+	}
 }
 
 void GamePlayScene::Finalize()
@@ -320,43 +312,43 @@ void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 }
 
 void GamePlayScene::ImGuiDraw() {
-	{
-		ImGui::Begin("Light");
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-		//ImGui::InputFloat3("lightDir0", lightDir0);
-		//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-		//ImGui::InputFloat3("lightDir1", lightDir1);
-		//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-		//ImGui::InputFloat3("lightDir2", lightDir2);
-		//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-		//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
-		////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
-		//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
-		//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
-		//ImGui::InputFloat3("fighterPos", fighterPos);
-		ImGui::ColorEdit3("PointColor", pointLightColor, ImGuiColorEditFlags_Float);
-		ImGui::InputFloat3("pointLightPos", pointLightPos);
-		ImGui::InputFloat3("pointLightAtten", pointLightAtten);
-		ImGui::End();
-	}
+	//{
+	//	ImGui::Begin("Light");
+	//	ImGui::SetWindowPos(ImVec2(0, 0));
+	//	ImGui::SetWindowSize(ImVec2(500, 200));
+	//	//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	//	//ImGui::InputFloat3("lightDir0", lightDir0);
+	//	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	//	//ImGui::InputFloat3("lightDir1", lightDir1);
+	//	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	//	//ImGui::InputFloat3("lightDir2", lightDir2);
+	//	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	//	//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
+	//	////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
+	//	//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
+	//	//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
+	//	//ImGui::InputFloat3("fighterPos", fighterPos);
+	//	ImGui::ColorEdit3("PointColor", pointLightColor, ImGuiColorEditFlags_Float);
+	//	ImGui::InputFloat3("pointLightPos", pointLightPos);
+	//	ImGui::InputFloat3("pointLightAtten", pointLightAtten);
+	//	ImGui::End();
+	//}
 	{
 		ImGui::Begin("postEffect");
-		ImGui::SetWindowPos(ImVec2(1000, 200));
-		ImGui::SetWindowSize(ImVec2(200, 200));
-		if (ImGui::RadioButton("Blur", &PostType)) {
-			PostType = Blur;
+		ImGui::SetWindowPos(ImVec2(1000, 150));
+		ImGui::SetWindowSize(ImVec2(280, 150));
+		if (ImGui::RadioButton("PostEffect", &PlayPostEffect)) {
+			PlayPostEffect = true;
 		}
-		if (ImGui::RadioButton("Default", &PostType)) {
-			PostType = Normal;
+		if (ImGui::RadioButton("Default", &PlayPostEffect)) {
+			PlayPostEffect = false;
 		}
 		ImGui::End();
 	}
 	{
 		ImGui::Begin("Material");
-		ImGui::SetWindowPos(ImVec2(1000, 400));
-		ImGui::SetWindowSize(ImVec2(200, 200));
+		ImGui::SetWindowPos(ImVec2(1000, 300));
+		ImGui::SetWindowSize(ImVec2(280, 150));
 		if (ImGui::RadioButton("Normal", &MaterialNumber)) {
 			MaterialNumber = NormalMaterial;
 		}
@@ -367,6 +359,20 @@ void GamePlayScene::ImGuiDraw() {
 			MaterialNumber = Single;
 		}
 		ImGui::End();
+	}
+	{
+		if (PlayPostEffect) {
+			ImGui::Begin("PostType");
+			ImGui::SetWindowPos(ImVec2(1000, 450));
+			ImGui::SetWindowSize(ImVec2(280, 150));
+			if (ImGui::RadioButton("Stripe", &PostType)) {
+				PostType = Stripe;
+			}
+			if (ImGui::RadioButton("Blur", &PostType)) {
+				PostType = Blur;
+			}
+			ImGui::End();
+		}
 	}
 }
 

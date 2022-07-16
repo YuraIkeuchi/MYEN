@@ -20,7 +20,7 @@ PostEffect::PostEffect()
 }
 
 
-void PostEffect::CreateGraphicsPipeline()
+void PostEffect::CreateGraphicsPipeline(const wchar_t* vsShaderName, const wchar_t* psShaderName)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -29,7 +29,7 @@ void PostEffect::CreateGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/PostEffectTestVS.hlsl",	// シェーダファイル名
+		vsShaderName,	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -54,7 +54,7 @@ void PostEffect::CreateGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/Shaders/PostEffectTestPS.hlsl",	// シェーダファイル名
+		psShaderName,	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -172,7 +172,7 @@ void PostEffect::CreateGraphicsPipeline()
 void PostEffect::Initialize()
 {
 	HRESULT result;
-	CreateGraphicsPipeline();
+	//CreateGraphicsPipeline();
 	//基底クラスとしての初期化
 	//Sprite::Initialize();
 

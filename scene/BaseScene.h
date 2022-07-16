@@ -85,20 +85,24 @@ public:
 	float circleShadowPos[3] = { 1,2,0 };
 	float circleShadowAtten[3] = { 0.5f,0.6f,0.0f };
 	float circleShadowFactorAngle[2] = { 0.0f, 0.5f };
+	//ポストエフェクトをかけるか
+	bool PlayPostEffect = false;
+	//ポストエフェクトの種類
 	int PostType = 0;
 
 	enum PostType {
-		Normal,
+		Stripe,
 		Blur,
-		Inversion,
 	};
 
+	//マテリアルの種類
 	int MaterialNumber = 0;
 	enum MaterialNumber {
 		NormalMaterial,
 		Toon,
 		Single,
 	};
+
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

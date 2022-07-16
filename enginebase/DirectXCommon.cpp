@@ -379,7 +379,7 @@ bool DirectXCommon::InitImgui()
 void DirectXCommon::WindowImGuiDraw() {
 	ImGui::Begin("SelectScreen");
 	ImGui::SetWindowPos(ImVec2(1000, 0));
-	ImGui::SetWindowSize(ImVec2(200, 200));
+	ImGui::SetWindowSize(ImVec2(280, 150));
 	if (ImGui::RadioButton("Full", &FullScreen)) {
 		m_This_Like_save_x = m_This_Like_window_x;
 		m_This_Like_save_y = m_This_Like_window_y;
