@@ -51,7 +51,7 @@ bool Player::Initialize()
 	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
 	Single_object3d_->SetPosition(pos);
 	Single_object3d_->SetRotation(rotation);
-	//Single_object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	Single_object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	Single_object3d_->Update();
 	Single_object3d_->SetScale(scale);
 	Single_object3d.reset(Single_object3d_);
@@ -66,7 +66,7 @@ bool Player::Initialize()
 void Player::Update()
 {
 	Input* input = Input::GetInstance();
-	object3d->Update();
+	//object3d->Update();
 	// A,D‚Åù‰ñ
 	if (input->PushKey(DIK_A)) {
 		pos.x -= 0.3f;

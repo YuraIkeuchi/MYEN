@@ -8,6 +8,7 @@
 #include<vector>
 #include "BaseCollider.h"
 #include "CollisionManager.h"
+#include "imgui.h"
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace std;
@@ -394,8 +395,26 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 		// ƒ‰ƒCƒg‚Ì•`‰æ
 	lightGroup->Draw(cmdList, 3);
-	// ƒ‚ƒfƒ‹•`‰æ
+	//// ƒ‚ƒfƒ‹•`‰æ
 	model->Draw(cmdList);
+	//HRESULT result;
+	//ConstBufferDataB0* constMap = nullptr;
+	//result = constBuffB0->Map(0, nullptr, (void**)&constMap);
+	
+	//ImGui::Begin("color");
+	//ImGui::SetWindowPos(ImVec2(500, 0));
+	//ImGui::SetWindowSize(ImVec2(280, 150));
+	//ImGui::SliderFloat("color.r", &color.x, 1, -1);
+	//ImGui::SliderFloat("color.g", &color.y, 1, -1);
+	//ImGui::SliderFloat("color.b", &color.z, 1, -1);
+	//ImGui::SliderFloat("color.a", &color.w, 1, -1);
+	//ImGui::SliderFloat("constcolor.r", &constMap->color.x, 1, -1);
+	//ImGui::SliderFloat("constcolor.g", &constMap->color.y, 1, -1);
+	//ImGui::SliderFloat("constcolor.b", &constMap->color.z, 1, -1);
+	//ImGui::SliderFloat("constcolor.w", &constMap->color.w, 1, -1);
+	//ImGui::Unindent();
+	//ImGui::End();
+	//constBuffB0->Unmap(0, nullptr);
 }
 
 void Object3d::UpdateWorldMatrix()

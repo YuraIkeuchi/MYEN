@@ -40,10 +40,10 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
+		XMFLOAT4 color;//色情報
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
-		XMFLOAT4 color;//色情報
 	};
 
 private: // 定数
@@ -167,7 +167,7 @@ protected: // メンバ変数
 	PipelineSet pipelineSet;
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
-	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 color = { 1,0,0,1 };
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角

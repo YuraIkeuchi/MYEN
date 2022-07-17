@@ -10,9 +10,10 @@ float4 main(VSOutput input) : SV_TARGET
 
 	//shadecolor.a = 1.0f;
 	//o—Í
-	//return float4(shadecolor.r,shadecolor.g,shadecolor.b,1.0f);
+	return shadecolor;
+	
 	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
 	//return color;
 
-	return float4(1.0f, 0.0f, 0.0f, 1.0f);
+	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
 }
