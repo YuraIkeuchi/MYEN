@@ -208,17 +208,20 @@ void Player::Update()
 	}
 
 	object3d->SetColor(color);
+	object3d->SetAddOffset(addoffset);
 	object3d->SetRotation(rotation);
 	object3d->SetPosition(pos);
 	// s—ñ‚ÌXV‚È‚Ç
 	object3d->Update();
 
 	Toon_object3d->SetColor(color);
+	Toon_object3d->SetAddOffset(addoffset);
 	Toon_object3d->SetRotation(rotation);
 	Toon_object3d->SetPosition(pos);
 	Toon_object3d->Update();
 
 	Single_object3d->SetColor(color);
+	Single_object3d->SetAddOffset(addoffset);
 	Single_object3d->SetRotation(rotation);
 	Single_object3d->SetPosition(pos);
 	Single_object3d->Update();
@@ -226,14 +229,6 @@ void Player::Update()
 
 //•`‰æ
 void Player::Draw(int DrawNumber) {
-	ImGui::Begin("color");
-	ImGui::SetWindowPos(ImVec2(0, 500));
-	ImGui::SetWindowSize(ImVec2(280, 200));
-	ImGui::SliderFloat("color.r", &color.x, 1, 0);
-	ImGui::SliderFloat("color.g", &color.y, 1, 0);
-	ImGui::SliderFloat("color.b", &color.z, 1, 0);
-	ImGui::SliderFloat("color.a", &color.w, 1, 0);
-	ImGui::End();
 	Object3d::PreDraw();
 	if (DrawNumber == 0) {
 		object3d->Draw();
@@ -266,4 +261,15 @@ void Player::OnCollision(const CollisionInfo& info)
 
 		ParticleManager::GetInstance()->Add(10, XMFLOAT3(info.inter.m128_f32), vel, XMFLOAT3(), 0.0f, 1.0f);
 	}
+}
+
+void Player::ImGuiDraw() {
+	ImGui::Begin("color");
+	ImGui::SetWindowPos(ImVec2(0, 500));
+	ImGui::SetWindowSize(ImVec2(280, 240));
+	ImGui::SliderFloat("color.r", &color.x, 1, 0);
+	ImGui::SliderFloat("color.g", &color.y, 1, 0);
+	ImGui::SliderFloat("color.b", &color.z, 1, 0);
+	ImGui::SliderFloat("color.a", &color.w, 1, 0);
+	ImGui::End();
 }

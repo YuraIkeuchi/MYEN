@@ -108,6 +108,9 @@
     <None Include="Resources\Shaders\Toon.hlsli">
       <Filter>シェーダーファイル\Material</Filter>
     </None>
+    <None Include="Resources\Shaders\DepthBlur.hlsli">
+      <Filter>シェーダーファイル\PostEffect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shaders\GaussianPS.hlsl">
@@ -172,6 +175,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shaders\ToonVS.hlsl">
       <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\DepthBlurPS.hlsl">
+      <Filter>シェーダーファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\DepthBlurVS.hlsl">
+      <Filter>シェーダーファイル\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

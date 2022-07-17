@@ -66,17 +66,19 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFloor_->SetModel(modelFloor);
 	objFloor_->SetPosition({ 0, -1, 0 });
 	objFloor_->SetScale({ 6.0f,1.0f,6.0f });
+	objFloor_->SetAddOffset(0.01f);
 	objFloor_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	objFloor.reset(objFloor_);
 	// モデル読み込み
-	modelSphere = Model::LoadFromOBJ("sphere", true);
+	modelSphere = Model::LoadFromOBJ("box1x1x1", true);
 
 	// 3Dオブジェクト生成
 	Object3d* objSphere_ = new Object3d();
 	objSphere_ = Object3d::Create();
 	objSphere_->SetModel(modelSphere);
-	objSphere_->SetPosition({ -2, 1, 0 });
-	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	objSphere_->SetPosition({ -2, 1, -5 });
+	objSphere_->SetAddOffset(0.04f);
+	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere.reset(objSphere_);
 	
@@ -88,6 +90,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objskydome_->SetModel(modelSkydome);
 	objskydome_->SetPosition({ 0, 0, 0 });
 	objskydome_->SetScale({ 2.0f,2.0f,2.0f });
+	objskydome_->SetAddOffset(0.07f);
 	objskydome_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	objSkydome.reset(objskydome_);
 	//Model* modeltable[10] = {
@@ -247,6 +250,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			dxCommon->PreDraw();
 			postEffect->Draw(dxCommon->GetCmdList());
 			ImGuiDraw();
+			player->ImGuiDraw();
 			dxCommon->PostDraw();
 			break;
 		case Blur://ぼかし
@@ -257,6 +261,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 			dxCommon->PreDraw();
 			gaussian->Draw(dxCommon->GetCmdList());
 			ImGuiDraw();
+			player->ImGuiDraw();
 			dxCommon->PostDraw();
 			break;
 		default:
@@ -272,6 +277,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		dxCommon->PreDraw();
 		GameDraw(dxCommon);
 		ImGuiDraw();
+		player->ImGuiDraw();
 		dxCommon->PostDraw();
 	}
 }
@@ -296,7 +302,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	//object1->Draw(dxCommon->GetCmdList());
 	objSkydome->Draw();
 	objFloor->Draw();
-	//objSphere->Draw();
+	objSphere->Draw();
 	player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();

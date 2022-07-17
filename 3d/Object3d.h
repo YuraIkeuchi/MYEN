@@ -41,9 +41,11 @@ public: // サブクラス
 	struct ConstBufferDataB0
 	{
 		XMFLOAT4 color;//色情報
+		XMFLOAT2 offset;
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
+		
 	};
 
 private: // 定数
@@ -151,6 +153,8 @@ public: // メンバ関数
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	//色の設定
 	void SetColor(XMFLOAT4 color) { this->color = color; }
+	//色の設定
+	void SetAddOffset(float addoffset) { this->addoffset = addoffset; }
 	//モデルのセット
 	void SetModel(Model* model) { this->model = model; }
 
@@ -168,6 +172,8 @@ protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT2 offset = { 0.0f,0.0f };
+	float addoffset = 0.0f;
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角
