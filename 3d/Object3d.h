@@ -167,7 +167,7 @@ protected: // メンバ変数
 	PipelineSet pipelineSet;
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
-	XMFLOAT4 color = { 1,0,0,1 };
+	XMFLOAT4 color = { 1,1,1,1 };
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角

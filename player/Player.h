@@ -55,6 +55,7 @@ public:
 
 private:
 	XMFLOAT3 pos = { 0,-2,0 };
+	XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	unique_ptr <Object3d> object3d;
 	unique_ptr <Object3d> Toon_object3d;
 	unique_ptr <Object3d> Single_object3d;

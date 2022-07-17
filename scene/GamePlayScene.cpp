@@ -32,8 +32,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	// テクスチャ1番に読み込み
-	Audio::GetInstance()->LoadSound(0, "Resources/Sound/kadai_BGM.wav");
-	Audio::GetInstance()->LoopWave(0, 0.3f);
+	//Audio::GetInstance()->LoadSound(0, "Resources/Sound/kadai_BGM.wav");
+	//Audio::GetInstance()->LoopWave(0, 0.3f);
 	// 背景スプライト生成
 	
 	//ポストエフェクト用テクスチャ読みこみ
@@ -66,7 +66,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFloor_->SetModel(modelFloor);
 	objFloor_->SetPosition({ 0, -1, 0 });
 	objFloor_->SetScale({ 6.0f,1.0f,6.0f });
-	objFloor_->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objFloor_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	objFloor.reset(objFloor_);
 	// モデル読み込み
 	modelSphere = Model::LoadFromOBJ("sphere", true);
@@ -88,7 +88,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objskydome_->SetModel(modelSkydome);
 	objskydome_->SetPosition({ 0, 0, 0 });
 	objskydome_->SetScale({ 2.0f,2.0f,2.0f });
-	objskydome_->CreateGraphicsPipeline(L"Resources/shaders/PointLightVS.hlsl", L"Resources/shaders/PointLightPS.hlsl");
+	objskydome_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	objSkydome.reset(objskydome_);
 	//Model* modeltable[10] = {
 	//	modelPlane,
@@ -294,8 +294,8 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
-	//objSkydome->Draw();
-	//objFloor->Draw();
+	objSkydome->Draw();
+	objFloor->Draw();
 	//objSphere->Draw();
 	player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理

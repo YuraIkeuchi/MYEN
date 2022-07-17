@@ -64,108 +64,114 @@
     <Filter Include="ソース ファイル\ease">
       <UniqueIdentifier>{897b3986-0329-46da-b1f4-5fa04cfc1b3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="シェーダーファイル\PostEffect">
+      <UniqueIdentifier>{dc8b99ed-76ff-4b6c-a727-b0ba96b27438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シェーダーファイル\Material">
+      <UniqueIdentifier>{524dc5df-f184-4a87-9fe0-94e914a7060f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Basic.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\Shaders\Sprite.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
     <None Include="imgui\imgui.vcxproj">
       <Filter>ソース ファイル\Imgui</Filter>
     </None>
     <None Include="imgui\imgui.vcxproj.filters">
       <Filter>ソース ファイル\Imgui</Filter>
     </None>
-    <None Include="Resources\Shaders\FBX.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\Shaders\OBJShaderHeaderhlsli.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\Shaders\Particle.hlsli">
-      <Filter>シェーダーファイル</Filter>
+    <None Include="Resources\Shaders\Gaussian.hlsli">
+      <Filter>シェーダーファイル\PostEffect</Filter>
     </None>
     <None Include="Resources\Shaders\PostEffectTest.hlsli">
-      <Filter>シェーダーファイル</Filter>
+      <Filter>シェーダーファイル\PostEffect</Filter>
     </None>
-    <None Include="Resources\Shaders\SingleColor.hlsli">
-      <Filter>シェーダーファイル</Filter>
+    <None Include="Resources\Shaders\Basic.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
+    </None>
+    <None Include="Resources\Shaders\FBX.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
+    </None>
+    <None Include="Resources\Shaders\OBJShaderHeaderhlsli.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
+    </None>
+    <None Include="Resources\Shaders\Particle.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
     </None>
     <None Include="Resources\Shaders\PointLight.hlsli">
-      <Filter>シェーダーファイル</Filter>
+      <Filter>シェーダーファイル\Material</Filter>
+    </None>
+    <None Include="Resources\Shaders\SingleColor.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
+    </None>
+    <None Include="Resources\Shaders\Sprite.hlsli">
+      <Filter>シェーダーファイル\Material</Filter>
     </None>
     <None Include="Resources\Shaders\Toon.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\Shaders\Gaussian.hlsli">
-      <Filter>シェーダーファイル</Filter>
+      <Filter>シェーダーファイル\Material</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shaders\BasicPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpriteVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\BasicVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\OBJPixelShader.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\OBJVertexShader.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\PostEffectTestPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\PostEffectTestVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SingleColorVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\SingleColorPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\PointLightVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\PointLightPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ToonVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shaders\ToonPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\Shaders\GaussianPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
+      <Filter>シェーダーファイル\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\GaussianVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
+      <Filter>シェーダーファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PostEffectTestPS.hlsl">
+      <Filter>シェーダーファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PostEffectTestVS.hlsl">
+      <Filter>シェーダーファイル\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BasicPS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\BasicVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\FBXPS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\FBXVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\OBJPixelShader.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\OBJVertexShader.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleGS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticlePS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ParticleVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PointLightPS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\PointLightVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SingleColorPS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SingleColorVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpritePS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\SpriteVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ToonPS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\ToonVS.hlsl">
+      <Filter>シェーダーファイル\Material</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
