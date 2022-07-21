@@ -275,8 +275,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 		dxCommon->PreDraw();
-		GameDraw(dxCommon);
 		ImGuiDraw();
+		GameDraw(dxCommon);
 		player->ImGuiDraw();
 		dxCommon->PostDraw();
 	}
@@ -370,13 +370,20 @@ void GamePlayScene::ImGuiDraw() {
 		ImGui::SetWindowPos(ImVec2(1000, 300));
 		ImGui::SetWindowSize(ImVec2(280, 150));
 		if (ImGui::RadioButton("Normal", &MaterialNumber)) {
+
 			MaterialNumber = NormalMaterial;
+			player->SetShaderChange(true);
+			player->ChangeShader(MaterialNumber);
 		}
 		if (ImGui::RadioButton("Toon", &MaterialNumber)) {
 			MaterialNumber = Toon;
+			player->SetShaderChange(true);
+			player->ChangeShader(MaterialNumber);
 		}
 		if (ImGui::RadioButton("Single", &MaterialNumber)) {
 			MaterialNumber = Single;
+			player->SetShaderChange(true);
+			player->ChangeShader(MaterialNumber);
 		}
 		ImGui::End();
 	}

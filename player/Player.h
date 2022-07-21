@@ -34,6 +34,8 @@ public:
 	/// </summary>
 	void Draw(int DrawNumber);
 
+	void ChangeShader(int DrawNumber);
+
 	void ImGuiDraw();
 
 	/// <summary>
@@ -55,6 +57,7 @@ public:
 
 	void SetRotation(XMFLOAT3 rotation) { object3d->SetRotation(rotation); }
 
+	void SetShaderChange(bool m_ShaderChange) { this->m_ShaderChange = m_ShaderChange; }
 private:
 	XMFLOAT3 pos = { 0,-2,0 };
 	XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
@@ -73,5 +76,7 @@ private:
 	};
 
 	int Shadernumber = 0;
+
+	bool m_ShaderChange = false;
 };
 

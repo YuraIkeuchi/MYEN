@@ -32,29 +32,29 @@ bool Player::Initialize()
 	object3d_->SetScale(scale);
 	object3d.reset(object3d_);
 
-	Object3d* Toon_object3d_ = new Object3d();
-	Toon_object3d_ = Object3d::Create();
-	Toon_object3d_->SetModel(model);
-	Toon_object3d_->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
-	position = { 100.0f,-60.0,0.0f };
-	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
-	Toon_object3d_->SetPosition(pos);
-	Toon_object3d_->SetRotation(rotation);
-	Toon_object3d_->SetScale(scale);
-	Toon_object3d.reset(Toon_object3d_);
+	//Object3d* Toon_object3d_ = new Object3d();
+	//Toon_object3d_ = Object3d::Create();
+	//Toon_object3d_->SetModel(model);
+	//Toon_object3d_->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
+	//position = { 100.0f,-60.0,0.0f };
+	////object3d_->SetRotation({ 0.0f,90.0f,0.0f });
+	//Toon_object3d_->SetPosition(pos);
+	//Toon_object3d_->SetRotation(rotation);
+	//Toon_object3d_->SetScale(scale);
+	//Toon_object3d.reset(Toon_object3d_);
 
-	Object3d* Single_object3d_ = new Object3d();
-	Single_object3d_ = Object3d::Create();
-	Single_object3d_->SetModel(model);
-	Single_object3d_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
-	position = { 100.0f,-60.0,0.0f };
-	//object3d_->SetRotation({ 0.0f,90.0f,0.0f });
-	Single_object3d_->SetPosition(pos);
-	Single_object3d_->SetRotation(rotation);
-	Single_object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-	Single_object3d_->Update();
-	Single_object3d_->SetScale(scale);
-	Single_object3d.reset(Single_object3d_);
+	//Object3d* Single_object3d_ = new Object3d();
+	//Single_object3d_ = Object3d::Create();
+	//Single_object3d_->SetModel(model);
+	//Single_object3d_->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+	//position = { 100.0f,-60.0,0.0f };
+	////object3d_->SetRotation({ 0.0f,90.0f,0.0f });
+	//Single_object3d_->SetPosition(pos);
+	//Single_object3d_->SetRotation(rotation);
+	//Single_object3d_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	//Single_object3d_->Update();
+	//Single_object3d_->SetScale(scale);
+	//Single_object3d.reset(Single_object3d_);
 	
 	// コライダーの追加
 	float radius = 0.6f;
@@ -214,31 +214,23 @@ void Player::Update()
 	// 行列の更新など
 	object3d->Update();
 
-	Toon_object3d->SetColor(color);
-	Toon_object3d->SetAddOffset(addoffset);
-	Toon_object3d->SetRotation(rotation);
-	Toon_object3d->SetPosition(pos);
-	Toon_object3d->Update();
+	//Toon_object3d->SetColor(color);
+	//Toon_object3d->SetAddOffset(addoffset);
+	//Toon_object3d->SetRotation(rotation);
+	//Toon_object3d->SetPosition(pos);
+	//Toon_object3d->Update();
 
-	Single_object3d->SetColor(color);
-	Single_object3d->SetAddOffset(addoffset);
-	Single_object3d->SetRotation(rotation);
-	Single_object3d->SetPosition(pos);
-	Single_object3d->Update();
+	//Single_object3d->SetColor(color);
+	//Single_object3d->SetAddOffset(addoffset);
+	//Single_object3d->SetRotation(rotation);
+	//Single_object3d->SetPosition(pos);
+	//Single_object3d->Update();
 }
 
 //描画
 void Player::Draw(int DrawNumber) {
 	Object3d::PreDraw();
-	if (DrawNumber == 0) {
-		object3d->Draw();
-	}
-	else if (DrawNumber == 1) {
-		Toon_object3d->Draw();
-	}
-	else if (DrawNumber == 2) {
-		Single_object3d->Draw();
-	}
+	object3d->Draw();
 }
 
 void Player::Finalize()
@@ -271,5 +263,23 @@ void Player::ImGuiDraw() {
 	ImGui::SliderFloat("color.g", &color.y, 1, 0);
 	ImGui::SliderFloat("color.b", &color.z, 1, 0);
 	ImGui::SliderFloat("color.a", &color.w, 1, 0);
+	ImGui::Text("Change:%d",m_ShaderChange);
 	ImGui::End();
+}
+
+void Player::ChangeShader(int DrawNumber) {
+	if (m_ShaderChange) {
+
+		if (DrawNumber == 0) {
+
+			object3d->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+		}
+		else if (DrawNumber == 1) {
+			object3d->CreateGraphicsPipeline(L"Resources/shaders/ToonVS.hlsl", L"Resources/shaders/ToonPS.hlsl");
+		}
+		else if (DrawNumber == 2) {
+			object3d->CreateGraphicsPipeline(L"Resources/shaders/SingleColorVS.hlsl", L"Resources/shaders/SingleColorPS.hlsl");
+		}
+		m_ShaderChange = false;
+	}
 }

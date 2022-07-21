@@ -88,7 +88,6 @@ void DirectXCommon::PreDraw()
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//•`‰æƒRƒ}ƒ“ƒh
-
 	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, (LONG)m_This_Like_window_x, (LONG)m_This_Like_window_y));
 
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, (LONG)m_This_Like_window_x, (LONG)m_This_Like_window_y));
