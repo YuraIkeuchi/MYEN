@@ -52,7 +52,6 @@ public:
 	CollisionManager* collsionManager = nullptr;
 	//ポストエフェクト指定
 	PostEffect* postEffect = nullptr;
-	PostEffect* gaussian = nullptr;
 	Model* modelFloor = nullptr;
 	unique_ptr <Object3d> objFloor;
 	Model* modelSphere = nullptr;
@@ -87,6 +86,7 @@ public:
 	float circleShadowPos[3] = { 1,2,0 };
 	float circleShadowAtten[3] = { 0.5f,0.6f,0.0f };
 	float circleShadowFactorAngle[2] = { 0.0f, 0.5f };
+	bool m_ChangePostEffect = false;
 	//ポストエフェクトをかけるか
 	bool PlayPostEffect = false;
 	//ポストエフェクトの種類

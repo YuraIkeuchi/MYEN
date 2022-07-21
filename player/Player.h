@@ -63,8 +63,6 @@ private:
 	XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	float addoffset = 0.1f;
 	unique_ptr <Object3d> object3d;
-	unique_ptr <Object3d> Toon_object3d;
-	unique_ptr <Object3d> Single_object3d;
 	Model* model;
 	int hit = 0;
 	bool onGround = true;

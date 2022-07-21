@@ -44,9 +44,9 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	postEffect->Initialize();
 	postEffect->CreateGraphicsPipeline(L"Resources/Shaders/PostEffectTestVS.hlsl", L"Resources/Shaders/PostEffectTestPS.hlsl");
 	//ガウシアン
-	gaussian = new PostEffect();
+	/*gaussian = new PostEffect();
 	gaussian->Initialize();
-	gaussian->CreateGraphicsPipeline(L"Resources/Shaders/GaussianVS.hlsl", L"Resources/Shaders/GaussianPS.hlsl");
+	gaussian->CreateGraphicsPipeline(L"Resources/Shaders/GaussianVS.hlsl", L"Resources/Shaders/GaussianPS.hlsl");*/
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
@@ -226,7 +226,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//cameraPos.z = player->GetPosition().z - 10;
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
-	
+	ChangePostEffect(PostType);
 	camera->SetEye({ 0,2,-10 });
 	camera->SetTarget({ 0, 2, 0 });
 	// 全ての衝突をチェック
@@ -239,35 +239,15 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 	//描画方法
 	//ポストエフェクトをかけるか
 	if (PlayPostEffect) {
-		//ポストエフェクトの種類変更
-		switch (PostType)
-		{
-		case Stripe://しましま
-			postEffect->PreDrawScene(dxCommon->GetCmdList());
-			GameDraw(dxCommon);
-			postEffect->PostDrawScene(dxCommon->GetCmdList());
+		postEffect->PreDrawScene(dxCommon->GetCmdList());
+		GameDraw(dxCommon);
+		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-			dxCommon->PreDraw();
-			postEffect->Draw(dxCommon->GetCmdList());
-			ImGuiDraw();
-			player->ImGuiDraw();
-			dxCommon->PostDraw();
-			break;
-		case Blur://ぼかし
-			gaussian->PreDrawScene(dxCommon->GetCmdList());
-			GameDraw(dxCommon);
-			gaussian->PostDrawScene(dxCommon->GetCmdList());
-
-			dxCommon->PreDraw();
-			gaussian->Draw(dxCommon->GetCmdList());
-			ImGuiDraw();
-			player->ImGuiDraw();
-			dxCommon->PostDraw();
-			break;
-		default:
-			break;
-		}
-		
+		dxCommon->PreDraw();
+		postEffect->Draw(dxCommon->GetCmdList());
+		ImGuiDraw();
+		player->ImGuiDraw();
+		dxCommon->PostDraw();
 	}
 	else {
 		postEffect->PreDrawScene(dxCommon->GetCmdList());
@@ -287,7 +267,7 @@ void GamePlayScene::Finalize()
 	//スプライト開放
 	delete spriteBG;
 	delete postEffect;
-	delete gaussian;
+	//delete gaussian;
 	player->Finalize();
 	//delete objFloor;
 	//delete objSphere;
@@ -370,7 +350,6 @@ void GamePlayScene::ImGuiDraw() {
 		ImGui::SetWindowPos(ImVec2(1000, 300));
 		ImGui::SetWindowSize(ImVec2(280, 150));
 		if (ImGui::RadioButton("Normal", &MaterialNumber)) {
-
 			MaterialNumber = NormalMaterial;
 			player->SetShaderChange(true);
 			player->ChangeShader(MaterialNumber);
@@ -394,12 +373,28 @@ void GamePlayScene::ImGuiDraw() {
 			ImGui::SetWindowSize(ImVec2(280, 150));
 			if (ImGui::RadioButton("Stripe", &PostType)) {
 				PostType = Stripe;
+				m_ChangePostEffect = true;
+				//ChangePostEffect(PostType);
 			}
 			if (ImGui::RadioButton("Gaussian", &PostType)) {
 				PostType = Blur;
+				m_ChangePostEffect = true;
+				
 			}
 			ImGui::End();
 		}
+	}
+}
+
+void GamePlayScene::ChangePostEffect(int PostType) {
+	if (m_ChangePostEffect) {
+		if (PostType == Stripe) {
+			postEffect->CreateGraphicsPipeline(L"Resources/Shaders/PostEffectTestVS.hlsl", L"Resources/Shaders/PostEffectTestPS.hlsl");
+		}
+		else if (PostType == Blur) {
+			postEffect->CreateGraphicsPipeline(L"Resources/Shaders/GaussianVS.hlsl", L"Resources/Shaders/GaussianPS.hlsl");
+		}
+		m_ChangePostEffect = false;
 	}
 }
 

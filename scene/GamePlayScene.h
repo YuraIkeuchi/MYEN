@@ -18,5 +18,7 @@ public:
 	void ModelDraw(DirectXCommon* dxCommon);
 	void GameDraw(DirectXCommon* dxCommon);
 	void ImGuiDraw();
+
+	void ChangePostEffect(int PostType);
 	
 };
