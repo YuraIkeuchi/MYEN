@@ -56,9 +56,10 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	particleMan->SetCamera(camera);
 
 	////// 3Dオブジェクト生成
-	player = new Player();
-	player->Initialize();
-
+	Player* _player = new Player();
+	_player->Initialize();
+	player.reset(_player);
+	
 	//ステージ床
 	Object3d* objFloor_ = new Object3d();
 	objFloor_ = Object3d::Create();
@@ -268,7 +269,7 @@ void GamePlayScene::Finalize()
 	delete spriteBG;
 	delete postEffect;
 	//delete gaussian;
-	player->Finalize();
+	//player->Finalize();
 	//delete objFloor;
 	//delete objSphere;
 	delete modelFloor;

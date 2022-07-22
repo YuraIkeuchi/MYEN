@@ -15,6 +15,7 @@
 #include "ParticleManager.h"
 #include "PostEffect.h"
 #include "ModelManager.h"
+#include "Player.h"
 #include <vector>
 #include <memory>
 #include <list> // ヘッダファイルインクルード
@@ -22,7 +23,7 @@ using namespace std;         //  名前空間指定
 //前方宣言
 class SceneManager;
 class CollisionManager;
-class Player;
+//class Player;
 class TouchableObject;
 //シーンインターフェース
 class BaseScene
@@ -35,7 +36,7 @@ public:
 	Sprite* spritePlayerHP = nullptr;
 	Sprite* spriteBossHP = nullptr;
 	std::vector<Object3d*> objects;
-	Player* player = nullptr;
+	unique_ptr<Player> player;
 	FBXModel* model1 = nullptr;
 	FBXObject3d* object1 = nullptr;
 	ParticleManager* particleMan = nullptr;

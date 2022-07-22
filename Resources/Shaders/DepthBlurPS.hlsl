@@ -35,10 +35,13 @@ float4 main(VSOutput input) : SV_TARGET
 	float _Depth = 0.05f;
 	float _Width = 0.05f;
 
-	float4 depth = tex1.Sample(smp, input.uv);
+	float4 depth = tex0.Sample(smp, input.uv);
 	float4 pintColor = tex0.Sample(smp, input.uv);
 	float4 overColor = GaussianBlur(input.uv, 0.03f, 0.005f);
+	//float4 pintcolor = float4(1, 0, 0, 1);
+	//float4 overcolor = float4(0, 0, 1, 1);
 	float pint = smoothstep(0, _Width / 2, abs(depth.r - _Depth));
 
 	return pint * overColor + (1 - pint) * pintColor;
+	//return (1 - pint) * pintColor + pint * overColor;
 }

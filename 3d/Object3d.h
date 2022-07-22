@@ -40,11 +40,12 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		XMFLOAT4 color;//色情報
 		XMFLOAT2 offset;
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
+		float pad;//パディング
+		XMFLOAT4 color;//色情報
 		
 	};
 
