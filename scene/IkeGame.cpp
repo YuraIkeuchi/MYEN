@@ -26,7 +26,7 @@ void IkeGame::Initialize(DirectXCommon* dxCommon)
 	//マネージャーセット
 	sceneFactory_ = new SceneFactory();
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
-	SceneManager::GetInstance()->ChangeScene("TITLE");
+	SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 }
 
 void IkeGame::Update(DirectXCommon* dxCommon)

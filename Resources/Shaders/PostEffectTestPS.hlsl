@@ -44,7 +44,6 @@ float4 main(VSOutput input) : SV_TARGET
     // //ここまでがぼかし
     // //ボーダー柄
      float4 colortex0 = tex0.Sample(smp,input.uv);
-     float4 colortex1 = tex0.Sample(smp, input.uv);
      //色反転
      float4 color = float4(1.0f - colortex0.rgb, 1);
      if (fmod(input.uv.y, 0.1f) < 0.05f) {

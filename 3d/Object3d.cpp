@@ -363,6 +363,7 @@ void Object3d::Update()
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
+	//addoffsetに合わせてuvスクロールする
 	offset.y += addoffset;
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;

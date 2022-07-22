@@ -40,7 +40,7 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		XMFLOAT2 offset;
+		XMFLOAT2 offset;//オフセット値
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）

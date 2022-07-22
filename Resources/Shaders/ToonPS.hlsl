@@ -20,8 +20,6 @@ float4 main(VSOutput input) : SV_TARGET
 	float intensity = saturate(dot(normalize(input.normal), halfvec));
 	//環境反射光
 	float3 ambient = m_ambient;
-	//a値を先に設定してる
-	shadecolor.a = m_alpha;
 	//smoothstep用変数
 	float _Threshold = 0.45;
 	//陰の部分
@@ -30,13 +28,15 @@ float4 main(VSOutput input) : SV_TARGET
 	float3 specular = m_specular * smoothstep(_Threshold, _Threshold + 0.1f, pow(intensity, shininess));
 	//すべて加算
 	float3 ads = (ambient + diffuse + specular) * texcolor.rgb;
-	//明るい部分の色
-	float3 light_color = ads;
 	//暗い部分の色
 	float3 dark_color = texcolor.rgb * 0.3;
+	//明るい部分の色
+	float3 light_color = ads;
 	//陰と光の部分の判定
-	shadecolor.rgb = smoothstep(_Threshold, _Threshold + 0.1f, intensity) * light_color + (1 - smoothstep(_Threshold, _Threshold + 0.1f, intensity)) * dark_color * lightcolor;
-	
+	shadecolor.rgb = smoothstep(_Threshold, _Threshold + 0.1f, intensity) * light_color + 
+		(1 - smoothstep(_Threshold, _Threshold + 0.1f, intensity)) * dark_color * lightcolor;
+	//a値設定
+	shadecolor.a = color.a;
 	//出力
 	return shadecolor * color;
 }
