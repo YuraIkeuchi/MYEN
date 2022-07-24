@@ -17,6 +17,8 @@ public:
 	};
 	enum tex2dName {
 		whiteeffect,
+		Line,
+		Box,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

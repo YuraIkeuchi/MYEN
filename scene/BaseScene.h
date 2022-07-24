@@ -143,11 +143,18 @@ public:
 
 	//重力加速度
 	float m = 9.8f;
-	// 角度
+	// 円運動
 	float angle = 0.0f;
 	float speed = 0.0f;
 	float scale = 10.0f;
 	XMFLOAT3 CirclePos = { 0.0f,0.0f,0.0f };
+
+	//外積当たり判定
+	unique_ptr <Texture> BoxTexture;
+	unique_ptr <Texture> LineTexture;
+
+	XMFLOAT3 BoxPos = { 0.0f,0.0f,10.0f };
+	XMFLOAT3 LinePos = { 10.0f,0.0f,10.0f };
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

@@ -36,4 +36,6 @@ public:
 	static bool CheckRay2Triangle(const Ray& ray, const Triangle& triangle, float* distance = nullptr, XMVECTOR* inter = nullptr);
 	//ƒŒƒC‚Æ‹…
 	static bool CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* distance = nullptr, XMVECTOR* inter = nullptr);
+	//” ‚Æ‹…
+	static bool CheckSphere2Box(const Sphere& sphere, const Box& box);
 };

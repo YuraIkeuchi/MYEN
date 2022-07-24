@@ -12,6 +12,14 @@ struct Sphere
 	float radius = 1.0f;
 };
 
+struct Box //” 
+{
+	//’†SÀ•W
+	DirectX::XMVECTOR center = { 0,0,0,1 };
+	//”¼Œa
+	DirectX::XMFLOAT3 scale = { 1.0f, 1.0f, 1.0f };
+};
+
 //•½–Ê
 struct Plane
 {

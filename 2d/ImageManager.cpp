@@ -10,5 +10,6 @@ void ImageManager::Load2D() {
 }
 
 void ImageManager::LoadTex2D() {
-	//Texture::LoadTexture(whiteeffect, L"Resources/2d/effect/ChargeEffect.png");
+	Texture::LoadTexture(Box, L"Resources/2d/Box.png");
+	Texture::LoadTexture(Line, L"Resources/2d/Line.png");
 }

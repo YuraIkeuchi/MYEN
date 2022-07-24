@@ -12,6 +12,7 @@
 #include "TouchableObject.h"
 #include "MeshCollider.h"
 #include "imgui.h"
+#include "ImageManager.h"
 
 //float easeInSine(float x) {
 //	return x * x * x;
@@ -138,6 +139,23 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
 
+	//テクスチャ関係
+	Texture* LineTexture_ = Texture::Create(ImageManager::Line, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	LineTexture_->TextureCreate();
+	//DushEffecttexture->SetRotation({ 90,0,0 });
+	LineTexture_->SetScale({0.3f,0.1f,1.0f});
+	LineTexture_->SetPosition(LinePos);
+	//LineTexture_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	LineTexture.reset(LineTexture_);
+
+	//テクスチャ関係
+	Texture* BoxTexture_ = Texture::Create(ImageManager::Box, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	BoxTexture_->TextureCreate();
+	//DushEffecttexture->SetRotation({ 90,0,0 });
+	BoxTexture_->SetScale({ 0.1f,0.1f,1.0f });
+	BoxTexture_->SetPosition(BoxPos);
+	BoxTexture.reset(BoxTexture_);
+
 
 		// カメラ注視点をセット
 	camera->SetEye({ 0,0,-5 });
@@ -198,6 +216,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	objSphere->Update();
 	objSphere2->Update();
 	objSkydome->Update();
+	LineTexture->Update();
+	BoxTexture->Update();
 	///ポイントライト
 	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
@@ -230,7 +250,40 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 		MathStart = false;
 	}
 
+	//線の移動
+	if (input->LeftTiltStick(input->Right)) {
+		LinePos.x += 0.2f;
+	}
 
+	if (input->LeftTiltStick(input->Left)) {
+		LinePos.x -= 0.2f;
+	}
+
+	if (input->LeftTiltStick(input->Up)) {
+		LinePos.y += 0.2f;
+	}
+
+	if (input->LeftTiltStick(input->Down)) {
+		LinePos.y -= 0.2f;
+	}
+
+	//外積当たり判定
+	Sphere box;
+	box.center = { BoxPos.x,BoxPos.y,BoxPos.z };
+	box.radius = 1;
+
+	Box line;
+	line.center = { LinePos.x,LinePos.y,LinePos.z };
+	line.scale = { 2.5f,0.8f,1.0f };
+
+	if (Collision::CheckSphere2Box(box, line)) {
+		BoxTexture->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+	else {
+		BoxTexture->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+
+	
 	//if (MathStart) {
 	//	//ボール一個目
 	//	{
@@ -309,7 +362,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//}
 	objSphere->SetPosition(m_SpherePos1);
 	objSphere2->SetPosition(m_SpherePos2);
-
+	LineTexture->SetPosition(LinePos);
+	BoxTexture->SetPosition(BoxPos);
 	
 	/*///スポットライト
 	lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
@@ -406,11 +460,14 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	//object1->Draw(dxCommon->GetCmdList());
 	//objSkydome->Draw();
 	//objFloor->Draw();
-	objSphere->Draw();
-	objSphere2->Draw();
+	//objSphere->Draw();
+	//objSphere2->Draw();
 	//player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
+	Texture::PreDraw();
+	LineTexture->Draw();
+	BoxTexture->Draw();
 #pragma endregion
 }
 
@@ -492,8 +549,8 @@ void GamePlayScene::ImGuiDraw() {
 			ImGui::Begin("Pos");
 			ImGui::SetWindowPos(ImVec2(1000, 450));
 			ImGui::SetWindowSize(ImVec2(280, 300));
-			ImGui::SliderFloat("speed", &speed, 360, 0);
-			ImGui::SliderFloat("scale", &scale, 30, 0);
+			ImGui::SliderFloat("LinePos.x", &LinePos.x, 360, -360);
+			ImGui::SliderFloat("LinePos.y", &LinePos.y, 30, 0);
 			//ImGui::Text("IsPlay::%d", isFlag);
 			ImGui::End();
 		}

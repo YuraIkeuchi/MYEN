@@ -318,3 +318,43 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 }
 
 
+bool Collision::CheckSphere2Box(const Sphere& sphere, const Box& box)
+{
+	float sqDistance = 0.0f;
+	float pos;
+
+	pos = sphere.center.m128_f32[0];
+	if (pos < box.center.m128_f32[0] - box.scale.x)
+	{
+		sqDistance += (pos - box.center.m128_f32[0] - box.scale.x) * (pos - box.center.m128_f32[0] - box.scale.x);
+	}
+	else if (pos > box.center.m128_f32[0] + box.scale.x)
+	{
+		sqDistance += (pos - box.center.m128_f32[0] + box.scale.x) * (pos - box.center.m128_f32[0] + box.scale.x);
+	}
+
+	pos = sphere.center.m128_f32[1];
+	if (pos < box.center.m128_f32[1] - box.scale.y)
+	{
+		sqDistance += (pos - box.center.m128_f32[1] - box.scale.y) * (pos - box.center.m128_f32[1] - box.scale.y);
+	}
+	else if (pos > box.center.m128_f32[1] + box.scale.y)
+	{
+		sqDistance += (pos - box.center.m128_f32[1] + box.scale.y) * (pos - box.center.m128_f32[1] + box.scale.y);
+	}
+
+	pos = sphere.center.m128_f32[2];
+	if (pos < box.center.m128_f32[2] - box.scale.z)
+	{
+		sqDistance += (pos - box.center.m128_f32[2] - box.scale.z) * (pos - box.center.m128_f32[2] - box.scale.z);
+	}
+	else if (pos > box.center.m128_f32[2] + box.scale.z)
+	{
+		sqDistance += (pos - box.center.m128_f32[2] + box.scale.z) * (pos - box.center.m128_f32[2] + box.scale.z);
+	}
+
+	return sqDistance < sphere.radius* sphere.radius;
+}
+
+
+
