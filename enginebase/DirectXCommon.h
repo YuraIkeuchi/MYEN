@@ -54,6 +54,11 @@ public:
 	ID3D12Device* GetDev() { return dev.Get(); }
 
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }
+
+	const bool& GetFullScreen() { return  FullScreen; }
+
+	void SetFullScreen(bool FullScreen) { this->FullScreen = FullScreen; }
+	
 private:
 	//ƒƒ“ƒo•Ï”
 		// Direct3DŠÖ˜A
@@ -71,8 +76,8 @@ private:
 	UINT64 fenceVal = 0;
 	WinApp* winApp = nullptr;
 	ComPtr<ID3D12DescriptorHeap> imguiHeap;
-	float m_This_Like_window_x = 1000.0f;
-	float m_This_Like_window_y = 500.0f;
+	float m_This_Like_window_x = 1280.0f;
+	float m_This_Like_window_y = 720.0f;
 	float m_This_Like_save_x = 1000.0f;
 	float m_This_Like_save_y = 500.0f;
 	bool FullScreen = false;

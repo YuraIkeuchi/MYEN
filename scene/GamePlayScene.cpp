@@ -71,17 +71,30 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	objFloor_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	objFloor.reset(objFloor_);
 	// モデル読み込み
-	modelSphere = Model::LoadFromOBJ("box1x1x1", true);
+	modelSphere = Model::LoadFromOBJ("sphere", true);
 
 	// 3Dオブジェクト生成
 	Object3d* objSphere_ = new Object3d();
 	objSphere_ = Object3d::Create();
 	objSphere_->SetModel(modelSphere);
 	objSphere_->SetPosition({ -2, 1, -5 });
+	objSphere_->SetScale({ 3.0f,3.0f,3.0f });
 	objSphere_->SetAddOffset(0.04f);
 	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere.reset(objSphere_);
+
+	// 3Dオブジェクト生成
+	Object3d* objSphere2_ = new Object3d();
+	objSphere2_ = Object3d::Create();
+	objSphere2_->SetModel(modelSphere);
+	objSphere2_->SetPosition({ -2, 1, -5 });
+	objSphere2_->SetScale({ 3.0f,3.0f,3.0f });
+	objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	objSphere2_->SetAddOffset(0.04f);
+	objSphere2_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	objSphere2.reset(objSphere2_);
 	
 	modelSkydome = ModelManager::GetInstance()->GetModel(ModelManager::Skydome);
 	
@@ -183,11 +196,92 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	camera->Update();
 	//objSphere->SetColor({ 0.0f,0.0f,1.0f,0.0f });
 	objSphere->Update();
+	objSphere2->Update();
 	objSkydome->Update();
 	///ポイントライト
 	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
+
+	if (MathStart) {
+		//ボール一個目
+		{
+			m_velY1 += m_gravity1;    //スピードに重力が加算される
+
+			//if (input->TriggerKey(DIK_1)) {
+			//	Bound = true;
+			//	velX *= -1.0f;
+			//}
+
+			m_SpherePos1.x += m_velX1;
+			//m_SpherePos1.y += m_velY1;
+
+			m_velX1 *= m_damp1;    //velXを減衰
+		}
+
+		//ボール二個目
+		{
+			m_velY2 += m_gravity2;    //スピードに重力が加算される
+
+			//if (input->TriggerKey(DIK_1)) {
+			//	Bound = true;
+			//	velX *= -1.0f;
+			//}
+
+			m_SpherePos2.x -= m_velX2;
+			//m_SpherePos2.y += m_velY2;
+
+			m_velX2 *= m_damp2;    //velXを減衰
+		}
+
+
+		//リセット
+		if (!m_Bound1 && !m_Bound2) {
+			if (m_velX1 <= 0.01f && m_velX2 <= 0.01f) {
+				Reset = true;
+				MathStart = false;
+			}
+		}
+		else if(m_Bound1 && m_Bound2) {
+			if (m_velX1 >= -0.01f && m_velX2 >= -0.01f) {
+
+				Reset = true;
+				MathStart = false;
+				m_Bound1 = false;
+				m_Bound2 = false;
+			}
+		}
+
+	}
+	else {
+		if (input->TriggerKey(DIK_1)) {
+			MathStart = true;
+		}
+	}
+
+
+	if (Reset) {
+		if (input->TriggerKey(DIK_0)) {
+
+			m_SpherePos1 = { -70,0,150 };
+			m_velX1 = 3.0f;
+			m_SpherePos2 = { 70,0,150 };
+			m_velX2 = 8.0f;
+			Reset = false;
+		}
+	}
+
+
+	if (collision->CircleCollision(m_SpherePos1.x, m_SpherePos1.y, 2.0f, m_SpherePos2.x, m_SpherePos2.y, 2.0f)) {
+
+		m_Bound1 = true;
+		m_velX1 *= -1.0f;
+		m_Bound2 = true;
+		m_velX2 *= -1.0f;
+	}
+	objSphere->SetPosition(m_SpherePos1);
+	objSphere2->SetPosition(m_SpherePos2);
+
 	
 	/*///スポットライト
 	lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
@@ -228,8 +322,8 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye(cameraPos);
 	ChangePostEffect(PostType);
-	camera->SetEye({ 0,2,-10 });
-	camera->SetTarget({ 0, 2, 0 });
+	camera->SetEye({ 0,0,-10 });
+	camera->SetTarget({ 0, 0, 0 });
 	// 全ての衝突をチェック
 	collsionManager->CheckAllCollisions();
 	DebugText::GetInstance()->Print("Raycast Hit.", 0, 30, 10);
@@ -256,7 +350,8 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 		postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 		dxCommon->PreDraw();
-		ImGuiDraw();
+		dxCommon->SetFullScreen(true);
+			ImGuiDraw();
 		GameDraw(dxCommon);
 		player->ImGuiDraw();
 		dxCommon->PostDraw();
@@ -281,10 +376,11 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw();
 	//object1->Draw(dxCommon->GetCmdList());
-	objSkydome->Draw();
-	objFloor->Draw();
+	//objSkydome->Draw();
+	//objFloor->Draw();
 	objSphere->Draw();
-	player->Draw(MaterialNumber);
+	objSphere2->Draw();
+	//player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 #pragma endregion
@@ -313,75 +409,63 @@ void GamePlayScene::GameDraw(DirectXCommon* dxCommon)
 }
 
 void GamePlayScene::ImGuiDraw() {
-	//{
-	//	ImGui::Begin("Light");
-	//	ImGui::SetWindowPos(ImVec2(0, 0));
-	//	ImGui::SetWindowSize(ImVec2(500, 200));
-	//	//ImGui::ColorEdit3("ambientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	//	//ImGui::InputFloat3("lightDir0", lightDir0);
-	//	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	//	//ImGui::InputFloat3("lightDir1", lightDir1);
-	//	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	//	//ImGui::InputFloat3("lightDir2", lightDir2);
-	//	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
-	//	//ImGui::InputFloat3("circleShadowDir", circleShadowDir);
-	//	////ImGui::InputFloat3("circleShadowPos", circleShadowPos);
-	//	//ImGui::InputFloat3("circleShadowAtten", circleShadowAtten, 8);
-	//	//ImGui::InputFloat2("circleShadowFactorAngle", circleShadowFactorAngle);
-	//	//ImGui::InputFloat3("fighterPos", fighterPos);
-	//	ImGui::ColorEdit3("PointColor", pointLightColor, ImGuiColorEditFlags_Float);
-	//	ImGui::InputFloat3("pointLightPos", pointLightPos);
-	//	ImGui::InputFloat3("pointLightAtten", pointLightAtten);
-	//	ImGui::End();
-	//}
 	{
-		ImGui::Begin("postEffect");
-		ImGui::SetWindowPos(ImVec2(1000, 150));
-		ImGui::SetWindowSize(ImVec2(280, 150));
-		if (ImGui::RadioButton("PostEffect", &PlayPostEffect)) {
-			PlayPostEffect = true;
-		}
-		if (ImGui::RadioButton("Default", &PlayPostEffect)) {
-			PlayPostEffect = false;
-		}
-		ImGui::End();
-	}
-	{
-		ImGui::Begin("Material");
-		ImGui::SetWindowPos(ImVec2(1000, 300));
-		ImGui::SetWindowSize(ImVec2(280, 150));
-		if (ImGui::RadioButton("Normal", &MaterialNumber)) {
-			MaterialNumber = NormalMaterial;
-			player->SetShaderChange(true);
-			player->ChangeShader(MaterialNumber);
-		}
-		if (ImGui::RadioButton("Toon", &MaterialNumber)) {
-			MaterialNumber = Toon;
-			player->SetShaderChange(true);
-			player->ChangeShader(MaterialNumber);
-		}
-		if (ImGui::RadioButton("Single", &MaterialNumber)) {
-			MaterialNumber = Single;
-			player->SetShaderChange(true);
-			player->ChangeShader(MaterialNumber);
-		}
-		ImGui::End();
-	}
-	{
-		if (PlayPostEffect) {
-			ImGui::Begin("PostType");
+		//	ImGui::Begin("postEffect");
+		//	ImGui::SetWindowPos(ImVec2(1000, 150));
+		//	ImGui::SetWindowSize(ImVec2(280, 150));
+		//	if (ImGui::RadioButton("PostEffect", &PlayPostEffect)) {
+		//		PlayPostEffect = true;
+		//	}
+		//	if (ImGui::RadioButton("Default", &PlayPostEffect)) {
+		//		PlayPostEffect = false;
+		//	}
+		//	ImGui::End();
+		//}
+		//{
+		//	ImGui::Begin("Material");
+		//	ImGui::SetWindowPos(ImVec2(1000, 300));
+		//	ImGui::SetWindowSize(ImVec2(280, 150));
+		//	if (ImGui::RadioButton("Normal", &MaterialNumber)) {
+		//		MaterialNumber = NormalMaterial;
+		//		player->SetShaderChange(true);
+		//		player->ChangeShader(MaterialNumber);
+		//	}
+		//	if (ImGui::RadioButton("Toon", &MaterialNumber)) {
+		//		MaterialNumber = Toon;
+		//		player->SetShaderChange(true);
+		//		player->ChangeShader(MaterialNumber);
+		//	}
+		//	if (ImGui::RadioButton("Single", &MaterialNumber)) {
+		//		MaterialNumber = Single;
+		//		player->SetShaderChange(true);
+		//		player->ChangeShader(MaterialNumber);
+		//	}
+		//	ImGui::End();
+		//}
+		//{
+		//	if (PlayPostEffect) {
+		//		ImGui::Begin("PostType");
+		//		ImGui::SetWindowPos(ImVec2(1000, 450));
+		//		ImGui::SetWindowSize(ImVec2(280, 150));
+		//		if (ImGui::RadioButton("Stripe", &PostType)) {
+		//			PostType = Stripe;
+		//			m_ChangePostEffect = true;
+		//			//ChangePostEffect(PostType);
+		//		}
+		//		if (ImGui::RadioButton("Gaussian", &PostType)) {
+		//			PostType = Blur;
+		//			m_ChangePostEffect = true;
+		//			
+		//		}
+		//		ImGui::End();
+		//	}
+		//}
+		{
+			ImGui::Begin("Pos");
 			ImGui::SetWindowPos(ImVec2(1000, 450));
-			ImGui::SetWindowSize(ImVec2(280, 150));
-			if (ImGui::RadioButton("Stripe", &PostType)) {
-				PostType = Stripe;
-				m_ChangePostEffect = true;
-				//ChangePostEffect(PostType);
-			}
-			if (ImGui::RadioButton("Gaussian", &PostType)) {
-				PostType = Blur;
-				m_ChangePostEffect = true;
-				
-			}
+			ImGui::SetWindowSize(ImVec2(280, 300));
+			ImGui::SliderFloat("velX1", &m_velX1, 10, 0);
+			ImGui::SliderFloat("velX2", &m_velX2, 10, 0);
 			ImGui::End();
 		}
 	}

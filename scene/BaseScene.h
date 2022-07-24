@@ -57,6 +57,7 @@ public:
 	unique_ptr <Object3d> objFloor;
 	Model* modelSphere = nullptr;
 	unique_ptr <Object3d> objSphere = nullptr;
+	unique_ptr <Object3d> objSphere2 = nullptr;
 	Model* modelSkydome = nullptr;
 	unique_ptr <Object3d> objSkydome = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
@@ -105,6 +106,40 @@ public:
 		Toon,
 		Single,
 	};
+
+	//数学用の変数
+	XMFLOAT3 m_SpherePos1 = {-70,0,150 };
+
+	//Sphere1個目
+	//ボールのx軸の初速
+	float m_velX1 = 3.0f;
+	//ボールのy軸の初速
+	float m_velY1 = 0.0f;
+	//ボールにかかる重力
+	float m_gravity1 = 0.6f;
+	//摩擦による減衰
+	float m_damp1 = 0.95f;
+	
+	bool m_Bound1 = false;
+
+	XMFLOAT3 m_SpherePos2 = { 70,0,150 };
+
+	//Sphere1個目
+	//ボールのx軸の初速
+	float m_velX2 = 8.0f;
+	//ボールのy軸の初速
+	float m_velY2 = 0.0f;
+	//ボールにかかる重力
+	float m_gravity2 = 0.6f;
+	//摩擦による減衰
+	float m_damp2 = 0.95f;
+
+	bool m_Bound2 = false;
+
+	//動き開始
+	bool MathStart = false;
+
+	bool Reset = false;
 
 public:
 	//仮想デストラクタ
