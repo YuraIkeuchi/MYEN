@@ -122,7 +122,7 @@ public:
 	
 	bool m_Bound1 = false;
 
-	XMFLOAT3 m_SpherePos2 = { 70,0,150 };
+	XMFLOAT3 m_SpherePos2 = { 0,0,150 };
 
 	//Sphere1個目
 	//ボールのx軸の初速
@@ -141,6 +141,13 @@ public:
 
 	bool Reset = false;
 
+	//重力加速度
+	float m = 9.8f;
+	// 角度
+	float angle = 0.0f;
+	float speed = 0.0f;
+	float scale = 10.0f;
+	XMFLOAT3 CirclePos = { 0.0f,0.0f,0.0f };
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

@@ -203,82 +203,110 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
 
-	if (MathStart) {
-		//ボール一個目
-		{
-			m_velY1 += m_gravity1;    //スピードに重力が加算される
+	
+	float radius = speed * 3.14f / 180.0f;
 
-			//if (input->TriggerKey(DIK_1)) {
-			//	Bound = true;
-			//	velX *= -1.0f;
-			//}
+	//XMFLOAT3 pos = object3d2->GetPosition();
+	//XMFLOAT3 center = object3d->GetPosition();
 
-			m_SpherePos1.x += m_velX1;
-			//m_SpherePos1.y += m_velY1;
+	CirclePos.x = cos(radius) * scale;
+	CirclePos.y = sin(radius) * scale;
 
-			m_velX1 *= m_damp1;    //velXを減衰
-		}
-
-		//ボール二個目
-		{
-			m_velY2 += m_gravity2;    //スピードに重力が加算される
-
-			//if (input->TriggerKey(DIK_1)) {
-			//	Bound = true;
-			//	velX *= -1.0f;
-			//}
-
-			m_SpherePos2.x -= m_velX2;
-			//m_SpherePos2.y += m_velY2;
-
-			m_velX2 *= m_damp2;    //velXを減衰
-		}
-
-
-		//リセット
-		if (!m_Bound1 && !m_Bound2) {
-			if (m_velX1 <= 0.01f && m_velX2 <= 0.01f) {
-				Reset = true;
-				MathStart = false;
-			}
-		}
-		else if(m_Bound1 && m_Bound2) {
-			if (m_velX1 >= -0.01f && m_velX2 >= -0.01f) {
-
-				Reset = true;
-				MathStart = false;
-				m_Bound1 = false;
-				m_Bound2 = false;
-			}
-		}
-
+	m_SpherePos1.x = CirclePos.x + m_SpherePos2.x;
+	m_SpherePos1.y = CirclePos.y + m_SpherePos2.y;
+	if (MathStart)
+	{
+		speed += 5.0f;
 	}
-	else {
-		if (input->TriggerKey(DIK_1)) {
-			MathStart = true;
-		}
+
+	if (input->TriggerKey(DIK_SPACE)) {
+		MathStart = true;
+	}
+
+	if (input->TriggerKey(DIK_R))
+	{
+		speed = 0.0f;
+		scale = 10.0f;
+		MathStart = false;
 	}
 
 
-	if (Reset) {
-		if (input->TriggerKey(DIK_0)) {
+	//if (MathStart) {
+	//	//ボール一個目
+	//	{
+	//		m_velY1 += m_gravity1;    //スピードに重力が加算される
 
-			m_SpherePos1 = { -70,0,150 };
-			m_velX1 = 3.0f;
-			m_SpherePos2 = { 70,0,150 };
-			m_velX2 = 8.0f;
-			Reset = false;
-		}
-	}
+	//		//if (input->TriggerKey(DIK_1)) {
+	//		//	Bound = true;
+	//		//	velX *= -1.0f;
+	//		//}
+
+	//		m_SpherePos1.x += m_velX1;
+	//		//m_SpherePos1.y += m_velY1;
+
+	//		m_velX1 *= m_damp1;    //velXを減衰
+	//	}
+
+	//	//ボール二個目
+	//	{
+	//		m_velY2 += m_gravity2;    //スピードに重力が加算される
+
+	//		//if (input->TriggerKey(DIK_1)) {
+	//		//	Bound = true;
+	//		//	velX *= -1.0f;
+	//		//}
+
+	//		m_SpherePos2.x -= m_velX2;
+	//		//m_SpherePos2.y += m_velY2;
+
+	//		m_velX2 *= m_damp2;    //velXを減衰
+	//	}
 
 
-	if (collision->CircleCollision(m_SpherePos1.x, m_SpherePos1.y, 2.0f, m_SpherePos2.x, m_SpherePos2.y, 2.0f)) {
+	//	//リセット
+	//	if (!m_Bound1 && !m_Bound2) {
+	//		if (m_velX1 <= 0.01f && m_velX2 <= 0.01f) {
+	//			Reset = true;
+	//			MathStart = false;
+	//		}
+	//	}
+	//	else if(m_Bound1 && m_Bound2) {
+	//		if (m_velX1 >= -0.01f && m_velX2 >= -0.01f) {
 
-		m_Bound1 = true;
-		m_velX1 *= -1.0f;
-		m_Bound2 = true;
-		m_velX2 *= -1.0f;
-	}
+	//			Reset = true;
+	//			MathStart = false;
+	//			m_Bound1 = false;
+	//			m_Bound2 = false;
+	//		}
+	//	}
+
+	//}
+	//else {
+	//	if (input->TriggerKey(DIK_1)) {
+	//		MathStart = true;
+	//	}
+	//}
+
+
+	//if (Reset) {
+	//	if (input->TriggerKey(DIK_0)) {
+
+	//		m_SpherePos1 = { -70,0,150 };
+	//		m_velX1 = 3.0f;
+	//		m_SpherePos2 = { 70,0,150 };
+	//		m_velX2 = 8.0f;
+	//		Reset = false;
+	//	}
+	//}
+
+
+	//if (collision->CircleCollision(m_SpherePos1.x, m_SpherePos1.y, 2.0f, m_SpherePos2.x, m_SpherePos2.y, 2.0f)) {
+
+	//	m_Bound1 = true;
+	//	m_velX1 *= -1.0f;
+	//	m_Bound2 = true;
+	//	m_velX2 *= -1.0f;
+	//}
 	objSphere->SetPosition(m_SpherePos1);
 	objSphere2->SetPosition(m_SpherePos2);
 
@@ -464,8 +492,9 @@ void GamePlayScene::ImGuiDraw() {
 			ImGui::Begin("Pos");
 			ImGui::SetWindowPos(ImVec2(1000, 450));
 			ImGui::SetWindowSize(ImVec2(280, 300));
-			ImGui::SliderFloat("velX1", &m_velX1, 10, 0);
-			ImGui::SliderFloat("velX2", &m_velX2, 10, 0);
+			ImGui::SliderFloat("speed", &speed, 360, 0);
+			ImGui::SliderFloat("scale", &scale, 30, 0);
+			//ImGui::Text("IsPlay::%d", isFlag);
 			ImGui::End();
 		}
 	}
