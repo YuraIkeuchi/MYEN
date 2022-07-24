@@ -58,6 +58,7 @@ public:
 	Model* modelSphere = nullptr;
 	unique_ptr <Object3d> objSphere = nullptr;
 	unique_ptr <Object3d> objSphere2 = nullptr;
+	unique_ptr <Object3d> objSphere3 = nullptr;
 	Model* modelSkydome = nullptr;
 	unique_ptr <Object3d> objSkydome = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
@@ -107,9 +108,6 @@ public:
 		Single,
 	};
 
-	//数学用の変数
-	XMFLOAT3 m_SpherePos1 = {-70,0,150 };
-
 	//Sphere1個目
 	//ボールのx軸の初速
 	float m_velX1 = 3.0f;
@@ -122,7 +120,13 @@ public:
 	
 	bool m_Bound1 = false;
 
-	XMFLOAT3 m_SpherePos2 = { 0,0,150 };
+
+	//数学用の変数
+	XMFLOAT3 m_SpherePos1 = { -100,20,150 };
+
+	XMFLOAT3 m_SpherePos2 = { -100,0,150 };
+
+	XMFLOAT3 m_SpherePos3 = { -100, -20,150 };
 
 	//Sphere1個目
 	//ボールのx軸の初速
@@ -155,6 +159,9 @@ public:
 
 	XMFLOAT3 BoxPos = { 0.0f,0.0f,10.0f };
 	XMFLOAT3 LinePos = { 10.0f,0.0f,10.0f };
+
+	//イージング
+	float m_frame = 0.0f;
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

@@ -256,15 +256,15 @@ void Player::OnCollision(const CollisionInfo& info)
 }
 
 void Player::ImGuiDraw() {
-	ImGui::Begin("color");
-	ImGui::SetWindowPos(ImVec2(0, 500));
-	ImGui::SetWindowSize(ImVec2(280, 240));
-	ImGui::SliderFloat("color.r", &color.x, 1, 0);
-	ImGui::SliderFloat("color.g", &color.y, 1, 0);
-	ImGui::SliderFloat("color.b", &color.z, 1, 0);
-	ImGui::SliderFloat("color.a", &color.w, 1, 0);
-	ImGui::Text("Change:%d",m_ShaderChange);
-	ImGui::End();
+	//ImGui::Begin("color");
+	//ImGui::SetWindowPos(ImVec2(0, 500));
+	//ImGui::SetWindowSize(ImVec2(280, 240));
+	//ImGui::SliderFloat("color.r", &color.x, 1, 0);
+	//ImGui::SliderFloat("color.g", &color.y, 1, 0);
+	//ImGui::SliderFloat("color.b", &color.z, 1, 0);
+	//ImGui::SliderFloat("color.a", &color.w, 1, 0);
+	//ImGui::Text("Change:%d",m_ShaderChange);
+	//ImGui::End();
 }
 
 void Player::ChangeShader(int DrawNumber) {
