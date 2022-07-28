@@ -58,7 +58,6 @@ public:
 	Model* modelSphere = nullptr;
 	unique_ptr <Object3d> objSphere = nullptr;
 	unique_ptr <Object3d> objSphere2 = nullptr;
-	unique_ptr <Object3d> objSphere3 = nullptr;
 	Model* modelSkydome = nullptr;
 	unique_ptr <Object3d> objSkydome = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
@@ -108,6 +107,9 @@ public:
 		Single,
 	};
 
+	//数学用の変数
+	XMFLOAT3 m_SpherePos1 = { 0,0,150 };
+
 	//Sphere1個目
 	//ボールのx軸の初速
 	float m_velX1 = 3.0f;
@@ -117,15 +119,10 @@ public:
 	float m_gravity1 = 0.6f;
 	//摩擦による減衰
 	float m_damp1 = 0.95f;
-	
+
 	bool m_Bound1 = false;
 
-	//数学用の変数
-	XMFLOAT3 m_SpherePos1 = { 0,0,150 };
-
 	XMFLOAT3 m_SpherePos2 = { 0,0,150 };
-
-	XMFLOAT3 m_SpherePos3 = { 0, 0,150 };
 
 	//Sphere1個目
 	//ボールのx軸の初速
@@ -146,39 +143,22 @@ public:
 
 	//重力加速度
 	float m = 9.8f;
-	// 円運動
-	float angle = 0.0f;
-	float speed = 0.0f;
-	float scale = 10.0f;
-	XMFLOAT3 CirclePos = { 0.0f,0.0f,0.0f };
+	// 角度
+	//float angle = 0.0f;
+	//float speed = 0.0f;
+	//float scale = 10.0f;
+	XMFLOAT2 nPos = { 0.0f, 0.0f };
+	//XMFLOAT3 CirclePos = { 0.0f,0.0f,0.0f };
+	const float pi = 3.1415f;
+	const int len = 20;
+	const float circum = (len * 2 * pi);
+	float mass = 0.05f;
+	const float gravity = 9.8f;
+	const float rad = 16.0f;
 
-	//外積当たり判定
-	unique_ptr <Texture> BoxTexture;
-	unique_ptr <Texture> LineTexture;
-
-	XMFLOAT3 BoxPos = { 0.0f,0.0f,10.0f };
-	XMFLOAT3 LinePos = { 10.0f,0.0f,10.0f };
-
-	//イージング
-	float m_frame = 0.0f;
-
-	//バネ
-	//オブジェクトのy座標
-	float m_y;
-	//オブジェクトの質量
-	float m_mass = 20.1f;
-	//ばねの強さ（ばね定数）
-	float m_k = 0.9f;
-	//摩擦による減衰率
-	float m_damp = 0.97f;
-	//y方向のスピード
-	float m_velY = 0.0f;
-	//加速度
-	float m_accel = 0.0f;
-	//ばねの反発力 
-	float m_force = 0.0f;
-	//基準点
-	float m_originY = 20.0f;
+	float x;
+	float speed;
+	float angle;
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

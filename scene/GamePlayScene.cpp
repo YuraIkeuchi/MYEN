@@ -12,8 +12,6 @@
 #include "TouchableObject.h"
 #include "MeshCollider.h"
 #include "imgui.h"
-#include "ImageManager.h"
-#include <Easing.h>
 
 //float easeInSine(float x) {
 //	return x * x * x;
@@ -37,7 +35,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//Audio::GetInstance()->LoadSound(0, "Resources/Sound/kadai_BGM.wav");
 	//Audio::GetInstance()->LoopWave(0, 0.3f);
 	// 背景スプライト生成
-	
+
 	//ポストエフェクト用テクスチャ読みこみ
 	Sprite::LoadTexture(100, L"Resources/2d/white1x1.png");
 	//ポストエフェクトの初期化
@@ -61,7 +59,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Player* _player = new Player();
 	_player->Initialize();
 	player.reset(_player);
-	
+
 	//ステージ床
 	Object3d* objFloor_ = new Object3d();
 	objFloor_ = Object3d::Create();
@@ -79,9 +77,8 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Object3d* objSphere_ = new Object3d();
 	objSphere_ = Object3d::Create();
 	objSphere_->SetModel(modelSphere);
-	objSphere_->SetPosition(m_SpherePos1);
+	objSphere_->SetPosition({ -2, 1, -5 });
 	objSphere_->SetScale({ 3.0f,3.0f,3.0f });
-	objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere_->SetAddOffset(0.04f);
 	objSphere_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
@@ -91,30 +88,17 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	Object3d* objSphere2_ = new Object3d();
 	objSphere2_ = Object3d::Create();
 	objSphere2_->SetModel(modelSphere);
-	objSphere2_->SetPosition(m_SpherePos2);
+	objSphere2_->SetPosition({ -2, 1, -5 });
 	objSphere2_->SetScale({ 3.0f,3.0f,3.0f });
-	objSphere2_->SetColor({ 0.0f,1.0f,0.0f,1.0f });
+	objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere2_->SetAddOffset(0.04f);
 	objSphere2_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	objSphere2.reset(objSphere2_);
 
-
-	// 3Dオブジェクト生成
-	Object3d* objSphere3_ = new Object3d();
-	objSphere3_ = Object3d::Create();
-	objSphere3_->SetModel(modelSphere);
-	objSphere3_->SetPosition(m_SpherePos3);
-	objSphere3_->SetScale({ 3.0f,3.0f,3.0f });
-	objSphere3_->SetColor({ 0.0f,0.0f,1.0f,1.0f });
-	objSphere3_->SetAddOffset(0.04f);
-	objSphere3_->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	//objSphere_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-	objSphere3.reset(objSphere3_);
-	
 	modelSkydome = ModelManager::GetInstance()->GetModel(ModelManager::Skydome);
-	
-	
+
+
 	Object3d* objskydome_ = new Object3d();
 	objskydome_ = Object3d::Create();
 	objskydome_->SetModel(modelSkydome);
@@ -153,24 +137,11 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//// カメラ注視点をセット
 	//camera->SetTarget(player->GetPosition());
 	//camera->SetEye({ player->GetPosition().x,player->GetPosition().y + 10,player->GetPosition().z - 10 });
-
-	//テクスチャ関係
-	Texture* LineTexture_ = Texture::Create(ImageManager::Line, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	LineTexture_->TextureCreate();
-	//DushEffecttexture->SetRotation({ 90,0,0 });
-	LineTexture_->SetScale({0.3f,0.1f,1.0f});
-	LineTexture_->SetPosition(LinePos);
-	//LineTexture_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-	LineTexture.reset(LineTexture_);
-
-	//テクスチャ関係
-	Texture* BoxTexture_ = Texture::Create(ImageManager::Box, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	BoxTexture_->TextureCreate();
-	//DushEffecttexture->SetRotation({ 90,0,0 });
-	BoxTexture_->SetScale({ 0.1f,0.1f,1.0f });
-	BoxTexture_->SetPosition(BoxPos);
-	BoxTexture.reset(BoxTexture_);
-
+	//nPos = { 1280.0f / 2.0f - rad,720.0f / 2.0f - rad };
+	x = circum / 8.0f;
+	speed = 0.0f;
+	angle = 0.0f;
+	//pos = { 0.0f,0.0f };
 
 		// カメラ注視点をセット
 	camera->SetEye({ 0,0,-5 });
@@ -207,7 +178,7 @@ void GamePlayScene::Initiallize(DirectXCommon* dxCommon)
 	//lightGroup->SetPointLightActive(1, false);
 	//lightGroup->SetPointLightActive(2, false);
 	//lightGroup->SetSpotLightActive(0, true);
-	
+
 }
 
 void GamePlayScene::Update(DirectXCommon* dxCommon)
@@ -230,110 +201,44 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//objSphere->SetColor({ 0.0f,0.0f,1.0f,0.0f });
 	objSphere->Update();
 	objSphere2->Update();
-	objSphere3->Update();
 	objSkydome->Update();
-	LineTexture->Update();
-	BoxTexture->Update();
 	///ポイントライト
 	lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
 
-	//
-	//float radius = speed * 3.14f / 180.0f;
 
-	////XMFLOAT3 pos = object3d2->GetPosition();
-	////XMFLOAT3 center = object3d->GetPosition();
+	float radius = speed * 3.14f / 180.0f;
+
+	//XMFLOAT3 pos = object3d2->GetPosition();
+	//XMFLOAT3 center = object3d->GetPosition();
 
 	//CirclePos.x = cos(radius) * scale;
 	//CirclePos.y = sin(radius) * scale;
 
 	//m_SpherePos1.x = CirclePos.x + m_SpherePos2.x;
 	//m_SpherePos1.y = CirclePos.y + m_SpherePos2.y;
-	/*if (MathStart)
+	if (MathStart)
 	{
-		if (m_frame < 1.0f) {
-			m_frame += 0.01f;
-		}
-		else {
-			m_frame = 1.0f;
-			MathStart = false;
-		}
-	}*/
+		speed += -mass * gravity * sin(x / len);
+		x -= speed;
+		angle = x / len + pi / 2.0f;
+		nPos.x = cos(angle) * len;
+		nPos.y = sin(angle) * len;
+	}
 
-	//if (input->TriggerKey(DIK_SPACE)) {
-	//	MathStart = true;
-	//}
-
-	//if (input->TriggerKey(DIK_R))
-	//{
-	//	m_frame = 0.0f;
-	//	m_SpherePos1 = { -100,40,150 };
-	//	m_SpherePos2 = { -100,0,150 };
-	//	m_SpherePos3 = { -100, -40,150 };
-	//}
-
-
-	if (input->TriggerKey(DIK_SPACE) && !MathStart)
-	{
+	if (input->TriggerKey(DIK_SPACE)) {
 		MathStart = true;
 	}
 
-	if (MathStart)
-	{
-		float distY = m_originY - m_SpherePos1.y;  //基準点からの距離
-		m_force = m_k * distY;    //ばねの力を計算（F = kx）
-		m_accel = m_force / m_mass;            //重さによる加速度を計算
-		m_velY = m_damp * (m_velY + m_accel);      //摩擦による減衰を計算
-		m_SpherePos1.y += m_velY;                       //オブジェクトを移動
-
-		m_SpherePos2.y = (m_SpherePos1.y + 50) / 2;
-
-		m_SpherePos3.y = (m_SpherePos2.y + 50) / 2;
-
-		//float a = (pos.y - 50);
-
-		//fbxObject3d2->SetScale({ 0.3f,a,0.3f });
-
-
-		//fbxObject3d->SetPosition(pos);
-		//fbxObject3d2->SetPosition(pos2);
-	}
-
-	////線の移動
-	//if (input->LeftTiltStick(input->Right)) {
-	//	LinePos.x += 0.2f;
+	//if (input->TriggerKey(DIK_R))
+	//{
+	//	speed = 0.0f;
+	//	scale = 10.0f;
+	//	MathStart = false;
 	//}
 
-	//if (input->LeftTiltStick(input->Left)) {
-	//	LinePos.x -= 0.2f;
-	//}
 
-	//if (input->LeftTiltStick(input->Up)) {
-	//	LinePos.y += 0.2f;
-	//}
-
-	//if (input->LeftTiltStick(input->Down)) {
-	//	LinePos.y -= 0.2f;
-	//}
-
-	////外積当たり判定
-	//Sphere box;
-	//box.center = { BoxPos.x,BoxPos.y,BoxPos.z };
-	//box.radius = 1;
-
-	//Box line;
-	//line.center = { LinePos.x,LinePos.y,LinePos.z };
-	//line.scale = { 2.5f,0.8f,1.0f };
-
-	//if (Collision::CheckSphere2Box(box, line)) {
-	//	BoxTexture->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
-	//}
-	//else {
-	//	BoxTexture->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-	//}
-
-	
 	//if (MathStart) {
 	//	//ボール一個目
 	//	{
@@ -410,15 +315,10 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//	m_Bound2 = true;
 	//	m_velX2 *= -1.0f;
 	//}
-	//m_SpherePos1.x = Ease(In, Cubic, m_frame, m_SpherePos1.x, 100.0f);
-	//m_SpherePos2.x = Ease(In, SoftBack, m_frame, m_SpherePos2.x, 100.0f);
-	//m_SpherePos3.x = Ease(In, Linear, m_frame, m_SpherePos3.x, 100.0f);
-	objSphere->SetPosition(m_SpherePos1);
+	objSphere->SetPosition({ m_SpherePos1.x + nPos.x,m_SpherePos1.y + nPos.y,m_SpherePos1.z });
 	objSphere2->SetPosition(m_SpherePos2);
-	objSphere3->SetPosition(m_SpherePos3);
-	LineTexture->SetPosition(LinePos);
-	BoxTexture->SetPosition(BoxPos);
-	
+
+
 	/*///スポットライト
 	lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0],spotLightDir[1],spotLightDir[2],0 }));
 	lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
@@ -435,7 +335,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	lightGroup->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
 	lightGroup->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));*/
 
-	
+
 	Ray ray;
 	//ray.start = { 10.0f, 0.5f, 0.0f, 1 };
 	//ray.dir = { 0,-1,0,0 };
@@ -487,7 +387,7 @@ void GamePlayScene::Draw(DirectXCommon* dxCommon)
 
 		dxCommon->PreDraw();
 		dxCommon->SetFullScreen(true);
-			ImGuiDraw();
+		ImGuiDraw();
 		GameDraw(dxCommon);
 		player->ImGuiDraw();
 		dxCommon->PostDraw();
@@ -515,14 +415,10 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	//objSkydome->Draw();
 	//objFloor->Draw();
 	objSphere->Draw();
-	objSphere2->Draw();
-	//objSphere3->Draw();
+	//objSphere2->Draw();
 	//player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
-	Texture::PreDraw();
-	/*LineTexture->Draw();
-	BoxTexture->Draw();*/
 #pragma endregion
 }
 
@@ -602,12 +498,14 @@ void GamePlayScene::ImGuiDraw() {
 		//}
 		{
 			ImGui::Begin("Pos");
-			ImGui::SetWindowPos(ImVec2(1000, 550));
+			ImGui::SetWindowPos(ImVec2(1000, 450));
 			ImGui::SetWindowSize(ImVec2(280, 300));
-			ImGui::SliderFloat("m_SpherePos1.x", &m_SpherePos1.y, 360, -360);
-			ImGui::SliderFloat("m_SpherePos2.x", &m_SpherePos2.y, 360, -360);
-			ImGui::SliderFloat("force", &m_force, 360, -360);
-			//ImGui::SliderFloat("m_SpherePos3.x", &m_SpherePos3.x, 360, -360);
+			ImGui::SliderFloat("m_pos1X", &m_SpherePos1.x, 360, -360);
+			ImGui::SliderFloat("m_pos1Y", &m_SpherePos1.y, 360, -360);
+			ImGui::SliderFloat("speed", &speed, 360, -360);
+			ImGui::SliderFloat("x", &x, 360, -360);
+			ImGui::SliderFloat("angle", &angle, 360, -360);
+			ImGui::SliderFloat("mass", &mass, 1, 0.01);
 			//ImGui::Text("IsPlay::%d", isFlag);
 			ImGui::End();
 		}
