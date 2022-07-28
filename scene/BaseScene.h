@@ -120,13 +120,12 @@ public:
 	
 	bool m_Bound1 = false;
 
-
 	//数学用の変数
-	XMFLOAT3 m_SpherePos1 = { -100,20,150 };
+	XMFLOAT3 m_SpherePos1 = { 0,0,150 };
 
-	XMFLOAT3 m_SpherePos2 = { -100,0,150 };
+	XMFLOAT3 m_SpherePos2 = { 0,0,150 };
 
-	XMFLOAT3 m_SpherePos3 = { -100, -20,150 };
+	XMFLOAT3 m_SpherePos3 = { 0, 0,150 };
 
 	//Sphere1個目
 	//ボールのx軸の初速
@@ -162,6 +161,24 @@ public:
 
 	//イージング
 	float m_frame = 0.0f;
+
+	//バネ
+	//オブジェクトのy座標
+	float m_y;
+	//オブジェクトの質量
+	float m_mass = 20.1f;
+	//ばねの強さ（ばね定数）
+	float m_k = 0.9f;
+	//摩擦による減衰率
+	float m_damp = 0.97f;
+	//y方向のスピード
+	float m_velY = 0.0f;
+	//加速度
+	float m_accel = 0.0f;
+	//ばねの反発力 
+	float m_force = 0.0f;
+	//基準点
+	float m_originY = 20.0f;
 public:
 	//仮想デストラクタ
 	virtual ~BaseScene() = default;

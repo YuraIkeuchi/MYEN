@@ -250,7 +250,7 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 
 	//m_SpherePos1.x = CirclePos.x + m_SpherePos2.x;
 	//m_SpherePos1.y = CirclePos.y + m_SpherePos2.y;
-	if (MathStart)
+	/*if (MathStart)
 	{
 		if (m_frame < 1.0f) {
 			m_frame += 0.01f;
@@ -259,18 +259,45 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 			m_frame = 1.0f;
 			MathStart = false;
 		}
-	}
+	}*/
 
-	if (input->TriggerKey(DIK_SPACE)) {
+	//if (input->TriggerKey(DIK_SPACE)) {
+	//	MathStart = true;
+	//}
+
+	//if (input->TriggerKey(DIK_R))
+	//{
+	//	m_frame = 0.0f;
+	//	m_SpherePos1 = { -100,40,150 };
+	//	m_SpherePos2 = { -100,0,150 };
+	//	m_SpherePos3 = { -100, -40,150 };
+	//}
+
+
+	if (input->TriggerKey(DIK_SPACE) && !MathStart)
+	{
 		MathStart = true;
 	}
 
-	if (input->TriggerKey(DIK_R))
+	if (MathStart)
 	{
-		m_frame = 0.0f;
-		m_SpherePos1 = { -100,40,150 };
-		m_SpherePos2 = { -100,0,150 };
-		m_SpherePos3 = { -100, -40,150 };
+		float distY = m_originY - m_SpherePos1.y;  //基準点からの距離
+		m_force = m_k * distY;    //ばねの力を計算（F = kx）
+		m_accel = m_force / m_mass;            //重さによる加速度を計算
+		m_velY = m_damp * (m_velY + m_accel);      //摩擦による減衰を計算
+		m_SpherePos1.y += m_velY;                       //オブジェクトを移動
+
+		m_SpherePos2.y = (m_SpherePos1.y + 50) / 2;
+
+		m_SpherePos3.y = (m_SpherePos2.y + 50) / 2;
+
+		//float a = (pos.y - 50);
+
+		//fbxObject3d2->SetScale({ 0.3f,a,0.3f });
+
+
+		//fbxObject3d->SetPosition(pos);
+		//fbxObject3d2->SetPosition(pos2);
 	}
 
 	////線の移動
@@ -383,9 +410,9 @@ void GamePlayScene::Update(DirectXCommon* dxCommon)
 	//	m_Bound2 = true;
 	//	m_velX2 *= -1.0f;
 	//}
-	m_SpherePos1.x = Ease(In, Cubic, m_frame, m_SpherePos1.x, 100.0f);
-	m_SpherePos2.x = Ease(In, SoftBack, m_frame, m_SpherePos2.x, 100.0f);
-	m_SpherePos3.x = Ease(In, Linear, m_frame, m_SpherePos3.x, 100.0f);
+	//m_SpherePos1.x = Ease(In, Cubic, m_frame, m_SpherePos1.x, 100.0f);
+	//m_SpherePos2.x = Ease(In, SoftBack, m_frame, m_SpherePos2.x, 100.0f);
+	//m_SpherePos3.x = Ease(In, Linear, m_frame, m_SpherePos3.x, 100.0f);
 	objSphere->SetPosition(m_SpherePos1);
 	objSphere2->SetPosition(m_SpherePos2);
 	objSphere3->SetPosition(m_SpherePos3);
@@ -489,7 +516,7 @@ void GamePlayScene::ModelDraw(DirectXCommon* dxCommon) {
 	//objFloor->Draw();
 	objSphere->Draw();
 	objSphere2->Draw();
-	objSphere3->Draw();
+	//objSphere3->Draw();
 	//player->Draw(MaterialNumber);
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
@@ -577,9 +604,10 @@ void GamePlayScene::ImGuiDraw() {
 			ImGui::Begin("Pos");
 			ImGui::SetWindowPos(ImVec2(1000, 550));
 			ImGui::SetWindowSize(ImVec2(280, 300));
-			ImGui::SliderFloat("m_SpherePos1.x", &m_SpherePos1.x, 360, -360);
-			ImGui::SliderFloat("m_SpherePos2.x", &m_SpherePos2.x, 360, -360);
-			ImGui::SliderFloat("m_SpherePos3.x", &m_SpherePos3.x, 360, -360);
+			ImGui::SliderFloat("m_SpherePos1.x", &m_SpherePos1.y, 360, -360);
+			ImGui::SliderFloat("m_SpherePos2.x", &m_SpherePos2.y, 360, -360);
+			ImGui::SliderFloat("force", &m_force, 360, -360);
+			//ImGui::SliderFloat("m_SpherePos3.x", &m_SpherePos3.x, 360, -360);
 			//ImGui::Text("IsPlay::%d", isFlag);
 			ImGui::End();
 		}
